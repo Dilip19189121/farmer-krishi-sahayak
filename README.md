@@ -1,4 +1,4 @@
-# Kisan AI Assistant
+# Farmer Krishi Sahayak
 
 A multilingual, voice-first AI assistant for farmers and rural cooperative
 members, providing verified guidance on government schemes, crop advisory,
