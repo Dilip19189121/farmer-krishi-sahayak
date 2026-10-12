@@ -61,6 +61,10 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Runtime SQLite data (grievances)
+app.db
+app.db-journal
+
 # Flask stuff:
 instance/
 .webassets-cache
@@ -216,3 +220,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Vector DB and test data artifacts
+chroma_db/
+test_recordings/
+
+# Local secrets
+.env

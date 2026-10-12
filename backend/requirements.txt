@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+chromadb
+pdfplumber
+pandas
+pyarrow
+python-dotenv
+google-generativeai
+sentence-transformers
