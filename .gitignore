@@ -227,3 +227,10 @@ test_recordings/
 
 # Local secrets
 .env
+
+# Downloaded/multilingual datasets (large, read-only reference data; not source code)
+multiligual datasets/
+
+
+# Downloaded reference datasets (large; not source code)
+multilingual datasets/
