@@ -1,9 +1,11 @@
 # chat.py — POST /chat: RAG-grounded answers for the farmer chat UI.
 
+import asyncio
+
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 
-from app.services import ai_service, chat_memory, rag_router, rag_service, voice_limit
+from app.services import ai_service, chat_memory, multilang, rag_router, rag_service, voice_limit
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -49,6 +51,13 @@ class ChatResponse(BaseModel):
 
 class VoiceChatResponse(ChatResponse):
     transcribed_text: str
+    detected_language: str = Field(
+        ...,
+        description="BCP code of the dominant language in the transcript "
+        "('te' | 'hi' | 'en'; mixed Telugu+English reports 'te'). 'und' "
+        "only when no transcription engine was available, so nothing could "
+        "be detected",
+    )
 
 
 def _build_sources(hits: list[dict]) -> list[Source]:
@@ -266,7 +275,11 @@ async def chat_voice(
         ) from exc
 
     try:
-        transcript = ai_service.transcribe_audio(audio, mime_type)
+        # Gemini STT is a blocking HTTP call: run it on a worker thread so
+        # the event loop keeps serving /hardware/status & /presence/status.
+        transcript = await asyncio.to_thread(
+            ai_service.transcribe_audio, audio, mime_type
+        )
     except Exception as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
@@ -277,6 +290,7 @@ async def chat_voice(
         # recorded because no successful transcription happened.
         return VoiceChatResponse(
             transcribed_text=transcript,
+            detected_language="und",
             answer=(
                 "Voice input is unavailable right now due to high demand. "
                 "Please type your question instead."
@@ -290,13 +304,16 @@ async def chat_voice(
     # Count usage only after a successful transcription.
     voice_limit.record_usage(sid, duration)
 
-    answer, provider, hits, cache_hit, verification, _ = _answer_turn(
-        transcript,
-        sid,
+    # RAG answer: the whole pipeline (routed retrieval, provider rotation,
+    # cache write) is blocking CPU/API work, so it runs on a worker thread
+    # and the event loop stays free for /hardware/status and /presence/status.
+    answer, provider, hits, cache_hit, verification, _ = await asyncio.to_thread(
+        _answer_turn, transcript, sid
     )
     verified = verification.get("supported", True)
     return VoiceChatResponse(
         transcribed_text=transcript,
+        detected_language=multilang.preferred_language(transcript)[0],
         answer=answer,
         provider=provider,
         sources=[] if cache_hit else _build_sources(hits),

@@ -38,6 +38,18 @@ _SCRIPT_RANGES = {
     "hi": (0x0900, 0x097F),
 }
 
+# Confidence below this the transcript is treated as UNDETECTABLE (the kiosk
+# then asks the farmer which language they want instead of guessing).
+MIN_DETECT_CONFIDENCE = 0.6
+
+# Words a farmer says when EXPLICITLY asking for a language change (whole
+# utterance of a few words). Romanized + native-script spellings.
+_SWITCH_KEYWORDS = {
+    "te": ("తెలుగు", "తెలుగులో", "telugu", "telugu lo", "telugulo"),
+    "hi": ("हिंदी", "hindi", "hindi mein", "हिंदी में"),
+    "en": ("english", "ఇంగ్లీష్", "ఇంగ్లిష్", "अंग्रेजी", "अंग्रेज़ी", "inglish"),
+}
+
 
 def detect_language(text: str) -> tuple[str, float]:
     """Return (lang, confidence) from Unicode script counts, or ("en", 0).
@@ -62,6 +74,49 @@ def detect_language(text: str) -> tuple[str, float]:
     lang = max(data, key=data.get)
     total = sum(data.values())
     return lang, data[lang] / total
+
+
+def preferred_language(text: str) -> tuple[str, float]:
+    """Session-facing language choice; Telugu wins Mixed te+en speech.
+
+    Counting stays script-based, but when BOTH Telugu and Latin letters are
+    present (a Telugu farmer mixing English words into their sentence), the
+    dominant language is Telugu regardless of which script is slightly
+    longer. Pure English (no Telugu/Devanagari) stays English.
+    """
+    counts = {"te": 0, "hi": 0, "en": 0}
+    for ch in text:
+        o = ord(ch)
+        for lang, (lo, hi) in _SCRIPT_RANGES.items():
+            if lo <= o <= hi:
+                counts[lang] += 1
+                break
+        else:
+            if ch.isalpha() and o < 0x0900:
+                counts["en"] += 1
+    if counts["te"] > 0:  # mixed Telugu+English -> prefer Telugu
+        return "te", counts["te"] / max(1, counts["te"] + counts["hi"])
+    data = {k: v for k, v in counts.items() if v > 0}
+    if not data:
+        return "en", 0.0
+    lang = max(data, key=data.get)
+    return lang, data[lang] / max(1, sum(data.values()))
+
+
+def explicit_language_switch(text: str) -> str | None:
+    """The BCP language the farmer EXPLICITLY asked to switch to, or None.
+
+    Whitespace-normalized keyword match, so 'speak in telugu please' or
+    'హిందీలో చెప్పు' flip the session language without any model call.
+    """
+    norm = " ".join((text or"").lower().split())
+    if not norm:
+        return None
+    for lang, words in _SWITCH_KEYWORDS.items():
+        for word in words:
+            if word in norm:
+                return lang
+    return None
 
 
 # ---- 2. Lightweight transcript normalization ------------------------------

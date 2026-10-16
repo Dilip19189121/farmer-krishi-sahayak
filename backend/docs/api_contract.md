@@ -174,6 +174,7 @@ curl -s -X GET http://127.0.0.1:8000/grievance/officer/list \
 | Field | Type | Note |
 | --- | --- | --- |
 | `transcribed_text` | string | Gemini STT output |
+| `detected_language` | string | `te` \| `hi` \| `en` from the transcript (mixed Telugu+English reports `te`); `und` only when no transcription engine was available |
 | `answer` | string | Same RAG pipeline as `/chat` on the transcript |
 | `provider` | string | Answer engine (`groq`, `cache`, etc.) |
 | `sources` | array of `Source` | RAG provenance |
@@ -181,8 +182,13 @@ curl -s -X GET http://127.0.0.1:8000/grievance/officer/list \
 | `sources_count` | integer\|null | Provenance count |
 
 > Voice-turn limits (configured server-side): clips > 60 s → `413`; session used
-> 5 min total → `429` with `retry_after_seconds`; no transcription engine → `422`-style
-> degraded response asking to type instead.
+> 5 min total → `429` with `retry_after_seconds`; no transcription engine → degraded
+> response (`provider: "degraded"`, `detected_language: "und"`) asking to type instead.
+>
+> Additive since the kiosk stages: every `/chat/voice` response now carries
+> `detected_language`, and both AI steps (STT, RAG answer) run on worker threads,
+> so `/hardware/status` and `/presence/status` stay responsive during turns.
+> No previously documented field changed shape.
 
 ---
 
@@ -549,8 +555,94 @@ Example:
 }
 ```
 
-> Idempotent: stopping when nothing is running returns
-> `{"status": "already_stopped", "message": "no watcher running"}`.
+---
+
+### POST /hardware/trigger (drive the kiosk manually)
+
+| Item | Value |
+| --- | --- |
+| Method | `POST` |
+| Path | `/hardware/trigger` |
+| Auth | none |
+| Query params | `force` (boolean, optional, default `false`) |
+| Request body | none |
+| Response (200) | JSON object (no fixed schema) |
+
+The manual stand-in for the (optional) ultrasonic sensor: arms the trigger that
+the kiosk's IDLE state waits for. Normal flow: CHECKING (presence confirmed
+within 5 `/presence/status` frames) → GREETING (multilingual welcome, up to
+`WELCOME_RETRIES` repeats) → LISTENING (`POST /chat/voice` with a per-session
+id) → RESPONDING loops → END → IDLE. `force=true` skips CHECKING's human
+confirmation (testing without anyone in frame).
+
+```json
+{
+  "status": "armed",
+  "cooldown_seconds": 10.0,
+  "force": false,
+  "state": "IDLE",
+  "gpio_available": false,
+  "camera_on": false,
+  "session_state": "inactive",
+  "cooldown_left": 0.0
+}
+```
+
+>`status: "busy"` while a session is running (return body shows live state).
+>`gpio_available: false` on laptops (no RPi.GPIO) — sensor trigger disabled, the
+>state machine still works through this endpoint.
+
+---
+
+### GET /hardware/status (kiosk state)
+
+| Item | Value |
+| --- | --- |
+| Method | `GET` |
+| Path | `/hardware/status` |
+| Auth | none |
+| Response (200) | JSON object (no fixed schema) |
+
+```json
+{
+  "status": "ok",
+  "state": "LISTENING",
+  "gpio_available": false,
+  "trig_pin": null,
+  "echo_pin": null,
+  "camera_on": true,
+  "session_state": "LISTENING",
+  "session_start": "2026-10-14T06:20:01.123456+00:00",
+  "remaining_seconds": 540,
+  "session_timeout_minutes": 10.0,
+  "grace_period_seconds": 120.0,
+  "absence_grace_seconds": 60.0,
+  "detected_language": "en",
+  "no_response_count": 0,
+  "silent_turns": 0,
+  "welcome_retries": 0,
+  "turns_answered": 2,
+  "listen_cap_seconds": 20.0,
+  "cooldown_left": 0.0,
+  "last_reason": "turn 3 (no-response 0/3)",
+  "last_error": null,
+  "transitions": 9
+}
+```
+
+| Field | Type | Note |
+| --- | --- | --- |
+| `state` | string | FSM state `IDLE\|CHECKING\|GREETING\|LISTENING\|RESPONDING\|END` |
+| `session_state` | string | Same as `state` while a session runs; `inactive` when none |
+| `session_start` | string\|null | ISO-8601 UTC start of the current session |
+| `remaining_seconds` | integer\|null | Countdown to `SESSION_TIMEOUT_MINUTES` |
+| `detected_language` | string\|null | Locked session language (`te`\|`hi`\|`en`) |
+| `cooldown_left` | number | Seconds left of the post-session cooldown |
+| `turns_answered` | integer | Answers spoken this process lifetime |
+
+> The whole timeout/grace/absence env matrix is documented in `.env.example`;
+> all of it is kiosk-internal behavior, no extra endpoints. Log lines print as
+> `[hardware] ...` so they can be filtered out of server logs.
 
 ---
 

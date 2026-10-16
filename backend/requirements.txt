@@ -8,3 +8,5 @@ pyarrow
 python-dotenv
 google-generativeai
 sentence-transformers
+edge-tts
+httpx

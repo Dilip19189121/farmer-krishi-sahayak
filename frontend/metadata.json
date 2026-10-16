@@ -1,0 +1,6 @@
+{
+  "name": "Krishi Sahayak - Agriculture Command & Crop Intelligence",
+  "description": "District Agricultural Officer (DAO) Command Gateway and Comprehensive Multilingual Crop Telemetry Platform for Agriculture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
