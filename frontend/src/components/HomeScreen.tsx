@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { postChat } from '../api/client';
 
 interface HomeScreenProps {
   onNavigate: (path: string) => void;
@@ -521,28 +522,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     stopListening();
 
     // 2. Generate and display assistant's response inside the chat box
-    setTimeout(() => {
-      const responseText =
-        assistantAdvisoryResponsesByLang[language] ||
-        assistantAdvisoryResponsesByLang.en;
-
+    postChat(trimmed).then((res) => {
+      const responseText = res?.answer || '';
       const replyMsg: ChatMessage = {
         id: `reply-${Date.now()}`,
         sender: 'assistant',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         text: responseText,
       };
-
       setMessages((prev) => [...prev, replyMsg]);
       setLatestAiAnswer(responseText);
       setLiveSpokenText(responseText);
-      setTimeout(() => {
-        moveChatToBottom();
-      }, 80);
-
-      // 3. Speak the assistant's answer aloud in the selected language
+      setTimeout(() => { moveChatToBottom(); }, 80);
       speakAssistantResponse(responseText);
-    }, 800);
+    }).catch(() => {
+      showToast('Could not reach server. Please try again.');
+    });
   };
 
   const handleSendMessage = (e?: React.FormEvent) => {

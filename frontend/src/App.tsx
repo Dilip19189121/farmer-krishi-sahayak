@@ -353,7 +353,6 @@ export default function App() {
             isSessionActive={sessionStatus !== 'expired'}
             sessionSeconds={sessionSeconds}
             sessionStatus={sessionStatus}
-            sessionState={sessionState}
             formatSessionTime={formatSessionTime}
           />
         )}
