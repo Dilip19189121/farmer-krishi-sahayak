@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes import chat, grievance, hardware, info, officer, presence
-
 app = FastAPI(
     title="Backend API",
     description="FastAPI backend serving the multilingual agriculture datasets",
     version="0.1.0",
+    
 )
 
 # CORS: allow the Vite dev servers (Application is served from port 3000).

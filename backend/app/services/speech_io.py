@@ -24,7 +24,7 @@ BACKEND_DIR = Path(__file__).resolve().parents[2]
 SAMPLE_RATE = 16_000      # mono 16 kHz, matches what /chat/voice expects
 CHANNELS = 1
 SPEAK_PROMPT_SECONDS = 0.8   # grace before recording starts
-SILENCE_STOP_SECONDS = 1.5   # sustained quiet that ends the recording early
+SILENCE_STOP_SECONDS = 0.8   # sustained quiet that ends the recording early
 SILENCE_RMS_THRESHOLD = 0.01  # int16 amplitude RMS below this counts as quiet
 
 RECORD_PROMPT = "Listening... ask your question now."     # for the TTS voice

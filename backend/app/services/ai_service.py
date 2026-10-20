@@ -21,6 +21,7 @@
 import os
 from pathlib import Path
 
+from typing import Optional
 import requests
 from dotenv import load_dotenv
 
@@ -288,7 +289,7 @@ TRANSCRIBE_INSTRUCTION = (
 )
 
 
-def resolve_audio_mime_type(content_type: str | None, filename: str | None) -> str:
+def resolve_audio_mime_type(content_type: Optional[str], filename: Optional[str]) -> str:
     """Pick a Gemini-supported audio MIME type from the upload's info."""
     mime = (content_type or "").split(";")[0].strip().lower()
     if mime in SUPPORTED_AUDIO_TYPES:
@@ -334,7 +335,7 @@ def transcribe_audio(audio_bytes: bytes, mime_type: str) -> str:
     return _TEXT_ONLY_MARKER
 
 
-def _transcribe_gemini(audio_bytes: bytes, mime_type: str) -> str | None:
+def _transcribe_gemini(audio_bytes: bytes, mime_type: str) -> Optional[str]:
     """Ring Gemini's audio endpoint; return the transcript or None on quota."""
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -364,7 +365,7 @@ def _transcribe_gemini(audio_bytes: bytes, mime_type: str) -> str | None:
     return text
 
 
-def _transcribe_groq_whisper(audio_bytes: bytes, mime_type: str) -> str | None:
+def _transcribe_groq_whisper(audio_bytes: bytes, mime_type: str) -> Optional[str]:
     """Ring Groq's Whisper endpoint; return the transcript or None."""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:

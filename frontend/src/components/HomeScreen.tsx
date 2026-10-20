@@ -17,6 +17,7 @@ interface ChatMessage {
   text?: string;
   time: string;
   isAssessment?: boolean;
+  type?: string;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -31,7 +32,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   },
 }) => {
-  const { t, language } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const [inputQuery, setInputQuery] = useState('');
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -204,6 +205,96 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     },
   ]);
 
+  // Auto-scroll chat to the bottom whenever a new message arrives
+  useEffect(() => {
+    chatScrollRef.current?.scrollTo({ top: chatScrollRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages]);
+
+  // Sync the kiosk Q&A log from GET /hardware/chat-log into the chat box,
+  // polling every 2s. role: 'user' = farmer bubble, 'assistant' = assistant bubble.
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/hardware/chat-log');
+        if (!res.ok) return;
+        const data = await res.json();
+        for (const item of data.log || []) {
+          const timeStr = new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `chatlog-${Date.now()}-${item.role}-${item.text.slice(0, 8)}`,
+              sender: item.role === 'user' ? 'user' : 'assistant',
+              text: item.text,
+              time: timeStr,
+            },
+          ]);
+        }
+      } catch {
+        // Server not reachable yet (e.g. kiosk not started) — retry next tick.
+      }
+    };
+
+    const id = setInterval(poll, 2000);
+    poll(); // immediate first pull
+    return () => clearInterval(id);
+  }, []);
+
+  // On mount: stream the trilingual welcome messages into the chat, then a
+  // language-selection bubble (Telugu / Hindi / English) 6s after mount.
+  useEffect(() => {
+    const nowTime = () =>
+      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const timers = [
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `welcome-1-${Date.now()}`,
+            sender: 'assistant',
+            text: 'Hello, Namaste, and a warm Welcome! Aapka swagat hai.',
+            time: nowTime(),
+          },
+        ]);
+      }, 0),
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `welcome-2-${Date.now()}`,
+            sender: 'assistant',
+            text: 'Please select your preferred language — Apni bhasha chunein — మీ భాషను ఎంచుకోండి.',
+            time: nowTime(),
+          },
+          {
+            id: `lang-select-${Date.now()}`,
+            sender: 'assistant',
+            type: 'lang-select',
+            text: '',
+            time: nowTime(),
+          },
+        ]);
+      }, 3000),
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `welcome-3-${Date.now()}`,
+            sender: 'assistant',
+            text: 'మీకు సహాయం చేయడానికి నేను ఇక్కడ ఉన్నాను. Main aapki madad ke liye yahan hoon. I am here for you.',
+            time: nowTime(),
+          },
+        ]);
+      }, 6000),
+    ];
+
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   // Update initial message and dialogue chart values when language changes
   useEffect(() => {
     setLatestPersonQuery(userQueryByLang[language] || userQueryByLang.en);
@@ -341,12 +432,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     if (sessionStartedRef.current) return;
     sessionStartedRef.current = true;
 
-    const timer = setTimeout(() => {
-      speakWelcomeMessage();
-    }, 600);
-
     return () => {
-      clearTimeout(timer);
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
@@ -534,7 +620,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       setLatestAiAnswer(responseText);
       setLiveSpokenText(responseText);
       setTimeout(() => { moveChatToBottom(); }, 80);
-      speakAssistantResponse(responseText);
     }).catch(() => {
       showToast('Could not reach server. Please try again.');
     });
@@ -696,44 +781,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                     />
                   </div>
                 </div>
-
-                {/* Dialogue Chart Toggle & Move Chat Up & Down Interactive Controls */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setShowDialogueChart((prev) => !prev)}
-                    title="Toggle Live Speech & Dialogue Chart"
-                    className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] sm:text-[11.5px] font-bold border-2 transition-all cursor-pointer shadow-xs ${
-                      showDialogueChart || isSpeaking
-                        ? 'bg-[#007432] text-white border-[#007432]'
-                        : 'bg-white hover:bg-emerald-50 text-[#007432] border-[#007432]'
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-[14px]">
-                      {isSpeaking ? 'graphic_eq' : 'query_stats'}
-                    </span>
-                    <span className="hidden sm:inline">Speech Chart</span>
-                  </button>
-
-                  <div className="flex items-center gap-1 bg-white/95 backdrop-blur-sm p-0.5 rounded-full border border-gray-200 shadow-xs">
-                    <button
-                      type="button"
-                      onClick={moveChatUp}
-                      title="Move Chat Up"
-                      className="w-6 h-6 rounded-full hover:bg-emerald-50 text-gray-800 flex items-center justify-center transition-colors cursor-pointer"
-                    >
-                      <span className="material-symbols-outlined text-[15px]">arrow_upward</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={moveChatDown}
-                      title="Move Chat Down"
-                      className="w-6 h-6 rounded-full hover:bg-emerald-50 text-gray-800 flex items-center justify-center transition-colors cursor-pointer"
-                    >
-                      <span className="material-symbols-outlined text-[15px]">arrow_downward</span>
-                    </button>
-                  </div>
-                </div>
               </div>
 
               {/* Scrollable Chat Viewport: ONLY THIS INSIDE REGION SCROLLS */}
@@ -741,421 +788,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 ref={chatScrollRef}
                 className="flex-1 min-h-0 overflow-y-auto glass-scrollbar pr-2 py-3 space-y-4 transition-all duration-300 scroll-smooth"
               >
-                {/* LIVE DIALOGUE & SPEECH TELEMETRY CHART IN THE CHAT BOX */}
-                {(showDialogueChart || isSpeaking) && (
-                  <div
-                    className={`rounded-2xl transition-all duration-300 border-2 p-3 sm:p-4 shadow-sm ${
-                      isRecording
-                        ? 'bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-emerald-500/15 border-amber-500 ring-2 ring-amber-400/30 shadow-[0_4px_20px_rgba(245,158,11,0.2)]'
-                        : isPlayingAudio
-                        ? 'bg-gradient-to-br from-emerald-500/15 via-cyan-500/10 to-purple-500/15 border-[#007432] ring-2 ring-emerald-400/30 shadow-[0_4px_20px_rgba(16,185,129,0.2)]'
-                        : 'bg-white/90 backdrop-blur-md border-[#007432]/40'
-                    }`}
-                  >
-                    {/* Chart Header with Live Frequency Equalizer */}
-                    <div className="flex items-center justify-between pb-2.5 border-b border-black/10 gap-2">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div
-                          className={`w-7 h-7 rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs ${
-                            isRecording
-                              ? 'bg-amber-600 animate-pulse'
-                              : isPlayingAudio
-                              ? 'bg-[#007432] animate-pulse'
-                              : 'bg-[#007432]'
-                          }`}
-                        >
-                          <span className="material-symbols-outlined text-[17px]">
-                            {isSpeaking ? 'graphic_eq' : 'query_stats'}
-                          </span>
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[12px] sm:text-[13.5px] font-black text-[#111827] tracking-tight">
-                              {isRecording
-                                ? 'Farmer Speaking • Live Speech Waveform Chart'
-                                : isPlayingAudio
-                                ? 'AI Assistant Speaking • Live Response Chart'
-                                : 'Live Speech & Dialogue Telemetry Chart'}
-                            </span>
-                            <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                                isRecording
-                                  ? 'bg-amber-100 text-amber-800 border border-amber-300 animate-pulse'
-                                  : isPlayingAudio
-                                  ? 'bg-emerald-100 text-[#006b2c] border border-emerald-300 animate-pulse'
-                                  : 'bg-emerald-50 text-[#007432] border border-[#007432]/30'
-                              }`}
-                            >
-                              {isRecording ? '● Person Mic Active' : isPlayingAudio ? '● AI Audio Active' : '● Dialogue Synchronized'}
-                            </span>
-                          </div>
-                          <span className="text-[10px] sm:text-[11px] text-gray-600 font-medium truncate block">
-                            Real-time voice modulation, frequency analysis & synchronized dialogue answer stream
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Real-time Frequency Equalizer Bars Chart */}
-                      <div className="flex items-end gap-1 h-7 px-2.5 py-1 bg-black/5 rounded-xl border border-black/5 shrink-0">
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-amber-500 animate-speech-bar-1'
-                              : isPlayingAudio
-                              ? 'bg-emerald-500 animate-speech-bar-1'
-                              : 'bg-gray-400 h-2'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '30%' }}
-                        />
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-orange-500 animate-speech-bar-2'
-                              : isPlayingAudio
-                              ? 'bg-cyan-500 animate-speech-bar-2'
-                              : 'bg-gray-400 h-3'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '50%' }}
-                        />
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-yellow-500 animate-speech-bar-3'
-                              : isPlayingAudio
-                              ? 'bg-blue-500 animate-speech-bar-3'
-                              : 'bg-gray-400 h-2'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '20%' }}
-                        />
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-amber-400 animate-speech-bar-4'
-                              : isPlayingAudio
-                              ? 'bg-emerald-400 animate-speech-bar-4'
-                              : 'bg-gray-400 h-4'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '70%' }}
-                        />
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-orange-400 animate-speech-bar-5'
-                              : isPlayingAudio
-                              ? 'bg-cyan-400 animate-speech-bar-5'
-                              : 'bg-gray-400 h-3'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '40%' }}
-                        />
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-emerald-500 animate-speech-bar-6'
-                              : isPlayingAudio
-                              ? 'bg-purple-500 animate-speech-bar-6'
-                              : 'bg-gray-400 h-2'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '30%' }}
-                        />
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-teal-400 animate-speech-bar-7'
-                              : isPlayingAudio
-                              ? 'bg-pink-500 animate-speech-bar-7'
-                              : 'bg-gray-400 h-3'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '60%' }}
-                        />
-                        <div
-                          className={`w-1 rounded-full ${
-                            isRecording
-                              ? 'bg-yellow-400 animate-speech-bar-8'
-                              : isPlayingAudio
-                              ? 'bg-violet-400 animate-speech-bar-8'
-                              : 'bg-gray-400 h-2'
-                          }`}
-                          style={{ height: isSpeaking ? '100%' : '35%' }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Dual Columns: Person's Answer/Speech & AI Assistant's Answer */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2.5">
-                      {/* Track 1: Person (Farmer) Speech Track */}
-                      <div
-                        className={`p-3 rounded-xl border-2 transition-all ${
-                          isRecording
-                            ? 'bg-amber-50/95 border-amber-500 shadow-xs ring-1 ring-amber-400/50'
-                            : 'bg-white/80 border-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[12px] font-bold shadow-2xs">
-                              <span className="material-symbols-outlined text-[13px]">person</span>
-                            </div>
-                            <span className="text-[11.5px] font-black text-[#111827]">
-                              Person (Farmer) Speech / Answer
-                            </span>
-                          </div>
-                          <span
-                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${
-                              isRecording
-                                ? 'bg-amber-200 text-amber-900 animate-pulse'
-                                : 'bg-gray-100 text-gray-700'
-                            }`}
-                          >
-                            {isRecording ? '● Live Recording' : 'Voice Input'}
-                          </span>
-                        </div>
-
-                        {/* Person's Answer / Spoken Words Bubble */}
-                        <div className="p-2.5 rounded-xl bg-white border border-amber-200/80 text-[12px] sm:text-[12.5px] text-[#111827] leading-relaxed font-medium min-h-[48px] shadow-2xs">
-                          {isRecording && liveSpokenText
-                            ? liveSpokenText
-                            : latestPersonQuery || (userQueryByLang[language] || userQueryByLang.en)}
-                        </div>
-
-                        <div className="flex items-center justify-between mt-2 text-[10px] text-gray-600 font-semibold">
-                          <span>{isRecording ? 'Microphone: Capturing Speech' : 'Status: Query Charted'}</span>
-                          <span>Voice Pitch: 215 Hz • 99.4% Clarity</span>
-                        </div>
-                      </div>
-
-                      {/* Track 2: AI Assistant Answer Track */}
-                      <div
-                        className={`p-3 rounded-xl border-2 transition-all ${
-                          isPlayingAudio
-                            ? 'bg-emerald-50/95 border-[#007432] shadow-xs ring-1 ring-emerald-500/50'
-                            : 'bg-white/80 border-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-5 h-5 rounded-full bg-[#007432] text-white flex items-center justify-center text-[12px] font-bold shadow-2xs">
-                              <span className="material-symbols-outlined text-[13px]">smart_toy</span>
-                            </div>
-                            <span className="text-[11.5px] font-black text-[#111827]">
-                              AI Assistant Answer
-                            </span>
-                          </div>
-                          <span
-                            className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${
-                              isPlayingAudio
-                                ? 'bg-emerald-200 text-[#005a24] animate-pulse'
-                                : 'bg-gray-100 text-gray-700'
-                            }`}
-                          >
-                            {isPlayingAudio ? '● Speaking Aloud' : 'Answer Generated'}
-                          </span>
-                        </div>
-
-                        {/* AI's Answer / Spoken Words Bubble */}
-                        <div className="p-2.5 rounded-xl bg-white border border-emerald-200/80 text-[12px] sm:text-[12.5px] text-[#111827] leading-relaxed font-medium min-h-[48px] shadow-2xs">
-                          {isPlayingAudio && liveSpokenText
-                            ? liveSpokenText
-                            : latestAiAnswer || (assistantAdvisoryResponsesByLang[language] || assistantAdvisoryResponsesByLang.en)}
-                        </div>
-
-                        <div className="flex items-center justify-between mt-2 text-[10px] text-gray-600 font-semibold">
-                          <span>Language: {language.toUpperCase()} (Spoken)</span>
-                          <span>TTS Rate: 0.95x • Audio Purity: 100%</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Dialogue Cadence & Synchronized Telemetry */}
-                    <div className="mt-2.5 pt-2 border-t border-black/5 flex items-center justify-between text-[10px] text-gray-600 font-semibold flex-wrap gap-2">
-                      <div className="flex items-center gap-2">
-                        <span>Dialogue Turn Balance:</span>
-                        <div className="w-24 sm:w-36 h-2 bg-gray-200 rounded-full overflow-hidden flex">
-                          <div
-                            className="h-full bg-amber-500 transition-all duration-300"
-                            style={{ width: isRecording ? '85%' : '45%' }}
-                            title="Person voice turn share"
-                          />
-                          <div
-                            className="h-full bg-[#007432] transition-all duration-300"
-                            style={{ width: isPlayingAudio ? '85%' : '55%' }}
-                            title="AI assistant response share"
-                          />
-                        </div>
-                      </div>
-                      <span className="text-[10px] text-[#007432] font-bold">
-                        {isSpeaking
-                          ? activeSpeaker === 'farmer'
-                            ? 'Capturing Farmer Speech into Live Chart...'
-                            : 'Assistant Speaking Aloud into Live Chart...'
-                          : 'Synchronized Dialogue Session Ready'}
-                      </span>
-                    </div>
-                  </div>
-                )}
-                {/* Message 1: Farmer Query Bubble */}
-                <div className="flex items-start justify-end gap-3 group">
-                  <div className="flex flex-col items-end max-w-xl">
-                    <div className="bg-[#005a24] text-white rounded-2xl rounded-tr-xs px-5 py-3.5 text-[14px] leading-relaxed shadow-md">
-                      {messages[0].text}
-                    </div>
-                    <div className="flex items-center gap-1 text-[11px] text-[#1f2937] mt-1 mr-1 font-semibold">
-                      <span>{messages[0].time}</span>
-                      <span className="text-[#006b2c] font-bold">✓✓</span>
-                    </div>
-                  </div>
-                  <div className="w-8 h-8 rounded-full border border-white/90 bg-white/90 backdrop-blur-sm flex items-center justify-center text-gray-800 shrink-0 mt-1 shadow-xs">
-                    <span className="material-symbols-outlined text-[18px]">person</span>
-                  </div>
-                </div>
-
-                {/* Message 2: Static Agronomic Assessment Card */}
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#006b2c] text-white flex items-center justify-center shrink-0 shadow-md mt-1">
-                    <span className="material-symbols-outlined text-[19px]">spa</span>
-                  </div>
-                  <div className="flex-1 bg-white/60 backdrop-blur-md rounded-2xl border border-white/80 p-5 shadow-xs space-y-4">
-                    {/* Header: Title & Audio Guidance Trigger */}
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5">
-                        <span className="material-symbols-outlined text-[#006b2c] text-[18px]">
-                          verified
-                        </span>
-                        <h3 className="text-[14px] sm:text-[15px] font-bold text-[#111827]">
-                          {t.assessment_title}
-                        </h3>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleSpeakAssessment}
-                        className={`px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer border shadow-xs ${
-                          isPlayingAudio
-                            ? 'bg-[#006b2c] text-white border-[#006b2c]'
-                            : 'bg-white/90 hover:bg-white text-[#006b2c] border-[#cbeccf]'
-                        }`}
-                      >
-                        <span className="material-symbols-outlined text-[15px]">
-                          {isPlayingAudio ? 'volume_off' : 'volume_up'}
-                        </span>
-                        <span>{isPlayingAudio ? t.chat_listen_stop : t.chat_listen}</span>
-                      </button>
-                    </div>
-
-                    {/* Static Alerts and Badges */}
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-[#ffebee] text-[#d32f2f] text-[11px] font-bold border border-[#ffcdd2] shadow-xs">
-                        <span className="material-symbols-outlined text-[13px]">warning</span>
-                        {t.assessment_alert_humidity}
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-white text-[#006b2c] text-[11px] font-bold border border-[#cbeccf] shadow-xs">
-                        <span className="material-symbols-outlined text-[13px]">science</span>
-                        {t.assessment_fungicide}
-                      </span>
-                      <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-white text-[#374151] text-[11px] font-bold border border-gray-200 shadow-xs">
-                        <span className="material-symbols-outlined text-[13px]">schedule</span>
-                        {t.assessment_action_time}
-                      </span>
-                    </div>
-
-                    {/* Static Crop Telemetry Micro-Chart (Completely static and clear) */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3 rounded-2xl bg-white/70 border border-white/90 shadow-2xs">
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold text-[#374151]">
-                          <span>{(telemetryLabelsByLang[language] || telemetryLabelsByLang.en).humidity}</span>
-                          <span className="font-bold text-red-600">85% RH</span>
-                        </div>
-                        <div className="w-full h-1.5 rounded-full bg-red-100 overflow-hidden">
-                          <div className="h-full bg-red-500 rounded-full" style={{ width: '85%' }}></div>
-                        </div>
-                        <span className="text-[10px] text-gray-500 font-medium block">{(telemetryLabelsByLang[language] || telemetryLabelsByLang.en).humidityAlert}</span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold text-[#374151]">
-                          <span>{(telemetryLabelsByLang[language] || telemetryLabelsByLang.en).soil}</span>
-                          <span className="font-bold text-amber-600">92% VWC</span>
-                        </div>
-                        <div className="w-full h-1.5 rounded-full bg-amber-100 overflow-hidden">
-                          <div className="h-full bg-amber-500 rounded-full" style={{ width: '92%' }}></div>
-                        </div>
-                        <span className="text-[10px] text-gray-500 font-medium block">{(telemetryLabelsByLang[language] || telemetryLabelsByLang.en).soilAlert}</span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between text-[11px] font-semibold text-[#374151]">
-                          <span>{(telemetryLabelsByLang[language] || telemetryLabelsByLang.en).rust}</span>
-                          <span className="font-bold text-[#b91c1c]">78 / 100</span>
-                        </div>
-                        <div className="w-full h-1.5 rounded-full bg-red-100 overflow-hidden">
-                          <div className="h-full bg-[#dc2626] rounded-full" style={{ width: '78%' }}></div>
-                        </div>
-                        <span className="text-[10px] text-gray-500 font-medium block">{(telemetryLabelsByLang[language] || telemetryLabelsByLang.en).rustAlert}</span>
-                      </div>
-                    </div>
-
-                    {/* Static Advice Description */}
-                    <p className="text-[13.5px] text-[#111827] font-medium leading-relaxed">
-                      {t.assessment_desc}
-                    </p>
-
-                    {/* Numbered Steps: Perfectly clear & readable */}
-                    <div className="space-y-2.5 pt-1">
-                      <div className="flex items-start gap-2.5">
-                        <div className="w-5 h-5 rounded-full bg-white text-[#006b2c] flex items-center justify-center font-extrabold text-[11px] shrink-0 mt-0.5 border border-[#cbeccf] shadow-xs">
-                          1
-                        </div>
-                        <p className="text-[13px] text-[#111827] leading-normal font-medium">
-                          <strong className="text-[#005a24] font-bold">{t.assessment_step1_label} </strong>
-                          {t.assessment_step1_text}
-                        </p>
-                      </div>
-                      <div className="flex items-start gap-2.5">
-                        <div className="w-5 h-5 rounded-full bg-white text-[#006b2c] flex items-center justify-center font-extrabold text-[11px] shrink-0 mt-0.5 border border-[#cbeccf] shadow-xs">
-                          2
-                        </div>
-                        <p className="text-[13px] text-[#111827] leading-normal font-medium">
-                          <strong className="text-[#005a24] font-bold">{t.assessment_step2_label} </strong>
-                          {t.assessment_step2_text}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Follow-up Action Chips */}
-                    <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-black/10">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onNavigate('schemes');
-                          showToast('Viewing subsidy schemes');
-                        }}
-                        className="px-3 py-1 rounded-full bg-white/90 hover:bg-white text-[#006b2c] border border-white/80 text-[11.5px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-xs"
-                      >
-                        <span className="material-symbols-outlined text-[13px]">percent</span>
-                        <span>{t.chat_action_subsidy}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onNavigate('learn');
-                          showToast('Loading ICAR soil moisture telemetry data');
-                        }}
-                        className="px-3 py-1 rounded-full bg-white/90 hover:bg-white text-[#006b2c] border border-white/80 text-[11.5px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-xs"
-                      >
-                        <span>{t.chat_action_moisture}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onNavigate('officer-hub');
-                          showToast('Connecting to District Agricultural Officer portal');
-                        }}
-                        className="px-3 py-1 rounded-full bg-white/90 hover:bg-white text-[#006b2c] border border-white/80 text-[11.5px] font-bold transition-colors cursor-pointer flex items-center gap-1 shadow-xs"
-                      >
-                        <span>{t.chat_action_officer}</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Additional messages */}
-                {messages.slice(2).map((msg) => (
+                {messages.map((msg) => (
                   <div
                     key={msg.id}
                     className={`flex items-start gap-3 ${
@@ -1174,7 +808,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                           : 'bg-white/90 text-[#111827] rounded-tl-xs border border-white'
                       }`}
                     >
-                      {msg.text}
+                      {msg.type === 'lang-select' ? (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setLanguage('te')}
+                            className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
+                          >
+                            తెలుగు
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setLanguage('hi')}
+                            className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
+                          >
+                            हिंदी
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setLanguage('en')}
+                            className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
+                          >
+                            English
+                          </button>
+                        </div>
+                      ) : (
+                        msg.text
+                      )}
                       <div
                         className={`text-[10px] mt-1 ${
                           msg.sender === 'user' ? 'text-emerald-200 text-right' : 'text-gray-500'

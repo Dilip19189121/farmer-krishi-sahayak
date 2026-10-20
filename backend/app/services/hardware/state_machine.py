@@ -69,6 +69,13 @@ import httpx
 
 from app.services import multilang
 
+
+# Whole-process chat log surfaced to the frontend: [{role, text}, ...] — the
+# full Q&A history of the kiosk. Cleared on demand by GET
+# /hardware/chat-log (routes/hardware.py).
+frontend_chat_log: list[dict] = []
+
+
 # state_machine.py -> hardware/ -> services/ -> app/ -> backend/
 BACKEND_DIR = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(BACKEND_DIR))
@@ -749,6 +756,10 @@ class KioskStateMachine:
 
             transcript = turn.get("transcript", "")
             answer = turn.get("answer", "")
+            # Log every Q&A turn for the frontend session log.
+            frontend_chat_log.append({"role": "user", "text": transcript})
+            if answer:
+                frontend_chat_log.append({"role": "assistant", "text": answer})
             unclear = bool(turn.get("unclear"))
 
             # Language: locked by the FIRST CLEAR transcript; never

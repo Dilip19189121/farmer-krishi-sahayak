@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { ApiError, getPrices, PriceRecord } from '../api/client';
+import { getImageForCrop } from '../utils/imageMatcher';
 
 interface PricesScreenProps {
   showToast: (msg: string) => void;
@@ -249,7 +250,7 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
       isDiscount: diff !== null && diff < 0,
       trendType: isUp ? 'up' : 'down',
       trendPercent: pctStr === null ? '—' : isUp ? `▲ +${pctStr}%` : `▼ -${pctStr}%`,
-      image: '',
+      image: getImageForCrop(r.commodity),
       sparklineColor: isUp ? '#16a34a' : '#dc2626',
       arrival: r.arrival,
     };

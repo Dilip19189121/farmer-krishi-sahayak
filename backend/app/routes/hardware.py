@@ -15,9 +15,10 @@
 # every other route are untouched.
 
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 
 from app.services.hardware import state_machine
-from app.services.hardware.state_machine import COOLDOWN_SECONDS, get_machine
+from app.services.hardware.state_machine import COOLDOWN_SECONDS, get_machine, frontend_chat_log
 
 router = APIRouter(prefix="/hardware", tags=["hardware"])
 
@@ -64,3 +65,15 @@ async def hardware_status():
     """Live state of the kiosk machine (or an idle one that never started)."""
     machine = get_machine()
     return {"status": "ok", **machine.status()}
+
+
+@router.get("/chat-log")
+async def hardware_chat_log():
+    """Return the kiosk's full Q&A log and clear it.
+
+    Shape: {"status": "ok", "log": [{role, text}, ...]}.
+    """
+    import app.services.hardware.state_machine as _sm
+    log = list(_sm.frontend_chat_log)
+    _sm.frontend_chat_log.clear()
+    return JSONResponse(content={"status": "ok", "log": log})
