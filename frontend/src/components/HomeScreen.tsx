@@ -276,12 +276,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         setMessages((prev) => [...prev, {
           id: `welcome-2-${Date.now()}`,
           sender: 'assistant',
-          text: 'Please select your preferred language — Apni bhasha chunein — మీ భాషను ఎంచుకోండి.',
+          text: 'Please select your preferred language\nअपनी भाषा चुनें\nమీ భాషను ఎంచుకోండి',
           time: nowTime(),
         }]);
         // Speak welcome bubble 2 aloud (Web Speech API)
         if ('speechSynthesis' in window) {
-          const utter2 = new SpeechSynthesisUtterance('Please select your preferred language — Apni bhasha chunein — మీ భాషను ఎంచుకోండి.');
+          const utter2 = new SpeechSynthesisUtterance('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి');
           window.speechSynthesis.speak(utter2);
         }
       }, 4000),
@@ -333,9 +333,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           recognitionRef.current.abort();
         }
         const recognition = new SpeechRecognition();
+        // After language selection, match the selected regional language
+        // exactly so the browser STT engine listens on the right accent/code.
         recognition.lang = langCodes[language] || 'en-IN';
         recognition.continuous = false;
-        recognition.interimResults = true;
+        recognition.interimResults = false;
 
         recognition.onresult = (event: any) => {
           let finalTranscript = '';
@@ -360,6 +362,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             setLiveSpokenText(spokenWords);
             setLatestPersonQuery(spokenWords);
             showToast('Voice query captured');
+            postChat(spokenWords);
+            setMessages((prev) => [...prev, {
+              id: `voice-${Date.now()}`,
+              sender: 'user',
+              text: spokenWords,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            }]);
             handleProcessQuery(spokenWords);
           }
         };
@@ -369,10 +378,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           if (err?.error === 'not-allowed' || err?.error === 'service-not-allowed') {
             setIsRecording(false);
           }
+          // No-speech or audio-capture failures: retry after 1s so the
+          // farmer is asked to speak again instead of the mic loop dying.
+          if (err?.error === 'no-speech' || err?.error === 'audio-capture') {
+            setTimeout(() => {
+              if (recognitionRef.current) {
+                recognitionRef.current.abort();
+              }
+              startListeningForFarmer();
+            }, 1000);
+          }
         };
 
         recognition.onend = () => {
           setIsRecording(false);
+          // If we started listening for a voice turn and nothing was
+          // captured, keep the mic loop alive so the farmer can keep speaking.
+          if (languageSelected && !isRecording) {
+            startListeningForFarmer();
+          }
         };
 
         recognitionRef.current = recognition;
@@ -701,10 +725,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                             onClick={() => {
                               setLanguage('te');
                               setLanguageSelected(true);
-                              // After the farmer picks a language and bubble 3 is
-                              // spoken, start the microphone so the backend STT
-                              // (and any live speech) can be captured.
-                              startListeningForFarmer();
+                              // Speak the Telugu start-up line in 'te-IN' then
+                              // start the microphone after bubble 3 is spoken.
+                              if ('speechSynthesis' in window) {
+                                const teUtterance = new SpeechSynthesisUtterance('మీకు ఏమి సహాయం కావాలి? పంట గురించి అడగండి.');
+                                teUtterance.lang = 'te-IN';
+                                window.speechSynthesis.speak(teUtterance);
+                              }
+                              setTimeout(() => startListeningForFarmer(), 3500);
                             }}
                             className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
                           >
@@ -715,7 +743,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                             onClick={() => {
                               setLanguage('hi');
                               setLanguageSelected(true);
-                              startListeningForFarmer();
+                              // Speak the Hindi start-up line in 'hi-IN' then
+                              // start the microphone after bubble 3 is spoken.
+                              if ('speechSynthesis' in window) {
+                                const hiUtterance = new SpeechSynthesisUtterance('आपको क्या सहायता चाहिए? फसल या योजना के बारे में पूछें।');
+                                hiUtterance.lang = 'hi-IN';
+                                window.speechSynthesis.speak(hiUtterance);
+                              }
+                              setTimeout(() => startListeningForFarmer(), 3500);
                             }}
                             className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
                           >
@@ -726,7 +761,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                             onClick={() => {
                               setLanguage('en');
                               setLanguageSelected(true);
-                              startListeningForFarmer();
+                              // Speak the English start-up line in 'en-US' then
+                              // start the microphone after bubble 3 is spoken.
+                              if ('speechSynthesis' in window) {
+                                const enUtterance = new SpeechSynthesisUtterance('What help do you need? Ask about crops or schemes.');
+                                enUtterance.lang = 'en-US';
+                                window.speechSynthesis.speak(enUtterance);
+                              }
+                              setTimeout(() => startListeningForFarmer(), 3500);
                             }}
                             className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
                           >

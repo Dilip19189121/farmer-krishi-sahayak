@@ -15,11 +15,11 @@ const buildPixabayUrl = (cropName: string): string =>
 
 // In-map cache: crop name -> direct CDN image URL.
 const cropImageMap: Record<string, string> = {
-  tomato: 'https://cdn.pixabay.com/photo/2018/07/01/19/55/tomatoes-3509822_640.jpg',
-  potato: 'https://cdn.pixabay.com/photo/2016/09/09/19/54/potatoes-1659111_640.jpg',
-  onion: 'https://cdn.pixabay.com/photo/2016/09/10/17/47/onion-1659236_640.jpg',
-  rice: 'https://cdn.pixabay.com/photo/2018/05/10/11/13/rice-3387261_640.jpg',
-  wheat: 'https://cdn.pixabay.com/photo/2014/12/11/02/55/wheat-563996_640.jpg',
+  'bitter gourd': 'https://cdn.pixabay.com/photo/2016/10/27/08/55/bitter-gourd-1776376_640.jpg',
+  'bottle gourd': 'https://cdn.pixabay.com/photo/2016/09/22/13/00/bottle-gourd-1653858_640.jpg',
+  'ridge gourd': 'https://cdn.pixabay.com/photo/2018/05/02/09/51/bottle-gourd-3372468_640.jpg',
+  'raw banana': 'https://cdn.pixabay.com/photo/2016/08/21/05/06/banana-1609984_640.jpg',
+  colocasia: 'https://cdn.pixabay.com/photo/2016/11/13/15/57/taro-1829503_640.jpg',
   cotton: 'https://cdn.pixabay.com/photo/2015/09/02/13/24/cotton-919049_640.jpg',
   maize: 'https://cdn.pixabay.com/photo/2016/07/12/13/54/corn-1511866_640.jpg',
   sugarcane: 'https://cdn.pixabay.com/photo/2017/08/10/02/05/tiles-2617112_640.jpg',
@@ -36,35 +36,52 @@ const cropImageMap: Record<string, string> = {
   paddy: 'https://cdn.pixabay.com/photo/2018/05/10/11/13/rice-3387261_640.jpg',
   mustard: 'https://cdn.pixabay.com/photo/2019/09/16/07/41/mustard-4480356_640.jpg',
 };
-
-// Case-insensitive, partial match against the mapped crop names.
 export const getImageForCrop = (name: string): string => {
   if (!name) return '';
   const query = name.toLowerCase().trim();
   const detected = Object.keys(cropImageMap).find((crop) =>
     query.includes(crop)
   );
-  return detected !== undefined ? cropImageMap[detected] : '';
-};
+  if (detected !== undefined) return cropImageMap[detected];
 
-// Live fallback: query Pixabay and return the top result's webformatURL,
-// or an empty string when the request fails or no photo is found.
+  // Local fallback for Indian produce that Pixabay struggles with.
+  const lower = query.toLowerCase().trim();
+  if (lower === 'bhindi') return cropImageMap.bhindi;
+  if (lower === 'brinjal') return cropImageMap.brinjal;
+  if (lower === 'drumstick') return cropImageMap.drumstick;
+  if (lower === 'bitter gourd') return cropImageMap['bitter gourd'];
+  if (lower === 'bottle gourd') return cropImageMap['bottle gourd'];
+  if (lower === 'ridge gourd') return cropImageMap['ridge gourd'];
+  if (lower === 'raw banana') return cropImageMap['raw banana'];
+  if (lower === 'colocasia') return cropImageMap.colocasia;
+  return '';
+};
 export const fetchLiveImage = async (name: string): Promise<string> => {
   if (!name) return '';
-  try {
-    const queryName = encodeURIComponent(name.trim());
-    const response = await fetch(
-      `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${queryName}&image_type=photo&per_page=3&safesearch=true`
-    );
-    if (!response.ok) return '';
-    const data = await response.json();
-    const firstHit = data?.hits?.[0];
-    const url = firstHit?.webformatURL;
-    if (url) {
-      cropImageMap[name.toLowerCase()] = url;
+  const cleaned = name
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .replace(/(hybrid|fresh)/gi, '')
+    .trim();
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  const candidates = [cleaned, ...words.slice(0, 1)];
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    try {
+      const response = await fetch(
+        `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(candidate)}&image_type=photo&per_page=3&safesearch=true`
+      );
+      if (!response.ok) continue;
+      const data = await response.json();
+      const firstHit = data?.hits?.[0];
+      const url = firstHit?.webformatURL;
+      if (url) {
+        cropImageMap[name.toLowerCase()] = url;
+        return url;
+      }
+    } catch {
+      continue;
     }
-    return url ?? '';
-  } catch {
-    return '';
   }
+  return '';
 };
