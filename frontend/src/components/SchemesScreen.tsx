@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { LocalizedScheme } from '../data/schemesData';
-import { ApiError, ApiScheme, getSchemes } from '../api/client';
+import { parsedSchemes } from '../data/parsedSchemes';
 
 interface SchemesScreenProps {
   showToast: (msg: string) => void;
@@ -23,15 +22,50 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
   const [selectedState, setSelectedState] = useState<string>('all');
   const [selectedEligibility, setSelectedEligibility] = useState<string>('all');
 
-  // Schemes come from the backend (GET /schemes) — no mock source.
-  const [schemes, setSchemes] = useState<LocalizedScheme[]>([]);
-  const [isLoadingSchemes, setIsLoadingSchemes] = useState(true);
-  const [schemesError, setSchemesError] = useState<string | null>(null);
-  const [expandedDocs, setExpandedDocs] = useState<Record<string, boolean>>({});
-  const [applyModalScheme, setApplyModalScheme] = useState<LocalizedScheme | null>(null);
+  // Schemes are parsed locally from the dataset files in "multiligual datasets/" (frontend-only).
   const [showDocsModal, setShowDocsModal] = useState(false);
-  const [farmerAadhaar, setFarmerAadhaar] = useState('');
-  const [farmerLandArea, setFarmerLandArea] = useState('2.5');
+  const [visibleSchemes, setVisibleSchemes] = useState(4);
+
+  const loadMoreTextByLang: Record<string, string> = {
+    en: 'Load More',
+    te: 'మరిన్ని చూడండి',
+    hi: 'और देखें',
+    ta: 'மேலும் காட்டு',
+    kn: 'ಇನ್ನಷ್ಟು ವೀಕ್ಷಿಸಿ',
+    mr: 'अधिक पहा',
+    bn: 'আরও দেখুন',
+    gu: 'વધુ જુઓ',
+    pa: 'ਹੋਰ ਦੇਖੋ',
+  };
+
+  const eligibilityLabelByLang: Record<string, string> = {
+    en: 'Eligibility',
+    te: 'అర్హత',
+    hi: 'पात्रता',
+    ta: 'தகுதி',
+    kn: 'ಅರ್ಹತೆ',
+    mr: 'पात्रता',
+    bn: 'যোগ্যতা',
+    gu: 'પાત્રતા',
+    pa: 'ਯੋਗਤਾ',
+  };
+
+  const visitPortalTextByLang: Record<string, string> = {
+    en: 'Visit Official Portal',
+    te: 'అధికారిక పోర్టల్ సందర్శించండి',
+    hi: 'आधिकारिक पोर्टल देखें',
+    ta: 'அதிகாரப்பூர்வ தளத்தை பார்வையிடுங்கள்',
+    kn: 'ಅಧಿಕೃತ ಪೋರ್ಟಲ್ ನೋಡಿ',
+    mr: 'अधिकृत पोर्टल पहा',
+    bn: 'সরকারি পোর্টাল দেখুন',
+    gu: 'સત્તાવાર પોર્ટલ જુઓ',
+    pa: 'ਸਰਕਾਰੀ ਪੋਰਟਲ ਵੇਖੋ',
+  };
+
+  const noLinkTextByLang: Record<string, string> = {
+    en: 'Official link not in dataset',
+    hi: 'आधिकारिक लिंक डेटासेट में नहीं है',
+  };  const [farmerLandArea, setFarmerLandArea] = useState('2.5');
 
 
   const getLocalized = (field: Record<string, string> | string | undefined): string => {
@@ -40,84 +74,9 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
     return field[language] || field.en || Object.values(field)[0] || '';
   };
 
-  const loadSchemes = async () => {
-    setIsLoadingSchemes(true);
-    try {
-      const data = await getSchemes();
-      setSchemes((data.schemes ?? []).map((s, idx) => mapApiScheme(s, idx)));
-      setSchemesError(null);
-    } catch (err) {
-      setSchemesError(
-        err instanceof ApiError
-          ? err.message
-          : 'Could not load schemes (backend on port 8000 not reachable).'
-      );
-    } finally {
-      setIsLoadingSchemes(false);
-    }
-  };
 
-  const mapApiScheme = (s: ApiScheme, idx: number): LocalizedScheme => {
-    const tagStyles = TAG_STYLES[idx % TAG_STYLES.length];
-    const slug = s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    const sentences = s.description
-      .split(/(?<=[.?!])\s+/)
-      .map((snt) => snt.trim())
-      .filter(Boolean);
-    return {
-      id: slug || `scheme-${idx}`,
-      categoryKey: 'all',
-      stateType: 'all',
-      eligibilityKey: 'all',
-      categoryTagBg: tagStyles.bg,
-      categoryTagText: tagStyles.text,
-      featureIcon: 'account_balance',
-      iconName: 'eco',
-      categoryTag: { en: 'GOVERNMENT SCHEME' },
-      featureTag: { en: s.source_url ? 'Official Source' : 'Knowledge Base' },
-      title: { en: s.name },
-      subtitle: {
-        en: s.source_url
-          ? `Official source: ${s.source_url}`
-          : 'Source: Krishi Sahayak knowledge base',
-      },
-      points: sentences.map((sentence) => ({
-        text: { en: sentence },
-        iconType: 'check' as const,
-      })),
-      documents: (s.source_files.length ? s.source_files : [s.source_url || 'No documents listed']).map(
-        (file) => ({ en: file })
-      ),
-      eligibility: {
-        en: `${s.chunk_count} knowledge chunks indexed from the department documents`,
-      },
-    };
-  };
 
-  useEffect(() => {
-    void loadSchemes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  const toggleDocs = (id: string) => {
-    setExpandedDocs((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
-  const handleApplyClick = (scheme: LocalizedScheme) => {
-    setApplyModalScheme(scheme);
-  };
-
-  const submitApplication = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!applyModalScheme) return;
-    const token = `AP-SCH-${Math.floor(100000 + Math.random() * 900000)}`;
-    const schemeTitle = getLocalized(applyModalScheme.title);
-    showToast(`Application submitted for ${schemeTitle}! Token: ${token}`);
-    setApplyModalScheme(null);
-  };
 
   const stateFilterLabelsByLang: Record<string, string> = {
     en: 'State: All (Central & State)',
@@ -454,23 +413,13 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
     pa: '12-ਅੰਕਾਂ ਦਾ ਆਧਾਰ ਨੰਬਰ ਦਰਜ ਕਰੋ',
   };
 
-  const filteredSchemes = schemes.filter((s) => {
+  const filteredSchemes = parsedSchemes.filter((s) => {
     const query = searchQuery.trim().toLowerCase();
-    const titleLocalized = getLocalized(s.title).toLowerCase();
-    const titleEn = (s.title?.en || '').toLowerCase();
-    const subLocalized = getLocalized(s.subtitle).toLowerCase();
-    const subEn = (s.subtitle?.en || '').toLowerCase();
-    const catLocalized = getLocalized(s.categoryTag).toLowerCase();
-    const catEn = (s.categoryTag?.en || '').toLowerCase();
-
     const matchesSearch =
       !query ||
-      titleLocalized.includes(query) ||
-      titleEn.includes(query) ||
-      subLocalized.includes(query) ||
-      subEn.includes(query) ||
-      catLocalized.includes(query) ||
-      catEn.includes(query);
+      s.name.toLowerCase().includes(query) ||
+      s.description.toLowerCase().includes(query) ||
+      s.eligibility.toLowerCase().includes(query);
 
     const matchesCategory = selectedCategory === 'all' || s.categoryKey === selectedCategory;
 
@@ -570,38 +519,8 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
         </div>
       </div>
 
-      {/* 3. The 6 Scheme Cards Grid */}
-      {/* Loading / Error / Empty states (real GET /schemes backend data) */}
-      {isLoadingSchemes && (
-        <div className="flex items-center justify-center gap-2 p-6 rounded-3xl bg-white/75 backdrop-blur-xl border border-white/60 shadow-xs text-[13px] font-bold text-[#374151]">
-          <span className="w-4 h-4 rounded-full border-2 border-[#006b2c] border-t-transparent animate-spin"></span>
-          <span>Loading central & state schemes from the backend...</span>
-        </div>
-      )}
-      {!isLoadingSchemes && schemesError && (
-        <div className="flex items-center justify-between gap-3 p-5 rounded-3xl bg-[#fff5f5] border border-red-200 shadow-xs">
-          <div className="flex items-center gap-2 text-[13px] font-bold text-[#b91c1c]">
-            <span className="material-symbols-outlined text-[18px]">wifi_off</span>
-            <span>{schemesError}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => void loadSchemes()}
-            className="px-4 py-1.5 rounded-full bg-[#b91c1c] hover:bg-[#991b1b] text-white text-[12px] font-bold cursor-pointer shadow-xs"
-          >
-            Retry
-          </button>
-        </div>
-      )}
-      {!isLoadingSchemes && !schemesError && schemes.length === 0 && (
-        <div className="flex items-center justify-center gap-2 p-6 rounded-3xl bg-white/75 backdrop-blur-xl border border-white/60 shadow-xs text-[13px] font-semibold text-[#6b7280]">
-          <span className="material-symbols-outlined text-[18px]">search_off</span>
-          <span>No schemes available from the backend yet.</span>
-        </div>
-      )}
-
-      {/* Empty filter results */}
-      {!isLoadingSchemes && !schemesError && schemes.length > 0 && filteredSchemes.length === 0 && (
+      {/* 3. Scheme Cards Grid — parsed from "multiligual datasets/" scheme files (4 shown by default) */}
+      {filteredSchemes.length === 0 && (
         <div className="flex items-center justify-center gap-2 p-6 rounded-3xl bg-white/75 backdrop-blur-xl border border-white/60 shadow-xs text-[13px] font-semibold text-[#6b7280]">
           <span className="material-symbols-outlined text-[18px]">filter_alt_off</span>
           <span>No schemes match your filter or search.</span>
@@ -610,114 +529,87 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
 
       {filteredSchemes.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredSchemes.map((scheme) => (
-          <div
-            key={scheme.id}
-            className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.08)] border border-white/60 p-5 sm:p-6 flex flex-col justify-between hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] transition-all duration-300"
-          >
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-4">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide ${scheme.categoryTagBg} ${scheme.categoryTagText} shadow-2xs`}
-                  >
-                    {getLocalized(scheme.categoryTag)}
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/80 backdrop-blur-xs text-[10.5px] font-semibold text-[#374151] border border-gray-200 shadow-2xs">
-                    <span className="material-symbols-outlined text-[13px] text-gray-600">
-                      {scheme.featureIcon}
+          {filteredSchemes.slice(0, visibleSchemes).map((scheme) => {
+            const catLabel =
+              scheme.categoryKey === 'insurance' ? 'INSURANCE' :
+              scheme.categoryKey === 'credit' ? 'CREDIT' :
+              scheme.categoryKey === 'irrigation' ? 'IRRIGATION' : 'GOVERNMENT SCHEME';
+            const catStyle =
+              scheme.categoryKey === 'insurance' ? 'bg-[#dcfce7] text-[#15803d]' :
+              scheme.categoryKey === 'credit' ? 'bg-[#e0f2fe] text-[#0369a1]' :
+              scheme.categoryKey === 'irrigation' ? 'bg-[#ccfbf1] text-[#0f766e]' : 'bg-[#f3f4f6] text-[#374151]';
+            return (
+              <div
+                key={scheme.id}
+                className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.08)] border border-white/60 p-5 sm:p-6 flex flex-col justify-between hover:shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12)] transition-all duration-300"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide ${catStyle} shadow-2xs`}
+                    >
+                      {catLabel}
                     </span>
-                    <span>{getLocalized(scheme.featureTag)}</span>
-                  </span>
-                </div>
-                <div className="w-9 h-9 rounded-full bg-white text-[#006b2c] flex items-center justify-center shrink-0 shadow-xs border border-white/80">
-                  <span className="material-symbols-outlined text-[19px]">
-                    {scheme.iconName}
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-[19px] sm:text-[20px] font-bold text-[#111827] leading-snug">
-                  {getLocalized(scheme.title)}
-                </h3>
-                <p className="text-[11.5px] sm:text-[12px] text-[#6b7280] font-medium mt-0.5">
-                  {getLocalized(scheme.subtitle)}
-                </p>
-              </div>
-
-              <div className="my-4 bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/80 space-y-2 text-[12.5px] text-[#374151] font-medium shadow-2xs">
-                {scheme.points.map((pt, idx) => (
-                  <div key={idx} className="flex items-start gap-2">
-                    {pt.iconType === 'check' && (
-                      <span className="w-4 h-4 rounded-full bg-[#dcfce7] text-[#15803d] flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
-                        ✓
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/80 backdrop-blur-xs text-[10.5px] font-semibold text-[#374151] border border-gray-200 shadow-2xs max-w-[55%]">
+                      <span className="material-symbols-outlined text-[13px] text-gray-600">
+                        description
                       </span>
-                    )}
-                    {pt.iconType === 'bolt' && (
-                      <span className="material-symbols-outlined text-[#15803d] text-[15px] shrink-0 mt-0.5">
-                        bolt
-                      </span>
-                    )}
-                    {pt.iconType === 'calendar' && (
-                      <span className="material-symbols-outlined text-[#15803d] text-[14px] shrink-0 mt-0.5">
-                        calendar_today
-                      </span>
-                    )}
-                    <span className="leading-snug text-[#1f2937]">{getLocalized(pt.text)}</span>
+                      <span className="truncate">{scheme.sourceFile.split(',')[0]}</span>
+                    </span>
                   </div>
-                ))}
-              </div>
 
-              <div className="mb-4">
-                <button
-                  type="button"
-                  onClick={() => toggleDocs(scheme.id)}
-                  className="w-full py-1.5 px-3 rounded-xl bg-white/50 hover:bg-white/80 text-[11.5px] font-semibold text-[#374151] flex items-center justify-between transition-colors border border-white/60 cursor-pointer shadow-2xs"
-                >
-                  <span className="flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[15px] text-[#006b2c]">
-                      description
+                  <h3 className="text-[19px] sm:text-[20px] font-bold text-[#111827] leading-snug">
+                    {scheme.name}
+                  </h3>
+
+                  <p className="mt-3 text-[12.5px] text-[#374151] leading-relaxed line-clamp-4">
+                    {scheme.description}
+                  </p>
+
+                  <div className="mt-3 bg-[#f0fdf4] rounded-2xl p-3 border border-[#dcfce7] shadow-2xs">
+                    <span className="text-[10px] font-extrabold text-[#15803d] uppercase tracking-wider block mb-1">
+                      {eligibilityLabelByLang[language] || eligibilityLabelByLang.en}
                     </span>
-                    <span>{reqDocsLabelByLang[language] || reqDocsLabelByLang.en}</span>
-                  </span>
-                  <span className="material-symbols-outlined text-[16px] text-gray-500">
-                    {expandedDocs[scheme.id] ? 'expand_less' : 'expand_more'}
-                  </span>
-                </button>
-                {expandedDocs[scheme.id] && (
-                  <div className="mt-2 p-3 bg-white/80 rounded-xl border border-white text-[11px] text-[#374151] space-y-1 shadow-xs animate-in fade-in duration-200">
-                    <span className="font-bold text-[#111827] block mb-1">
-                      {checklistLabelByLang[language] || checklistLabelByLang.en}
+                    <span className="text-[12px] text-[#1f2937] font-medium leading-snug">
+                      {scheme.eligibility}
                     </span>
-                    {scheme.documents.map((doc, dIdx) => (
-                      <div key={dIdx} className="flex items-center gap-1.5">
-                        <span className="text-[#006b2c]">✓</span>
-                        <span>{getLocalized(doc)}</span>
-                      </div>
-                    ))}
-                    <div className="pt-1.5 mt-1 border-t border-black/5 text-[#4b5563]">
-                      <strong>{targetLabelByLang[language] || targetLabelByLang.en} </strong>{' '}
-                      {getLocalized(scheme.eligibility)}
-                    </div>
+                  </div>
+                </div>
+
+                {scheme.link ? (
+                  <a
+                    href={scheme.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 w-full py-3 px-4 rounded-full bg-[#006b2c] hover:bg-[#005a24] text-white font-bold text-[13.5px] flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                  >
+                    <span>{visitPortalTextByLang[language] || visitPortalTextByLang.en}</span>
+                    <span className="material-symbols-outlined text-[17px]">arrow_outward</span>
+                  </a>
+                ) : (
+                  <div className="mt-4 w-full py-3 px-4 rounded-full bg-gray-100 text-[#6b7280] font-bold text-[13.5px] flex items-center justify-center gap-1.5 shadow-xs">
+                    <span>{noLinkTextByLang[language] || noLinkTextByLang.en}</span>
+                    <span className="material-symbols-outlined text-[17px]">link_off</span>
                   </div>
                 )}
               </div>
-            </div>
+            );
+          })}
+        </div>
+      )}
 
-            <button
-              type="button"
-              onClick={() => handleApplyClick(scheme)}
-              className="w-full py-3 px-4 rounded-full bg-[#006b2c] hover:bg-[#005a24] text-white font-bold text-[13.5px] flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
-            >
-              <span>{t.schemes_apply_now}</span>
-              <span className="material-symbols-outlined text-[17px]">
-                arrow_outward
-              </span>
-            </button>
-          </div>
-        ))}
-      </div>
+      {/* Load More — reveals 4 more scheme cards */}
+      {visibleSchemes < filteredSchemes.length && (
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={() => setVisibleSchemes((v) => v + 4)}
+            className="px-7 py-2.5 rounded-full bg-white/80 hover:bg-white text-[#006b2c] border border-[#006b2c]/30 font-bold text-[13px] flex items-center gap-1 shadow-xs transition-colors cursor-pointer"
+          >
+            <span>{loadMoreTextByLang[language] || loadMoreTextByLang.en}</span>
+            <span className="material-symbols-outlined text-[17px]">expand_more</span>
+          </button>
+        </div>
       )}
 
       {/* 4. Bottom Helpline & Navigation Banner */}
@@ -759,78 +651,6 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
           </button>
         </div>
       </div>
-
-      {/* Online Application Modal */}
-      {applyModalScheme && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-white/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-7 shadow-2xl border border-white relative animate-in fade-in duration-200">
-            <button
-              onClick={() => setApplyModalScheme(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center cursor-pointer"
-            >
-              ✕
-            </button>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-2xl bg-[#dcfce7] text-[#15803d] flex items-center justify-center font-bold">
-                <span className="material-symbols-outlined text-[22px]">
-                  {applyModalScheme.iconName}
-                </span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-[#15803d] uppercase tracking-wider block">
-                  {appModalDirectByLang[language] || appModalDirectByLang.en}
-                </span>
-                <h3 className="text-[18px] font-bold text-[#111827]">
-                  {getLocalized(applyModalScheme.title)}
-                </h3>
-              </div>
-            </div>
-            <form onSubmit={submitApplication} className="space-y-3.5">
-              <div>
-                <label className="block text-[12px] font-bold text-[#111827] mb-1">
-                  {appModalAadhaarByLang[language] || appModalAadhaarByLang.en}
-                </label>
-                <input
-                  type="text"
-                  required
-                  maxLength={12}
-                  placeholder={aadhaarPlaceholderByLang[language] || aadhaarPlaceholderByLang.en}
-                  value={farmerAadhaar}
-                  onChange={(e) => setFarmerAadhaar(e.target.value)}
-                  className="w-full h-10 px-4 rounded-full bg-slate-50 border border-slate-200 text-[13px] focus:outline-none focus:ring-2 focus:ring-[#006b2c]"
-                />
-              </div>
-              <div>
-                <label className="block text-[12px] font-bold text-[#111827] mb-1">
-                  {appModalLandByLang[language] || appModalLandByLang.en}
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  required
-                  value={farmerLandArea}
-                  onChange={(e) => setFarmerLandArea(e.target.value)}
-                  className="w-full h-10 px-4 rounded-full bg-slate-50 border border-slate-200 text-[13px] focus:outline-none focus:ring-2 focus:ring-[#006b2c]"
-                />
-              </div>
-              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-100 text-[12px] text-emerald-900 space-y-1">
-                <span className="font-bold block">
-                  {protocolTitleByLang[language] || protocolTitleByLang.en}
-                </span>
-                <p>
-                  {protocolDescByLang[language] || protocolDescByLang.en}
-                </p>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-3 rounded-full bg-[#006b2c] hover:bg-[#005a24] text-white font-bold text-[13.5px] shadow-sm transition-all cursor-pointer mt-2"
-              >
-                {appModalSubmitByLang[language] || appModalSubmitByLang.en}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Required Documents Modal */}
       {showDocsModal && (

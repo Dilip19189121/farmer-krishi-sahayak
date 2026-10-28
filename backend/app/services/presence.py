@@ -14,6 +14,7 @@
 # person leaves again.
 
 import time
+import threading
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -105,7 +106,8 @@ class PresenceWatcher:
             self._cap.release()
             self._cap = None
 
-    # -- detection ----------------------------------------------------------
+
+# -- detection ----------------------------------------------------------
 
     def _faces_now(self) -> int:
         """Grab one frame, run YuNet, return the number of confident faces."""
@@ -195,6 +197,24 @@ class PresenceWatcher:
             return None
         finally:
             self.stop()
+
+
+# ---------------------------------------------------------------------------
+# Stop support for FastAPI shutdown (main.py).
+# ---------------------------------------------------------------------------
+
+# Module-level stop flag: the background watcher thread checks this on every
+# iteration so it stops actively on shutdown (not just via daemon=True).
+_presence_stop_flag = threading.Event()
+
+
+def stop_presence() -> None:
+    """Set the stop flag and release the camera, killing the presence thread.
+
+    The background loop checks _presence_stop_flag on every iteration and
+    exits, then releases the camera.
+    """
+    _presence_stop_flag.set()
 
 
 # ---------------------------------------------------------------------------

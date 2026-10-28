@@ -7,7 +7,7 @@ import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -72,9 +72,9 @@ def _generate_id(conn: sqlite3.Connection) -> str:
 
 class GrievanceCreate(BaseModel):
     problem: str = Field(..., min_length=1, description="What went wrong")
-    name: str | None = Field(default=None, description="Farmer's name")
-    village: str | None = Field(default=None, description="Village / block")
-    phone: str | None = Field(default=None, description="Contact number")
+    name: Optional[str] = Field(default=None, description="Farmer's name")
+    village: Optional[str] = Field(default=None, description="Village / block")
+    phone: Optional[str] = Field(default=None, description="Contact number")
 
 
 class GrievanceStatusUpdate(BaseModel):
@@ -88,9 +88,9 @@ class GrievanceCreated(BaseModel):
 
 class GrievanceOut(BaseModel):
     grievance_id: str
-    name: str | None = None
-    village: str | None = None
-    phone: str | None = None
+    name: Optional[str] = None
+    village: Optional[str] = None
+    phone: Optional[str] = None
     problem: str
     status: str
     created_at: str

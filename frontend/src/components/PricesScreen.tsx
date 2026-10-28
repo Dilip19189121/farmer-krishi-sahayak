@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { ApiError, getPrices, PriceRecord } from '../api/client';
-import { getImageForCrop } from '../utils/imageMatcher';
+import { getImageForCrop, fetchLiveImage } from '../utils/imageMatcher';
+import { parsedPriceItems, ParsedPriceItem } from '../data/parsedPrices';
 
 interface PricesScreenProps {
   showToast: (msg: string) => void;
@@ -34,6 +35,59 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
   const [commodities, setCommodities] = useState<CommodityCardData[]>([]);
   const [isLoadingPrices, setIsLoadingPrices] = useState(true);
   const [pricesError, setPricesError] = useState<string | null>(null);
+
+  // Parsed-dataset subsections ("multilingual datasets/prices"): 6 cards shown by default.
+  const [visibleVegetables, setVisibleVegetables] = useState(6);
+  const [visibleFruits, setVisibleFruits] = useState(6);
+  const [liveImages, setLiveImages] = useState<Record<string, string>>({});
+
+  const vegetablesTextByLang: Record<string, string> = {
+    en: 'Vegetables',
+    te: 'కూరగాయలు',
+    hi: 'सब्जियां',
+    ta: 'காய்கறிகள்',
+    kn: 'ತರಕಾರಿಗಳು',
+    mr: 'भाज्या',
+    bn: 'সবজি',
+    gu: 'શાકભાજી',
+    pa: 'ਸਬਜ਼ੀਆਂ',
+  };
+
+  const fruitsTextByLang: Record<string, string> = {
+    en: 'Fruits',
+    te: 'పండ్లు',
+    hi: 'फल',
+    ta: 'பழங்கள்',
+    kn: 'ಹಣ್ಣುಗಳು',
+    mr: 'फळे',
+    bn: 'ফল',
+    gu: 'ફળો',
+    pa: 'ਫਲ',
+  };
+
+  const loadMoreTextByLang: Record<string, string> = {
+    en: 'Load More',
+    te: 'మరిన్ని చూడండి',
+    hi: 'और देखें',
+    ta: 'மேலும் காட்டு',
+    kn: 'ಇನ್ನಷ್ಟು ವೀಕ್ಷಿಸಿ',
+    mr: 'अधिक पहा',
+    bn: 'আরও দেখুন',
+    gu: 'વધુ જુઓ',
+    pa: 'ਹੋਰ ਦੇਖੋ',
+  };
+
+  const noProduceTextByLang: Record<string, string> = {
+    en: 'No records for this produce category in the parsed market dataset.',
+    te: 'పార్స్ చేసిన మార్కెట్ డేటాసెట్‌లో ఈ కేటగికీ రికార్డులు లేవు.',
+    hi: 'पार्स किए गए मंडी डेटा में इस श्रेणी के रिकॉर्ड नहीं हैं।',
+    ta: 'பார்ஸ் செய்யப்பட்ட சந்தை தரவில் இந்த வகைக்கு பதிவுகள் இல்லை.',
+    kn: 'ಪಾರ್ಸ್ ಮಾಡಿದ ಮಾರುಕಟ್ಟೆ ದತ್ತಾಂಶದಲ್ಲಿ ಈ ವರ್ಗಕ್ಕೆ ದಾಖಲೆಗಳಿಲ್ಲ.',
+    mr: 'पार्स केलेल्या बाजार डेटामध्ये या श्रेणीसाठी रेकॉर्ड नाहीत.',
+    bn: 'পার্স করা বাজার ডেটাসেটে এই বিভাগের কোনো রেকর্ড নেই।',
+    gu: 'પાર્સ કરેલ બજાર ડેટાસેટમાં આ શ્રેણી માટે રેકોર્ડ નથી.',
+    pa: 'ਪਾਰਸ ਕੀਤੇ ਮੰਡੀ ਡੇਟਾ ਵਿੱਚ ਇਸ ਸ਼੍ਰੇਣੀ ਲਈ ਰਿਕਾਰਡ ਨਹੀਂ ਹਨ।',
+  };
 
   const stateLabelsByLang: Record<string, Record<string, string>> = {
     'Andhra Pradesh': {
@@ -286,20 +340,241 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
     };
   }, []);
 
-  const filteredCommodities = commodities.filter((item) => {
+  // Parsed items split into the two produce subsections.
+  const cleanQueryName = (c: string): string =>
+    c.replace(/\([^)]*\)/g, '').split('/')[0].trim();
+
+  const vegetableItems = parsedPriceItems.filter(
+    (item) => item.group.toLowerCase() === 'vegetables'
+  );
+
+  // Fruits: deduplicate by commodity name, keeping only the latest price
+  // entry per commodity (the highest price value in the prices array).
+  // The raw parsed dataset repeats the same commodity several times with
+  // different price rows, so show each fruit once.
+  const fruitItems = (() => {
+    const seen = new Map<string, ParsedPriceItem>();
+    for (const item of parsedPriceItems) {
+      if (!item.group.toLowerCase().includes('fruit')) continue;
+      const name = item.commodity.trim();
+      if (!seen.has(name)) {
+        seen.set(name, item);
+        continue;
+      }
+      const existing = seen.get(name)!;
+      const existingPrice = existing.prices
+        .map((p) => p.price)
+        .filter((p): p is number => p !== null && p > 0);
+      const newestPrice = item.prices
+        .map((p) => p.price)
+        .filter((p): p is number => p !== null && p > 0);
+      if (newestPrice.length > 0 &&
+          (existingPrice.length === 0 ||
+           Math.max(...newestPrice) > Math.max(...existingPrice))) {
+        seen.set(name, item);
+      }
+    }
+    return Array.from(seen.values());
+  })();
+
+  // Live Pixabay fallback for parsed items without a pre-mapped image.
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const targets = [...vegetableItems, ...fruitItems].filter(
+        (item) => !getImageForCrop(item.commodity)
+      );
+      const updates: Record<string, string> = {};
+      for (const item of targets) {
+        const q = cleanQueryName(item.commodity);
+        if (!q || liveImages[q]) continue;
+        const url = await fetchLiveImage(q);
+        if (url) updates[q] = url;
+      }
+      if (!cancelled && Object.keys(updates).length > 0) {
+        setLiveImages((prev) => ({ ...prev, ...updates }));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [liveImages]);
+
+  const filteredVegetables = vegetableItems.filter((item) => {
     const q = searchQuery.toLowerCase();
-    const currName = item.name[language] || item.name.en;
-    const currVariety = item.variety[language] || item.variety.en;
-    const currMandi = item.mandi[language] || item.mandi.en;
-    const matchesSearch =
-      currName.toLowerCase().includes(q) ||
-      currVariety.toLowerCase().includes(q) ||
-      currMandi.toLowerCase().includes(q);
-    const matchesMarket =
-      selectedMarketTab === 'All' || item.stateKey === selectedMarketTab;
-    return matchesSearch && matchesMarket;
+    return (
+      item.commodity.toLowerCase().includes(q) ||
+      item.group.toLowerCase().includes(q)
+    );
   });
 
+  const filteredFruits = fruitItems.filter((item) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      item.commodity.toLowerCase().includes(q) ||
+      item.group.toLowerCase().includes(q)
+    );
+  });
+
+  // One produce subsection: header, larger-image cards, and Load More below.
+  const renderSubsection = (
+    items: ParsedPriceItem[],
+    visibleCount: number,
+    setVisibleCount: React.Dispatch<React.SetStateAction<number>>,
+    labels: Record<string, string>,
+    icon: string
+  ) => {
+    const shown = items.slice(0, visibleCount);
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-[19px] text-[#006b2c]">{icon}</span>
+          <h2 className="text-[17px] font-bold text-[#111827] tracking-tight">
+            {labels[language] || labels.en}
+          </h2>
+          <span className="text-[11px] font-bold text-[#6b7280] uppercase tracking-wider">
+            {items.length}
+          </span>
+        </div>
+        {items.length === 0 && (
+          <div className="flex items-center gap-2 p-4 rounded-2xl bg-white/80 border border-white/80 shadow-xs text-[12.5px] font-semibold text-[#6b7280]">
+            <span className="material-symbols-outlined text-[17px]">info</span>
+            <span>{noProduceTextByLang[language] || noProduceTextByLang.en}</span>
+          </div>
+        )}
+        {shown.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {shown.map((item) => {
+              const latest = item.prices.find(p => p.price !== null && p.price > 0)?.price ?? null;
+              // Use the SECOND non-zero price for the trend calculation; the
+              // first (latest) is the current card price and the PDF zero must
+              // not count as a previous value.
+              const prev = item.prices
+                .filter(p => p.price !== null && p.price > 0)
+                .at(1)?.price ?? null;
+              const isUp = latest !== null && prev !== null && latest >= prev;
+              const diff = latest !== null && prev !== null ? latest - prev : null;
+              const pct = diff !== null && prev ? (diff / prev) * 100 : null;
+              const pctStr = pct === null ? null : Math.abs(pct).toFixed(1);
+              const img =
+                getImageForCrop(item.commodity) ||
+                liveImages[cleanQueryName(item.commodity)] ||
+                '';
+              return (
+                <div
+                  key={`${item.commodity}-${item.sourceFile}`}
+                  className="bg-white/95 rounded-3xl border border-gray-100 shadow-xs hover:shadow-md transition-all overflow-hidden flex flex-col"
+                >
+                  {img ? (
+                    <img
+                      src={img}
+                      alt={item.commodity}
+                      className="w-full h-44 object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-44 bg-[#dcfce7] text-[#15803d] flex items-center justify-center">
+                      <span className="material-symbols-outlined text-[44px]">spa</span>
+                    </div>
+                  )}
+                  <div className="p-5 flex flex-col justify-between flex-1">
+                    <div>
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                          <h3 className="text-[18px] font-bold text-[#111827] leading-snug">
+                            {item.commodity}
+                          </h3>
+                          <p className="text-[11.5px] text-[#6b7280] font-medium">
+                            {item.prices[0]?.date ?? ''}
+                          </p>
+                        </div>
+                        <span className="px-2.5 py-1 rounded-full bg-[#f3f4f6] text-[#374151] text-[11px] font-semibold whitespace-nowrap shadow-2xs">
+                          {item.group}
+                        </span>
+                      </div>
+
+                      <div className="flex items-baseline justify-between mt-2">
+                        <div className="flex items-baseline">
+                          <span className="text-[30px] sm:text-[32px] font-bold text-[#111827] tracking-tight tabular-nums">
+                            {latest !== null ? `₹ ${latest.toLocaleString('en-IN')}` : '—'}
+                          </span>
+                          <span className="text-[12px] text-[#6b7280] font-medium ml-1">
+                            {t.prices_per_quintal}
+                          </span>
+                        </div>
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#e8f8eb] text-[#006b2c] text-[11.5px] font-bold shadow-2xs tabular-nums">
+                          {latest !== null ? `₹ ${(latest / 100).toFixed(2)}` : '—'}
+                          {perKgSuffixByLang[language] || '/kg'}
+                        </span>
+                      </div>
+
+                      <div className="mt-1 text-[11.5px] text-[#4b5563] flex flex-wrap items-center gap-x-3">
+                        {item.msp !== null && (
+                          <span>
+                            {govtMspLabelByLang[language] || 'Govt MSP'}: ₹ {item.msp.toLocaleString('en-IN')}
+                          </span>
+                        )}
+                        {item.arrivals[0]?.arrival != null && (
+                          <span>
+                            {arrivalsTextByLang[language] || arrivalsTextByLang.en}:
+                            {' '}
+                            {item.arrivals[0].arrival.toLocaleString('en-IN')} {mtTextByLang[language] || 'MT'}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <svg width="64" height="20" viewBox="0 0 64 20" className="overflow-visible">
+                          {isUp ? (
+                            <path
+                              d="M 2 16 Q 16 14, 28 15 T 44 8 T 62 4"
+                              fill="none"
+                              stroke={isUp ? '#16a34a' : '#dc2626'}
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                            />
+                          ) : (
+                            <path
+                              d="M 2 5 Q 16 8, 28 6 T 44 14 T 62 17"
+                              fill="none"
+                              stroke="#dc2626"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                            />
+                          )}
+                        </svg>
+                        <span className="text-[11px] text-[#6b7280] font-medium">{t.prices_trend}</span>
+                      </div>
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full text-[11.5px] font-bold shadow-2xs tabular-nums ${
+                          isUp ? 'bg-[#dcfce7] text-[#15803d]' : 'bg-[#fee2e2] text-[#b91c1c]'
+                        }`}
+                      >
+                        {pctStr === null ? '—' : isUp ? `▲ +${pctStr}%` : `▼ -${pctStr}%`}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {visibleCount < items.length && (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((v) => v + 4)}
+              className="px-7 py-2.5 rounded-full bg-white/80 hover:bg-white text-[#006b2c] border border-[#006b2c]/30 font-bold text-[13px] flex items-center gap-1 shadow-xs transition-colors cursor-pointer"
+            >
+              <span>{loadMoreTextByLang[language] || loadMoreTextByLang.en}</span>
+              <span className="material-symbols-outlined text-[17px]">expand_more</span>
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
   return (
     <div className="w-full max-w-[1380px] mx-auto px-4 sm:px-6 py-4 space-y-5">
       <div className="w-full bg-white/80 backdrop-blur-xl rounded-3xl shadow-[0_16px_40px_-12px_rgba(0,0,0,0.12)] border border-white/60 p-6 sm:p-8 space-y-6">
@@ -347,7 +622,7 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
           </div>
           <button
             type="button"
-            onClick={() => showToast(`${filteredRatesTextByLang[language] || 'Filtered market rates'}: ${filteredCommodities.length}`)}
+            onClick={() => showToast(`${filteredRatesTextByLang[language] || 'Filtered market rates'}: ${filteredVegetables.length + filteredFruits.length}`)}
             className="absolute right-1.5 px-6 py-2.5 rounded-full bg-[#132a1e] hover:bg-black text-white font-semibold text-[13px] shadow-xs cursor-pointer transition-colors"
           >
             {t.prices_find_rates}
@@ -416,10 +691,10 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
             </button>
           </div>
         )}
-        {!isLoadingPrices && !pricesError && filteredCommodities.length === 0 && (
+        {!isLoadingPrices && !pricesError && filteredVegetables.length === 0 && filteredFruits.length === 0 && (
           <div className="flex items-center justify-center gap-2 p-6 rounded-2xl bg-white/80 border border-white/80 shadow-xs text-[13px] font-semibold text-[#6b7280]">
             <span className="material-symbols-outlined text-[18px]">search_off</span>
-            <span>No commodity records match your search or market filter.</span>
+            <span>No produce records match your search or market filter.</span>
           </div>
         )}
 
@@ -501,119 +776,11 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
           </div>
         </div>
 
-        {/* The 6 Commodity Price Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredCommodities.map((item) => {
-            const cName = item.name[language] || item.name.en;
-            const cVariety = item.variety[language] || item.variety.en;
-            const cMandi = item.mandi[language] || item.mandi.en;
+        {/* Vegetables subsection (parsed from the price PDFs) — 4 cards by default */}
+        {renderSubsection(filteredVegetables, visibleVegetables, setVisibleVegetables, vegetablesTextByLang, 'eco')}
 
-            const localizedMspNote = item.mspNote.startsWith('Govt MSP:')
-              ? `${govtMspLabelByLang[language] || 'Govt MSP'}: ${item.mspNote.replace('Govt MSP: ', '')}`
-              : item.mspNote.startsWith('Benchmark Floor:')
-              ? `${benchmarkFloorLabelByLang[language] || 'Benchmark Floor'}: ${item.mspNote.replace('Benchmark Floor: ', '')}`
-              : item.mspNote;
-            const localizedPremiumText = item.isDiscount
-              ? item.premiumText.replace('discount', discountLabelByLang[language] || 'discount')
-              : item.premiumText.replace('premium', premiumLabelByLang[language] || 'premium');
-
-            return (
-              <div
-                key={item.id}
-                className="bg-white/95 rounded-3xl p-5 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-3">
-                      {item.image ? (
-                        <img
-                          src={item.image}
-                          alt={cName}
-                          className="w-12 h-12 rounded-full object-cover border border-gray-200/70 shadow-2xs shrink-0"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 rounded-full bg-[#dcfce7] text-[#15803d] flex items-center justify-center border border-gray-200/70 shadow-2xs shrink-0">
-                          <span className="material-symbols-outlined text-[22px]">spa</span>
-                        </div>
-                      )}
-                      <div>
-                        <h3 className="text-[17px] font-bold text-[#111827] leading-snug">
-                          {cName}
-                        </h3>
-                        <p className="text-[11.5px] text-[#6b7280] font-medium">
-                          {cVariety}
-                        </p>
-                      </div>
-                    </div>
-                    <span className="px-2.5 py-1 rounded-full bg-[#f3f4f6] text-[#374151] text-[11px] font-semibold whitespace-nowrap shadow-2xs">
-                      {cMandi}
-                    </span>
-                  </div>
-
-                  <div className="flex items-baseline justify-between mt-2">
-                    <div className="flex items-baseline">
-                      <span className="text-[30px] sm:text-[32px] font-bold text-[#111827] tracking-tight tabular-nums">
-                        {item.price}
-                      </span>
-                      <span className="text-[12px] text-[#6b7280] font-medium ml-1">
-                        {t.prices_per_quintal}
-                      </span>
-                    </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#e8f8eb] text-[#006b2c] text-[11.5px] font-bold shadow-2xs tabular-nums">
-                      {item.perKg.replace('/kg', perKgSuffixByLang[language] || '/kg')}
-                    </span>
-                  </div>
-
-                  <div className="mt-1 text-[11.5px] text-[#4b5563]">
-                    <span>{localizedMspNote} </span>
-                    <span
-                      className={`font-bold ${
-                        item.isDiscount ? 'text-[#dc2626]' : 'text-[#16a34a]'
-                      }`}
-                    >
-                      {localizedPremiumText}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <svg width="64" height="20" viewBox="0 0 64 20" className="overflow-visible">
-                      {item.trendType === 'up' ? (
-                        <path
-                          d="M 2 16 Q 16 14, 28 15 T 44 8 T 62 4"
-                          fill="none"
-                          stroke={item.sparklineColor}
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                        />
-                      ) : (
-                        <path
-                          d="M 2 5 Q 16 8, 28 6 T 44 14 T 62 17"
-                          fill="none"
-                          stroke={item.sparklineColor}
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                        />
-                      )}
-                    </svg>
-                    <span className="text-[11px] text-[#6b7280] font-medium">{t.prices_trend}</span>
-                  </div>
-
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full text-[11.5px] font-bold shadow-2xs tabular-nums ${
-                      item.trendType === 'up'
-                        ? 'bg-[#dcfce7] text-[#15803d]'
-                        : 'bg-[#fee2e2] text-[#b91c1c]'
-                    }`}
-                  >
-                    {item.trendPercent}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* Fruits subsection (parsed from the price PDFs) — 4 cards by default */}
+        {renderSubsection(filteredFruits, visibleFruits, setVisibleFruits, fruitsTextByLang, 'nutrition')}
       </div>
     </div>
   );

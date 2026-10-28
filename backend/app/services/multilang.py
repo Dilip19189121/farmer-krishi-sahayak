@@ -23,6 +23,7 @@ import json
 import os
 import re
 import unicodedata
+from typing import Optional
 from dotenv import load_dotenv
 import requests
 
@@ -103,7 +104,7 @@ def preferred_language(text: str) -> tuple[str, float]:
     return lang, data[lang] / max(1, sum(data.values()))
 
 
-def explicit_language_switch(text: str) -> str | None:
+def explicit_language_switch(text: str) -> Optional[str]:
     """The BCP language the farmer EXPLICITLY asked to switch to, or None.
 
     Whitespace-normalized keyword match, so 'speak in telugu please' or

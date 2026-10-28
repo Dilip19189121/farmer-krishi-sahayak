@@ -1,5 +1,6 @@
 # officer.py — officer login and the bearer-token guard for officer-only routes.
 
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
@@ -41,7 +42,7 @@ def officer_login(payload: OfficerLogin):
 
 
 def require_officer(
-    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme),
 ) -> str:
     """Dependency requiring `Authorization: Bearer <token>`; returns the username."""
     if credentials is None or not credentials.credentials.strip():

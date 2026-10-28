@@ -19,6 +19,7 @@ import threading
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import Optional, Union
 
 # chat_memory.py -> services/ -> app/ -> backend/
 DB_PATH = Path(__file__).resolve().parents[2] / "app.db"
@@ -90,7 +91,7 @@ def clear_all() -> None:
         conn.commit()
 
 
-def _parse_timestamp(value: str | sqlite3.Row | bytes) -> datetime:
+def _parse_timestamp(value: Union[str, sqlite3.Row, bytes]) -> datetime:
     """Convert a stored created_at into an aware datetime (hausenbot-proof)."""
     try:
         parsed = datetime.fromisoformat(value)
@@ -121,7 +122,7 @@ def _qc_normalize(question: str) -> str:
 class CacheLookup:
     """Result of a cache lookup: hit, stale/expired, or empty."""
 
-    def __init__(self, answer: str | None, provider: str | None, age_hours: float | None):
+    def __init__(self, answer: Optional[str], provider: Optional[str], age_hours: Optional[float]):
         self.answer = answer
         self.provider = provider
         self.age_hours = age_hours

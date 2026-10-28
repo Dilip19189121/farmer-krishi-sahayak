@@ -8,6 +8,7 @@
 import os
 import secrets
 from datetime import datetime, timedelta, timezone
+from typing import Optional
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -60,7 +61,7 @@ def create_session(username: str) -> tuple[str, str]:
     return token, expires_at.isoformat(timespec="seconds")
 
 
-def validate_session(token: str) -> dict | None:
+def validate_session(token: str) -> Optional[dict]:
     """Return the session for a valid, unexpired token, else None."""
     now = datetime.now(timezone.utc)
     _purge_expired(now)

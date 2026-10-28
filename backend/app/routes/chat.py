@@ -2,6 +2,8 @@
 
 import asyncio
 
+from typing import Optional, Union
+
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 
@@ -16,7 +18,7 @@ class ChatRequest(BaseModel):
         min_length=1,
         description="Farmer's question in Telugu, Hindi or English",
     )
-    session_id: str | None = Field(
+    session_id: Optional[str] = Field(
         None,
         description="Client-generated session id; enables conversation memory "
         "(the session's last 3 exchanges become context) and the 24-hour "
@@ -27,13 +29,13 @@ class ChatRequest(BaseModel):
 class Source(BaseModel):
     """Retrieved chunk provenance; fields present depend on its kind."""
 
-    kind: str | None = None
-    source: str | None = None
-    page: int | None = None
-    scheme: str | None = None
-    source_url: str | None = None
-    question: str | None = None
-    distance: float | None = None
+    kind: Optional[str] = None
+    source: Optional[str] = None
+    page: Optional[int] = None
+    scheme: Optional[str] = None
+    source_url: Optional[str] = None
+    question: Optional[str] = None
+    distance: Optional[float] = None
 
 
 class ChatResponse(BaseModel):
@@ -41,7 +43,7 @@ class ChatResponse(BaseModel):
     provider: str
     sources: list[Source]
     cached: bool = False
-    sources_count: int | None = Field(
+    sources_count: Optional[int] = Field(
         None,
         description="Provenance count for internal monitoring (equal to "
         "sources when verified, 0 when the answer was weakly supported by "
@@ -115,7 +117,7 @@ def _answer_turn(
     question: str,
     session_id: str,
     pre_searched: bool = False,
-    pre_searched_hits: list[dict] | None = None,
+    pre_searched_hits: Optional[list[dict]] = None,
 ) -> tuple[str, str, list[dict], bool, dict, dict]:
     """One chat turn's full pipeline, shared by /chat and /chat/voice.
 
@@ -213,12 +215,12 @@ def chat(req: ChatRequest):
 @router.post("/voice", response_model=VoiceChatResponse, response_model_exclude_none=True)
 async def chat_voice(
     file: UploadFile = File(..., description="Recorded audio clip"),
-    session_id: str | None = Form(
+    session_id: Optional[str] = Form(
         None,
         description="Client-generated session id for voice usage limiting and "
         "conversation memory (may also be sent as a query parameter)",
     ),
-    session_id_param: str | None = Query(
+    session_id_param: Optional[str] = Query(
         None,
         alias="session_id",
         description="Same value as the session_id form field",

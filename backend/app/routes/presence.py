@@ -14,6 +14,7 @@
 # hook the separate speech test script (run_speech_test.py) used to call
 # presence.py directly.
 
+import threading
 import time
 
 from fastapi import APIRouter
@@ -53,12 +54,15 @@ def presence_start(camera_index: int = 0):
         # leave the app half-initialized. /chat and /chat/voice are still up.
         return {"status": "camera_busy", "error": str(exc)}
 
-    # Run the watch loop in a background thread; it polls forever until
-    # /presence/stop releases the camera and sets _watcher to None.
+    # Run the watch loop in a background thread. It polls forever but
+    # checks its own local stop_event at the top of every iteration and exits
+    # (releasing the camera) when the event is set — on /presence/stop OR
+    # on FastAPI shutdown. The event is owned by the watcher object so the
+    # shutdown handler and /presence/stop share the same copy.
     def _watch_loop() -> None:
         nonlocal watcher
         try:
-            while True:
+            while not watcher._stop_event.is_set():
                 state = watcher.poll()
                 if state["fired"]:
                     # Signal the caller the person arrived. A real "ask the
@@ -72,9 +76,9 @@ def presence_start(camera_index: int = 0):
         finally:
             watcher.stop()
 
-    import threading
-
-    thread = threading.Thread(target=_watch_loop, daemon=True)
+    stop_event = threading.Event()
+    watcher._stop_event = stop_event
+    thread = threading.Thread(target=_watch_loop)
     thread.start()
     _watcher = watcher
     return {
@@ -97,6 +101,7 @@ def presence_stop():
     if _watcher is None:
         return {"status": "already_stopped", "message": "no watcher running"}
     state = _watcher.poll()
+    _watcher._stop_event.set()
     _watcher.stop()
     _watcher = None
     return {"status": "stopped", "last": state}

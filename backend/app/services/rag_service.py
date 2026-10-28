@@ -28,6 +28,7 @@ import json
 import math
 import re
 import sys
+from typing import Optional, Union
 from pathlib import Path
 
 import chromadb
@@ -212,12 +213,24 @@ MIN_CHUNK_WORDS = 50  # drop sparse annexure/header fragments before embedding
 _model = None
 
 
-def _get_model() -> SentenceTransformer:
-    """Lazy-load the sentence-transformers model once per process."""
+def load_embedding_model() -> SentenceTransformer:
+    """Preload the multilingual-e5-small embedding model at application startup.
+
+    Called from the FastAPI lifespan so the model is warm before the first
+    farmer request, removing the 5-10s first-request delay.
+    """
     global _model
     if _model is None:
         print(f"Loading embedding model {E5_MODEL_NAME} ...")
         _model = SentenceTransformer(E5_MODEL_NAME)
+    return _model
+
+
+def _get_model() -> SentenceTransformer:
+    """Lazy-load the sentence-transformers model once per process."""
+    global _model
+    if _model is None:
+        return load_embedding_model()
     return _model
 
 
@@ -455,9 +468,9 @@ VEC_WEIGHT = 1.0 - KW_WEIGHT   # vector share
 # Corpus stats are cached per process (the collection only changes via
 # `python rag_service.py`, a fresh process, so no invalidation hook is needed
 # at request time).
-_kw_cache: tuple[
+_kw_cache: Optional[tuple[
     list[str], list[dict], list[dict[str, int]], list[int]
-] | None = None
+]] = None
 
 
 def _content_tokens(text: str) -> list[str]:
@@ -520,7 +533,7 @@ def token_doc_spread(token: str) -> float:
 
 # token -> share of chunks containing it; built once per process alongside
 # the keyword corpus.
-_doc_spread_cache: dict[str, float] | None = None
+_doc_spread_cache: Optional[dict[str, float]] = None
 
 
 def _idf_map(
@@ -581,7 +594,7 @@ def keyword_search(query: str, top_k: int = 10) -> list[dict]:
 
 
 def search_hybrid(
-    queries: str | list[str], top_k: int = 5, fetch_k: int = 25
+    queries: Union[str, list[str]], top_k: int = 5, fetch_k: int = 25
 ) -> list[dict]:
     """Merge vector search (per query) with BM25-lite keyword search.
 
@@ -687,7 +700,7 @@ def search_hybrid(
 
 
 def retrieve(
-    queries: str | list[str], top_k: int = 3, hybrid: bool = True
+    queries: Union[str, list[str]], top_k: int = 3, hybrid: bool = True
 ) -> list[dict]:
     """Unified retrieval entry used by the router flow in chat.py.
 
@@ -768,7 +781,7 @@ def _norm_cell(value: str) -> str:
     return re.sub(r"[^a-z0-9]", "", (value or "").lower())
 
 
-def _to_number(value: str | None) -> float | None:
+def _to_number(value: Optional[str]) -> Optional[float]:
     """Parse a table number like '2,900.00' or '-' into float/None."""
     if value is None:
         return None
@@ -781,7 +794,7 @@ def _to_number(value: str | None) -> float | None:
         return None
 
 
-def _to_iso_date(value: str | None) -> str | None:
+def _to_iso_date(value: Optional[str]) -> Optional[str]:
     """Parse '21 Sep, 2026' (or '21-09-2026') into '2026-09-21'."""
     if not value:
         return None
@@ -834,10 +847,10 @@ def _records_from_table(header: list[str], rows: list[list]) -> list[dict]:
     norm = [_norm_cell(cell) for cell in header]
     index = {name: norm.index(name) for name in set(norm) if name}
 
-    def column(name: str) -> int | None:
+    def column(name: str) -> Optional[int]:
         return index.get(name)
 
-    def column_starting(prefix: str) -> int | None:
+    def column_starting(prefix: str) -> Optional[int]:
         # Header cells stack units onto the label, e.g.
         # 'MSP\n(Rs./Quintal)\n2026-27', so match on the prefix.
         return next((i for i, n in enumerate(norm) if n.startswith(prefix)), None)
@@ -856,7 +869,7 @@ def _records_from_table(header: list[str], rows: list[list]) -> list[dict]:
         if _norm_cell(cell).startswith("arrivalon")
     ]
 
-    def cell(row: list, i: int | None) -> str:
+    def cell(row: list, i: Optional[int]) -> str:
         return row[i].strip() if i is not None and i < len(row) else ""
 
     records: list[dict] = []

@@ -16,6 +16,7 @@
 # top of the file without touching the logic.
 
 import re
+from typing import Optional
 
 from app.services import rag_service
 
@@ -277,7 +278,7 @@ def verify_answer(answer: str, hits: list[dict], question: str = "") -> dict:
     }
 
 
-def route(query: str, hits: list[dict] | None = None) -> dict:
+def route(query: str, hits: Optional[list[dict]] = None) -> dict:
     """All retrieval decisions for one query in a single call (for tests/ops).
 
     Returns {"transform", "expand_queries", "hybrid", "rerank", "reasons"}.

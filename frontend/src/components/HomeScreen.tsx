@@ -36,6 +36,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [inputQuery, setInputQuery] = useState('');
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  // Language-selection tracking: set once the farmer has chosen a language
+  const [languageSelected, setLanguageSelected] = useState(false);
 
   // Camera-assisted session state: active state and person detection state
   // Ready to receive real camera/detection events from FastAPI/backend in VS Code:
@@ -210,8 +212,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     chatScrollRef.current?.scrollTo({ top: chatScrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
-  // Sync the kiosk Q&A log from GET /hardware/chat-log into the chat box,
-  // polling every 2s. role: 'user' = farmer bubble, 'assistant' = assistant bubble.
+  // Sync the kiosk Q&A log from GET /hardware/chat-log into the chat box.
+  // Polling starts immediately on mount (no languageSelected guard) so backend
+  // STT answers appear in the chat panel even before language selection.
   useEffect(() => {
     const poll = async () => {
       try {
@@ -239,8 +242,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     };
 
     const id = setInterval(poll, 2000);
-    poll(); // immediate first pull
+    poll(); // immediate first pull (starts on mount)
     return () => clearInterval(id);
+  }, []);
+
+  // On mount: clear any message from a previous session before adding the
+  // new welcome bubbles, so no old messages appear on startup.
+  useEffect(() => {
+    setMessages([]);
   }, []);
 
   // On mount: stream the trilingual welcome messages into the chat, then a
@@ -251,46 +260,43 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
     const timers = [
       setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `welcome-1-${Date.now()}`,
-            sender: 'assistant',
-            text: 'Hello, Namaste, and a warm Welcome! Aapka swagat hai.',
-            time: nowTime(),
-          },
-        ]);
+        setMessages((prev) => [...prev, {
+          id: `welcome-1-${Date.now()}`,
+          sender: 'assistant',
+          text: 'Hello, Namaste, and a warm Welcome! Aapka swagat hai.',
+          time: nowTime(),
+        }]);
+        // Speak welcome bubble 1 aloud (Web Speech API)
+        if ('speechSynthesis' in window) {
+          const utter1 = new SpeechSynthesisUtterance('Hello, Namaste, and a warm Welcome! Aapka swagat hai.');
+          window.speechSynthesis.speak(utter1);
+        }
       }, 0),
       setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `welcome-2-${Date.now()}`,
-            sender: 'assistant',
-            text: 'Please select your preferred language — Apni bhasha chunein — మీ భాషను ఎంచుకోండి.',
-            time: nowTime(),
-          },
-          {
-            id: `lang-select-${Date.now()}`,
-            sender: 'assistant',
-            type: 'lang-select',
-            text: '',
-            time: nowTime(),
-          },
-        ]);
-      }, 3000),
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `welcome-3-${Date.now()}`,
-            sender: 'assistant',
-            text: 'మీకు సహాయం చేయడానికి నేను ఇక్కడ ఉన్నాను. Main aapki madad ke liye yahan hoon. I am here for you.',
-            time: nowTime(),
-          },
-        ]);
-      }, 6000),
+        setMessages((prev) => [...prev, {
+          id: `welcome-2-${Date.now()}`,
+          sender: 'assistant',
+          text: 'Please select your preferred language — Apni bhasha chunein — మీ భాషను ఎంచుకోండి.',
+          time: nowTime(),
+        }]);
+        // Speak welcome bubble 2 aloud (Web Speech API)
+        if ('speechSynthesis' in window) {
+          const utter2 = new SpeechSynthesisUtterance('Please select your preferred language — Apni bhasha chunein — మీ భాషను ఎంచుకోండి.');
+          window.speechSynthesis.speak(utter2);
+        }
+      }, 4000),
     ];
+    // After bubble 2 has spoken (at 4000ms): show the language-selection
+    // message so the farmer can pick a language.
+    setTimeout(() => {
+      setMessages((prev) => [...prev, {
+        id: `lang-select-${Date.now()}`,
+        sender: 'assistant',
+        type: 'lang-select',
+        text: '',
+        time: nowTime(),
+      }]);
+    }, 4000);
 
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -386,48 +392,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       }
     }
     setIsRecording(false);
-  };
-
-  // Speaks welcome message aloud in selected language, then automatically listens
-  const speakWelcomeMessage = () => {
-    const welcomeText = welcomeMessageByLang[language] || welcomeMessageByLang.en;
-    setLiveSpokenText(welcomeText);
-    setLatestAiAnswer(welcomeText);
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(welcomeText);
-      utterance.rate = 0.95;
-      utterance.lang = langCodes[language] || 'en-IN';
-
-      utterance.onstart = () => {
-        setIsPlayingAudio(true);
-        setLiveSpokenText(welcomeText);
-        setLatestAiAnswer(welcomeText);
-        showToast('Assistant speaking welcome message...');
-      };
-
-      utterance.onend = () => {
-        setIsPlayingAudio(false);
-        // Automatically start listening for farmer's speech without pressing mic button
-        startListeningForFarmer();
-      };
-
-      utterance.onerror = () => {
-        setIsPlayingAudio(false);
-        // Fallback: automatically listen if speech synthesis is interrupted or blocked
-        startListeningForFarmer();
-      };
-
-      setIsPlayingAudio(true);
-      window.speechSynthesis.speak(utterance);
-    } else {
-      // Fallback if browser does not support speechSynthesis
-      startListeningForFarmer();
-    }
-  };
-
-  // Automatic welcome speech and transition to listening on session start
+  };                  // Automatic welcome speech and transition to listening on session start
   useEffect(() => {
     if (sessionStartedRef.current) return;
     sessionStartedRef.current = true;
@@ -497,85 +462,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const moveChatToBottom = () => {
     if (chatScrollRef.current) {
       chatScrollRef.current.scrollTo({ top: chatScrollRef.current.scrollHeight, behavior: 'smooth' });
-    }
-  };
-
-  const handleSpeakAssessment = () => {
-    if (isPlayingAudio) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
-      setIsPlayingAudio(false);
-      setLiveSpokenText('');
-      showToast(t.chat_listen_stop);
-      return;
-    }
-    const textToRead = `${t.assessment_desc} ${t.assessment_step1_label} ${t.assessment_step1_text}. ${t.assessment_step2_label} ${t.assessment_step2_text}`;
-    setLiveSpokenText(textToRead);
-    setLatestAiAnswer(textToRead);
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(textToRead);
-      utterance.rate = 0.92;
-      utterance.lang = langCodes[language] || 'en-IN';
-
-      utterance.onstart = () => {
-        setIsPlayingAudio(true);
-        setLiveSpokenText(textToRead);
-        setLatestAiAnswer(textToRead);
-      };
-
-      utterance.onend = () => setIsPlayingAudio(false);
-      utterance.onerror = () => setIsPlayingAudio(false);
-      setIsPlayingAudio(true);
-      window.speechSynthesis.speak(utterance);
-      showToast(`${t.chat_listen} (${language.toUpperCase()})`);
-    } else {
-      setIsPlayingAudio(true);
-      setLiveSpokenText(textToRead);
-      setLatestAiAnswer(textToRead);
-      showToast(t.chat_listen);
-      setTimeout(() => setIsPlayingAudio(false), 5000);
-    }
-  };
-
-  // Speaks the assistant's answer aloud in the selected regional language,
-  // then automatically returns to listening for the farmer's next speech turn
-  const speakAssistantResponse = (textToSpeak: string) => {
-    setLiveSpokenText(textToSpeak);
-    setLatestAiAnswer(textToSpeak);
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.rate = 0.95;
-      utterance.lang = langCodes[language] || 'en-IN';
-
-      utterance.onstart = () => {
-        setIsPlayingAudio(true);
-        setLiveSpokenText(textToSpeak);
-        setLatestAiAnswer(textToSpeak);
-      };
-
-      utterance.onend = () => {
-        setIsPlayingAudio(false);
-        // Automatically start listening for farmer's next question without needing mic button press
-        startListeningForFarmer();
-      };
-
-      utterance.onerror = (err) => {
-        console.warn('Speech synthesis note:', err);
-        setIsPlayingAudio(false);
-        // Fallback: resume listening automatically
-        startListeningForFarmer();
-      };
-
-      setIsPlayingAudio(true);
-      window.speechSynthesis.speak(utterance);
-    } else {
-      setIsPlayingAudio(false);
-      startListeningForFarmer();
     }
   };
 
@@ -812,21 +698,36 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                         <div className="flex flex-wrap items-center gap-2">
                           <button
                             type="button"
-                            onClick={() => setLanguage('te')}
+                            onClick={() => {
+                              setLanguage('te');
+                              setLanguageSelected(true);
+                              // After the farmer picks a language and bubble 3 is
+                              // spoken, start the microphone so the backend STT
+                              // (and any live speech) can be captured.
+                              startListeningForFarmer();
+                            }}
                             className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
                           >
                             తెలుగు
                           </button>
                           <button
                             type="button"
-                            onClick={() => setLanguage('hi')}
+                            onClick={() => {
+                              setLanguage('hi');
+                              setLanguageSelected(true);
+                              startListeningForFarmer();
+                            }}
                             className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
                           >
-                            हिंदी
+                            हिंదీ
                           </button>
                           <button
                             type="button"
-                            onClick={() => setLanguage('en')}
+                            onClick={() => {
+                              setLanguage('en');
+                              setLanguageSelected(true);
+                              startListeningForFarmer();
+                            }}
                             className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
                           >
                             English

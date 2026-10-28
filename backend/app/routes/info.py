@@ -1,5 +1,7 @@
 # info.py — read-only catalogue views: schemes and market prices.
 
+from typing import Optional
+
 from fastapi import APIRouter, HTTPException
 
 from app.services import rag_service
@@ -36,7 +38,7 @@ SCHEME_SPECS = [
 ]
 
 
-def _source_folder(metadata: dict) -> str | None:
+def _source_folder(metadata: dict) -> Optional[str]:
     """Top-level folder of a PDF source path, e.g. 'PMFBY\\Hindi.pdf' -> 'PMFBY'."""
     source = metadata.get("source")
     if not source:

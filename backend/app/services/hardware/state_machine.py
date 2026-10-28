@@ -63,6 +63,7 @@ import os
 import sys
 import threading
 import time
+from typing import Optional
 from pathlib import Path
 
 import httpx
@@ -277,19 +278,23 @@ def _play_bytes_interruptible(audio_bytes: bytes) -> bool:
         audio = resample_poly(audio, max_rate // g, int(sr) // g)
         sr = max_rate
     interrupted = False
+    _playback_complete = threading.Event()
     sd.play(audio, samplerate=int(sr))
     try:
-        while sd.is_playing():
-            if _INTERRUPT_FLAG.is_set():
-                interrupted = True
-                break
-            time.sleep(0.08)
+        # Wait until playback finishes or the farmer interrupts it.
+        # sd.wait() blocks the worker thread (never the event loop); the
+        # interrupt path below sets this event so _sd_stop_all can unblock it.
+        _playback_complete.wait()
+        if _INTERRUPT_FLAG.is_set():
+            interrupted = True
     finally:
         if _INTERRUPT_FLAG.is_set():
             sd.stop()
-            interrupted = True
         else:
+            # sd.wait() already returned: playback finished normally, no
+            # need to wait again; prevent overlapping audio.
             sd.wait()
+    _playback_complete.clear()
     return interrupted
 
 
@@ -470,33 +475,33 @@ class KioskStateMachine:
         self.session_id_base = session_id
 
         self.state = State.IDLE
-        self._task: asyncio.Task | None = None
+        self._task: Optional[asyncio.Task] = None
         self._trigger_event = asyncio.Event()
         self._force_next = False        # skip CHECKING confirmation (tests/manual)
         self._idle_since = time.monotonic() - COOLDOWN_SECONDS  # fresh start: no wait
         self._camera_on = False         # we started the presence watcher
-        self._gpio_thread: threading.Thread | None = None
+        self._gpio_thread: Optional[threading.Thread] = None
         # httpx transport injection point (tests use MockTransport).
         self._transport = None
 
         # ---- one session's state (ALL cleared by _clear_session) -----------
-        self._session_started_at: float | None = None   # time.monotonic()
-        self._session_started_wall: float | None = None  # time.time()
-        self._session_deadline: float | None = None
+        self._session_started_at: Optional[float] = None   # time.monotonic()
+        self._session_started_wall: Optional[float] = None  # time.time()
+        self._session_deadline: Optional[float] = None
         self._deadline_warned = False
         self._session_id_for_turn: str = ""
-        self._lang: str | None = None                    # locked language
+        self._lang: Optional[str] = None                    # locked language
         self._welcome_retries = 0
         self._silent_turns = 0
         self._turn_in_progress = False
-        self._absent_since: float | None = None
-        self._last_speech_at: float | None = None
+        self._absent_since: Optional[float] = None
+        self._last_speech_at: Optional[float] = None
 
         # Telemetry surfaced by GET /hardware/status.
         self.turns_answered = 0
         self.no_response_count = 0
         self.last_reason = "initialized"
-        self.last_error: str | None = None
+        self.last_error: Optional[str] = None
         self.transitions = 0
 
     # -- lifecycle -----------------------------------------------------------
@@ -619,7 +624,7 @@ class KioskStateMachine:
         thread.start()
         self._gpio_thread = thread
 
-    def _sensor_fired(self, distance_cm: float | None) -> None:
+    def _sensor_fired(self, distance_cm: Optional[float]) -> None:
         dist = f" at {distance_cm:.0f}cm" if distance_cm else ""
         _log(f"SENSOR TRIGGER{dist}")
         self.request_trigger()
@@ -936,8 +941,8 @@ class KioskStateMachine:
         return False
 
     async def _listening_turn(
-        self, reason: str = "", cap: float | None = None
-    ) -> dict | None:
+        self, reason: str = "", cap: Optional[float] = None
+    ) -> Optional[dict]:
         """One LISTENING turn: mic → /chat/voice → processed turn dict."""
         if reason:
             _log(f"listening window: {reason}")
@@ -1091,7 +1096,7 @@ class KioskStateMachine:
                     return True
         return False
 
-    async def _do_listening(self, cap_seconds: float | None = None) -> dict | None:
+    async def _do_listening(self, cap_seconds: Optional[float] = None) -> Optional[dict]:
         """Record the mic and POST /chat/voice.
 
         Returns a turn dict:
@@ -1197,7 +1202,7 @@ class KioskStateMachine:
         _log("session state cleared; back to IDLE after cooldown")
 
 
-def _gpio_distance_cm(GPIO, trig_pin: int, echo_pin: int) -> float | None:
+def _gpio_distance_cm(GPIO, trig_pin: int, echo_pin: int) -> Optional[float]:
     """One raw HC-SR04 pulse read (blocking; runs in the sensor thread only)."""
     import time as _t
 
@@ -1221,7 +1226,7 @@ def _gpio_distance_cm(GPIO, trig_pin: int, echo_pin: int) -> float | None:
 # Module singleton + blocking entry point for headless/direct use
 # ---------------------------------------------------------------------------
 
-_machine: KioskStateMachine | None = None
+_machine: Optional[KioskStateMachine] = None
 
 
 def get_machine() -> KioskStateMachine:
