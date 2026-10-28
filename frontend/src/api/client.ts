@@ -35,6 +35,13 @@ export interface VoiceChatResponse extends ChatResponse {
   audio?: string;
 }
 
+/** Shape returned by POST /chat/tts when it serves a playable audio URL. */
+export interface TtsResponse {
+  audio_url?: string;
+  /** Optional base64 WAV payload served inline instead of a URL. */
+  audio?: string;
+}
+
 export interface ApiScheme {
   name: string;
   description: string;
@@ -243,6 +250,28 @@ export const postChatVoice = (
     body: form,
   });
 };
+
+/** POST /chat/tts — Telugu-only text-to-speech.
+ *
+ * Frontend taps this from the Telugu language-selection button to have the
+ * backend render speech audio for the given Telugu text, then plays it with
+ * the browser Audio API. Not to be confused with /chat/voice, which is the
+ * STT endpoint for voice input.
+ */
+export const postChatTts = (text: string, lang: string = 'te') =>
+  request<TtsResponse>('/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ text, lang }),
+  });
+
+/** POST /chat/tts (raw WAV fallback, no audio_url/ audio fields). */
+export const postChatTtsRaw = (text: string, lang: string = 'te') =>
+  request<TtsResponse>('/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ text, lang }),
+  });
 
 /** GET /schemes — scheme summaries from the knowledge base. */
 export const getSchemes = () => get<SchemesResponse>('/schemes');

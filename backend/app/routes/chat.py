@@ -3,11 +3,10 @@
 import asyncio
 
 from typing import Optional, Union
-
 from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
+from fastapi.responses import Response
 from pydantic import BaseModel, Field
-
-from app.services import ai_service, chat_memory, multilang, rag_router, rag_service, voice_limit
+from app.services import ai_service, chat_memory, multilang, rag_router, rag_service, voice_limit, tts_service
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -49,6 +48,11 @@ class ChatResponse(BaseModel):
         "sources when verified, 0 when the answer was weakly supported by "
         "the retrieved chunks); carries no user-facing label",
     )
+
+
+class _TtsRequest(BaseModel):
+    text: str
+    lang: str = Field(default="te", pattern="^te$")
 
 
 class VoiceChatResponse(ChatResponse):
@@ -210,6 +214,24 @@ def chat(req: ChatRequest):
             None if cache_hit else 0
         ),
     )
+
+
+@router.post("/tts", response_model=None)
+async def tts_generate(req: _TtsRequest) -> Response:
+    """Generate Telugu TTS audio from text (telugu-only).
+
+    Frontend: the Telugu language-selection button uses this instead of the
+    Web Speech API. Returns a WAV audio payload the browser can play with
+    the Audio API.
+    """
+    try:
+        audio_bytes = tts_service.generate_tts_audio(req.text, req.lang)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return Response(content=audio_bytes, media_type="audio/wav", headers={
+        "Content-Disposition": "attachment; filename=\"tts.wav\"",
+    })
 
 
 @router.post("/voice", response_model=VoiceChatResponse, response_model_exclude_none=True)

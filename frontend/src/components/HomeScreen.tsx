@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { postChat } from '../api/client';
+import { postChat, postChatTts, postChatTtsRaw } from '../api/client';
 
 interface HomeScreenProps {
   onNavigate: (path: string) => void;
@@ -267,10 +267,30 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           time: nowTime(),
         }]);
         // Speak welcome bubble 1 aloud (Web Speech API)
-        if ('speechSynthesis' in window) {
-          const utter1 = new SpeechSynthesisUtterance('Hello, Namaste, and a warm Welcome! Aapka swagat hai.');
-          window.speechSynthesis.speak(utter1);
-        }
+        // Telugu welcome bubble: speak via backend TTS (te-IN), else browser voice.
+        postChatTts('Hello, Namaste, and a warm Welcome! Aapka swagat hai.')
+          .then((res) => {
+            if (res.audio_url) {
+              const audio = new Audio(res.audio_url);
+              audio.play().catch(() => {});                                  } else if (res.audio) {
+                                    const audio = new Audio(URL.createObjectURL(new Blob([atob(res.audio)], { type: 'audio/wav' })));
+                                    audio.play().catch(() => {});
+                                  } else {
+              postChatTtsRaw('Hello, Namaste, and a warm Welcome! Aapka swagat hai.')
+                .then((rawRes) => {
+                  if (rawRes.audio) {
+                    const audio = new Audio('data:audio/wav;base64,' + rawRes.audio);
+                    audio.play().catch(() => {});
+                  }
+                });
+            }
+          })
+          .catch(() => {
+            if ('speechSynthesis' in window) {
+              const utter1 = new SpeechSynthesisUtterance('Hello, Namaste, and a warm Welcome! Aapka swagat hai.');
+              window.speechSynthesis.speak(utter1);
+            }
+          });
       }, 0),
       setTimeout(() => {
         setMessages((prev) => [...prev, {
@@ -280,10 +300,31 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           time: nowTime(),
         }]);
         // Speak welcome bubble 2 aloud (Web Speech API)
-        if ('speechSynthesis' in window) {
-          const utter2 = new SpeechSynthesisUtterance('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి');
-          window.speechSynthesis.speak(utter2);
-        }
+        // Language-selection bubble (Telugu / Hindi / English): speak via
+        // backend TTS for Telugu only; Hindi/English keep the browser voice.
+        postChatTts('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి')
+          .then((res) => {
+            if (res.audio_url) {
+              const audio = new Audio(res.audio_url);
+              audio.play().catch(() => {});                                  } else if (res.audio) {
+                                    const audio = new Audio(URL.createObjectURL(new Blob([atob(res.audio)], { type: 'audio/wav' })));
+                                    audio.play().catch(() => {});
+                                  } else {
+              postChatTtsRaw('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి')
+                .then((rawRes) => {
+                  if (rawRes.audio) {
+                    const audio = new Audio('data:audio/wav;base64,' + rawRes.audio);
+                    audio.play().catch(() => {});
+                  }
+                });
+            }
+          })
+          .catch(() => {
+            if ('speechSynthesis' in window) {
+              const utter2 = new SpeechSynthesisUtterance('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి');
+              window.speechSynthesis.speak(utter2);
+            }
+          });
       }, 4000),
     ];
     // After bubble 2 has spoken (at 4000ms): show the language-selection
@@ -725,13 +766,38 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                             onClick={() => {
                               setLanguage('te');
                               setLanguageSelected(true);
-                              // Speak the Telugu start-up line in 'te-IN' then
-                              // start the microphone after bubble 3 is spoken.
-                              if ('speechSynthesis' in window) {
-                                const teUtterance = new SpeechSynthesisUtterance('మీకు ఏమి సహాయం కావాలి? పంట గురించి అడగండి.');
-                                teUtterance.lang = 'te-IN';
-                                window.speechSynthesis.speak(teUtterance);
-                              }
+                              // Speak the Telugu start-up line via the backend TTS
+                              // (te-IN multilingual voice), then start the mic.
+                              const teText = 'మీకు ఏమి సహాయం కావాలి? పంట గురించి అడగండి.';
+                              postChatTts(teText)
+                                .then((res) => {
+                                  if (res.audio_url) {
+                                    const audio = new Audio(res.audio_url);
+                                    audio.play().catch(() => {});
+                                  } else if (res.audio) {
+                                    const audio = new Audio(URL.createObjectURL(new Blob([atob(res.audio)], { type: 'audio/wav' })));                                  } else if (res.audio) {
+                                    const audio = new Audio(URL.createObjectURL(new Blob([atob(res.audio)], { type: 'audio/wav' })));
+                                    audio.play().catch(() => {});
+                                  } else {
+                                    postChatTtsRaw(teText)
+                                      .then((rawRes) => {
+                                        if (rawRes.audio) {
+                                          const audio = new Audio('data:audio/wav;base64,' + rawRes.audio);
+                                          audio.play().catch(() => {});
+                                        }
+                                      });
+                                  }
+                                })
+                                .catch(() => {
+                                  // Backend TTS unavailable — fall through to the
+                                  // existing browser Web Speech API so the line
+                                  // still speaks on devices without the backend.
+                                  if ('speechSynthesis' in window) {
+                                    const teUtterance = new SpeechSynthesisUtterance(teText);
+                                    teUtterance.lang = 'te-IN';
+                                    window.speechSynthesis.speak(teUtterance);
+                                  }
+                                });
                               setTimeout(() => startListeningForFarmer(), 3500);
                             }}
                             className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
