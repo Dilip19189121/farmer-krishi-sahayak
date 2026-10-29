@@ -55,14 +55,18 @@ def presence_start(camera_index: int = 0):
         return {"status": "camera_busy", "error": str(exc)}
 
     # Run the watch loop in a background thread. It polls forever but
-    # checks its own local stop_event at the top of every iteration and exits
-    # (releasing the camera) when the event is set — on /presence/stop OR
-    # on FastAPI shutdown. The event is owned by the watcher object so the
-    # shutdown handler and /presence/stop share the same copy.
+    # checks the watcher's own _stop_event AND the module-level shutdown flag
+    # at the top of every iteration and exits (releasing the camera) when
+    # either is set — on /presence/stop OR on FastAPI shutdown
+    # (services/presence.stop_presence() sets both). daemon=True so the
+    # thread can never wedge interpreter exit on shutdown.
     def _watch_loop() -> None:
         nonlocal watcher
         try:
-            while not watcher._stop_event.is_set():
+            while not (
+                watcher._stop_event.is_set()
+                or presence._presence_stop_flag.is_set()
+            ):
                 state = watcher.poll()
                 if state["fired"]:
                     # Signal the caller the person arrived. A real "ask the
@@ -76,9 +80,7 @@ def presence_start(camera_index: int = 0):
         finally:
             watcher.stop()
 
-    stop_event = threading.Event()
-    watcher._stop_event = stop_event
-    thread = threading.Thread(target=_watch_loop)
+    thread = threading.Thread(target=_watch_loop, daemon=True)
     thread.start()
     _watcher = watcher
     return {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getHardwareStatus, hardwareTrigger } from './api/client';
 import { OfficerGateway } from './components/OfficerGateway';
 import { DaoCommandCenter } from './components/DaoCommandCenter';
@@ -9,6 +9,7 @@ import { GrievancesScreen } from './components/GrievancesScreen';
 import { LearnScreen } from './components/LearnScreen';
 import { useLanguage } from './context/LanguageContext';
 import { AppLanguage } from './utils/translations';
+import type { ChatMessage } from './components/HomeScreen';
 
 export type NavigationPath =
   | 'home'
@@ -26,6 +27,8 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const sessionInitialized = useRef(false);
 
   // Session state comes from the real backend kiosk FSM (GET /hardware/status).
   const [sessionSeconds, setSessionSeconds] = useState<number>(0);
@@ -94,6 +97,9 @@ export default function App() {
       setCurrentPath(path as NavigationPath);
     }
     setMobileMenuOpen(false);
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -354,6 +360,9 @@ export default function App() {
             sessionSeconds={sessionSeconds}
             sessionStatus={sessionStatus}
             formatSessionTime={formatSessionTime}
+            messages={messages}
+            setMessages={setMessages}
+            sessionInitialized={sessionInitialized}
           />
         )}
         {currentPath === 'officer-hub' && (

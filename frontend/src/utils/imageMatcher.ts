@@ -1,11 +1,11 @@
 // Crop image matching utility for commodity price cards.
 // Image URLs follow the Pixabay photo-search endpoint pattern:
-// https://pixabay.com/api/?key=YOUR_KEY&q=CROP_NAME&image_type=photo&per_page=3
+// https://pixabay.com/api/?key=58137616-9d4517e7233de18ff1b4aef7e&q=CROP_NAME&image_type=photo&per_page=3
 
 const PIXABAY_API_KEY = '58137616-9d4517e7233de18ff1b4aef7e';
 
 const PIXABAY_QUERY_PATTERN =
-  'https://pixabay.com/api/?key=YOUR_KEY&q=CROP_NAME&image_type=photo&per_page=3';
+  'https://pixabay.com/api/?key=58137616-9d4517e7233de18ff1b4aef7e&q=CROP_NAME&image_type=photo&per_page=3';
 
 const buildPixabayUrl = (cropName: string): string =>
   PIXABAY_QUERY_PATTERN.replace('YOUR_KEY', PIXABAY_API_KEY).replace(
@@ -28,19 +28,22 @@ const cropImageMap: Record<string, string> = {
   chilli: 'https://cdn.pixabay.com/photo/2016/03/05/22/47/peppers-1239279_640.jpg',
   turmeric: 'https://cdn.pixabay.com/photo/2015/05/29/19/18/turmeric-789914_640.jpg',
   banana: 'https://cdn.pixabay.com/photo/2018/01/24/18/45/banana-3104997_640.jpg',
-  mango: 'https://cdn.pixabay.com/photo/2017/08/02/14/55/mango-2570958_640.jpg',
+  mango: 'https://cdn.pixabay.com/photo/2016/03/13/10/24/mango-1245938_640.jpg',
   apple: 'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_640.jpg',
   grapes: 'https://cdn.pixabay.com/photo/2016/03/26/16/44/grapes-1280_640.jpg',
   pomegranate: 'https://cdn.pixabay.com/photo/2017/09/26/13/31/pomegranate-2788599_640.jpg',
   watermelon: 'https://cdn.pixabay.com/photo/2016/07/22/14/11/watermelon-1533029_640.jpg',
   paddy: 'https://cdn.pixabay.com/photo/2018/05/10/11/13/rice-3387261_640.jpg',
   mustard: 'https://cdn.pixabay.com/photo/2019/09/16/07/41/mustard-4480356_640.jpg',
+  'pineapple': 'https://cdn.pixabay.com/photo/2016/07/20/14/59/pineapple-1524343_640.jpg',
+  'papaya': 'https://cdn.pixabay.com/photo/2016/09/24/21/34/papaya-1674192_640.jpg',
+  'jackfruit': 'https://cdn.pixabay.com/photo/2017/06/17/17/48/jackfruit-2419914_640.jpg',
 };
 export const getImageForCrop = (name: string): string => {
   if (!name) return '';
   const query = name.toLowerCase().trim();
   const detected = Object.keys(cropImageMap).find((crop) =>
-    query.includes(crop)
+    crop.split(/\s+/).every((word) => query.split(/\s+/).includes(word))
   );
   if (detected !== undefined) return cropImageMap[detected];
 

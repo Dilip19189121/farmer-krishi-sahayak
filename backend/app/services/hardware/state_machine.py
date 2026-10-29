@@ -282,18 +282,19 @@ def _play_bytes_interruptible(audio_bytes: bytes) -> bool:
     sd.play(audio, samplerate=int(sr))
     try:
         # Wait until playback finishes or the farmer interrupts it.
-        # sd.wait() blocks the worker thread (never the event loop); the
-        # interrupt path below sets this event so _sd_stop_all can unblock it.
-        _playback_complete.wait()
+        # sd.wait() is the real completion gate: it blocks the worker thread
+        # (never the event loop) and also unblocks early when sd.stop() is
+        # called by the interrupt / session-end path.
+        sd.wait()
+        # The event below used to be waited on but was never set anywhere —
+        # a guaranteed deadlock on every interruptible playback. Setting it
+        # right after sd.wait() means no later wait() can ever block forever.
+        _playback_complete.set()
         if _INTERRUPT_FLAG.is_set():
             interrupted = True
     finally:
         if _INTERRUPT_FLAG.is_set():
             sd.stop()
-        else:
-            # sd.wait() already returned: playback finished normally, no
-            # need to wait again; prevent overlapping audio.
-            sd.wait()
     _playback_complete.clear()
     return interrupted
 
@@ -352,16 +353,14 @@ async def _speak(text: str, lang: str = "en", interruptible: bool = True) -> boo
 
     Engine priority mirrors app/services/answer_speaker.py but is loop-safe
     (answer_speaker.speak() uses asyncio.run(), which cannot run inside this
-    asyncio task): edge-tts (capped) → gTTS → offline pyttsx3.
+    asyncio task): gTTS → offline pyttsx3.
     With interruptible=True a mic watcher runs in parallel and cuts the
     playback short the moment the farmer starts talking.
     """
     interrupted = False
-    try:
-        interrupted = await _speak_edge(text, lang, interruptible=interruptible)
-        return interrupted
-    except Exception as exc:
-        _log(f"TTS edge-tts failed ({type(exc).__name__}: {exc}); next engine")
+    # gTTS is now the first engine (edge-tts removed from the chain):
+    # every call here uses _play_gtts via asyncio.to_thread, which is
+    # interruptible through the mic watcher (_arm_interruption).
     try:
         if interruptible:
             await _arm_interruption()
@@ -408,37 +407,6 @@ def _sd_stop_all() -> None:
         sd.stop()
     except Exception:
         pass
-
-
-async def _speak_edge(text: str, lang: str, interruptible: bool = True) -> bool:
-    buf = io.BytesIO()
-    import edge_tts
-
-    voice = VOICE_BY_LANG.get((lang or "en").split("-")[0], VOICE_BY_LANG["en"])
-    communicate = edge_tts.Communicate(text, voice=voice)
-
-    async def _stream() -> None:
-        async for chunk in communicate.stream():
-            if chunk["type"] == "audio":
-                buf.write(chunk["data"])
-
-    # edge-tts is a network stream: without a cap a slow/blocked connection
-    # would freeze the kiosk in GREETING/RESPONDING forever.
-    await asyncio.wait_for(_stream(), timeout=SPEAK_TIMEOUT_SECONDS)
-    if buf.tell() == 0:
-        raise RuntimeError("edge-tts produced no audio")
-    if interruptible:
-        interrupted = False
-        await _arm_interruption()
-        try:
-            interrupted = await asyncio.to_thread(
-                _play_bytes_interruptible, buf.getvalue()
-            )
-        finally:
-            _WATCHER_STOP.set()  # never leak an open mic stream
-        return interrupted
-    await asyncio.to_thread(_play_bytes, buf.getvalue())
-    return False
 
 
 def _play_gtts(text: str, lang: str) -> None:

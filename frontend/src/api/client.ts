@@ -259,7 +259,7 @@ export const postChatVoice = (
  * STT endpoint for voice input.
  */
 export const postChatTts = (text: string, lang: string = 'te') =>
-  request<TtsResponse>('/tts', {
+  request<TtsResponse>('/chat/tts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify({ text, lang }),
@@ -267,7 +267,7 @@ export const postChatTts = (text: string, lang: string = 'te') =>
 
 /** POST /chat/tts (raw WAV fallback, no audio_url/ audio fields). */
 export const postChatTtsRaw = (text: string, lang: string = 'te') =>
-  request<TtsResponse>('/tts', {
+  request<TtsResponse>('/chat/tts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify({ text, lang }),

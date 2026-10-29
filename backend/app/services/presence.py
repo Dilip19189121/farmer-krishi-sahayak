@@ -70,6 +70,11 @@ class PresenceWatcher:
         )
         self._cap: Optional[cv2.VideoCapture] = None
 
+        # Loop stop signal, owned by the watcher instance from birth (routes
+        # and stop_presence() both set it; it used to be injected externally
+        # and simply did not exist on a bare-constructed watcher).
+        self._stop_event = threading.Event()
+
         # Edge-trigger state machine (reset on start()).
         # Camera is optional here: on headless machines (no webcam) where
         # the user only wants the status/POLL endpoints, the watcher must
@@ -86,6 +91,8 @@ class PresenceWatcher:
 
     def start(self) -> None:
         """Open the webcam (CAP_DSHOW: fast open on Windows)."""
+        global _active_watcher
+        self._stop_event.clear()
         self._streak = 0
         self._face_present = False
         self._last_trigger_t = 0.0
@@ -100,11 +107,20 @@ class PresenceWatcher:
             # poll() will just report 0 faces, and the frontend can still
             # call /presence/status and /presence/stop without the app 500ing.
         self._detector.setInputSize((640, 480))
+        # Registered so stop_presence() can kill this watcher on backend
+        # shutdown even when no route holds a reference to it.
+        _active_watcher = self
 
     def stop(self) -> None:
+        # Signals any watch loop polling this watcher to exit (checked every
+        # iteration) AND releases the camera.
+        self._stop_event.set()
+        global _active_watcher
         if self._cap is not None:
             self._cap.release()
             self._cap = None
+        if _active_watcher is self:
+            _active_watcher = None
 
 
 # -- detection ----------------------------------------------------------
@@ -207,14 +223,24 @@ class PresenceWatcher:
 # iteration so it stops actively on shutdown (not just via daemon=True).
 _presence_stop_flag = threading.Event()
 
+# The watcher most recently started (registered by PresenceWatcher.start(),
+# cleared by stop()). Lets stop_presence() kill the camera thread on backend
+# shutdown even if the route-level reference is already gone.
+_active_watcher: Optional["PresenceWatcher"] = None
+
 
 def stop_presence() -> None:
-    """Set the stop flag and release the camera, killing the presence thread.
+    """Set the stop flag, signal the active watcher and release the camera.
 
-    The background loop checks _presence_stop_flag on every iteration and
-    exits, then releases the camera.
+    The routes/presence.py watch loop checks both _presence_stop_flag and the
+    watcher's own _stop_event every iteration; stopping the watcher here too
+    guarantees _stop_event is set and the camera is released on backend
+    shutdown, whatever route state looks like.
     """
     _presence_stop_flag.set()
+    watcher = _active_watcher
+    if watcher is not None:
+        watcher.stop()  # sets _stop_event and releases the camera
 
 
 # ---------------------------------------------------------------------------

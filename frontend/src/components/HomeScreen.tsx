@@ -2,6 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { postChat, postChatTts, postChatTtsRaw } from '../api/client';
 
+export interface ChatMessage {
+  id: string;
+  sender: 'user' | 'assistant';
+  text?: string;
+  time: string;
+  isAssessment?: boolean;
+  type?: string;
+}
+
 interface HomeScreenProps {
   onNavigate: (path: string) => void;
   showToast: (msg: string) => void;
@@ -9,15 +18,9 @@ interface HomeScreenProps {
   sessionSeconds?: number;
   sessionStatus?: 'active' | 'warning' | 'expired';
   formatSessionTime?: (totalSeconds: number) => string;
-}
-
-interface ChatMessage {
-  id: string;
-  sender: 'user' | 'assistant';
-  text?: string;
-  time: string;
-  isAssessment?: boolean;
-  type?: string;
+  messages: ChatMessage[];
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  sessionInitialized: React.MutableRefObject<boolean>;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -31,18 +34,25 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     const secs = totalSeconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   },
+  messages,
+  setMessages,
+  sessionInitialized,
 }) => {
   const { t, language, setLanguage } = useLanguage();
-  const [inputQuery, setInputQuery] = useState('');
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  // Language-selection tracking: set once the farmer has chosen a language
+  const [latestAiAnswer, setLatestAiAnswer] = useState<string>('');
+  const [latestPersonQuery, setLatestPersonQuery] = useState<string>('');
+  const [showDialogueChart, setShowDialogueChart] = useState<boolean>(true);
+  const [liveSpokenText, setLiveSpokenText] = useState<string>('');
+  const [personDetectionState, setPersonDetectionState] = useState<'detected' | 'not_detected'>('detected');
+  const [isCameraActive, setIsCameraActive] = useState(false);
   const [languageSelected, setLanguageSelected] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [inputQuery, setInputQuery] = useState('');
+  // Language-selection tracking: set once the farmer has chosen a language
 
   // Camera-assisted session state: active state and person detection state
   // Ready to receive real camera/detection events from FastAPI/backend in VS Code:
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [personDetectionState, setPersonDetectionState] = useState<'detected' | 'not_detected'>('detected');
 
   // Speaking-state variable: active when farmer is speaking (isRecording) or AI assistant is speaking (isPlayingAudio)
   // Ready to connect to real audio/VAD events in VS Code:
@@ -53,10 +63,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const sessionStartedRef = useRef(false);
 
   // Live spoken text & dialogue chart state (visualizes Person answer and AI answer while speaking)
-  const [liveSpokenText, setLiveSpokenText] = useState<string>('');
-  const [showDialogueChart, setShowDialogueChart] = useState<boolean>(true);
-  const [latestPersonQuery, setLatestPersonQuery] = useState<string>('');
-  const [latestAiAnswer, setLatestAiAnswer] = useState<string>('');
 
   // Regional language voice tags for Web Speech API
   const langCodes: Record<string, string> = {
@@ -192,21 +198,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     },
   };
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'msg-1',
-      sender: 'user',
-      text: userQueryByLang[language] || userQueryByLang.en,
-      time: '10:39 AM',
-    },
-    {
-      id: 'msg-2',
-      sender: 'assistant',
-      time: '10:40 AM',
-      isAssessment: true,
-    },
-  ]);
-
   // Auto-scroll chat to the bottom whenever a new message arrives
   useEffect(() => {
     chatScrollRef.current?.scrollTo({ top: chatScrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -246,10 +237,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     return () => clearInterval(id);
   }, []);
 
-  // On mount: clear any message from a previous session before adding the
-  // new welcome bubbles, so no old messages appear on startup.
+  // On mount: clear messages and mark session initialized (first mount only,
+  // so remounting during an active session does not restart the welcome flow).
   useEffect(() => {
-    setMessages([]);
+    if (!sessionInitialized.current && messages.length === 0) {
+      setMessages([]);
+      sessionInitialized.current = true;
+    }
   }, []);
 
   // On mount: stream the trilingual welcome messages into the chat, then a
