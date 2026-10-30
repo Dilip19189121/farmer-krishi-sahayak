@@ -38,6 +38,17 @@ const cropImageMap: Record<string, string> = {
   'pineapple': 'https://cdn.pixabay.com/photo/2016/07/20/14/59/pineapple-1524343_640.jpg',
   'papaya': 'https://cdn.pixabay.com/photo/2016/09/24/21/34/papaya-1674192_640.jpg',
   'jackfruit': 'https://cdn.pixabay.com/photo/2017/06/17/17/48/jackfruit-2419914_640.jpg',
+  'tomato': 'https://cdn.pixabay.com/photo/2016/07/14/08/59/tomato-1525466_640.jpg',
+  'onion': 'https://cdn.pixabay.com/photo/2016/03/15/21/33/onion-1265917_640.jpg',
+  'potato': 'https://cdn.pixabay.com/photo/2016/09/20/18/15/potato-1668559_640.jpg',
+  'bajra': 'https://cdn.pixabay.com/photo/2017/08/15/08/21/millet-2660740_640.jpg',
+  'barley': 'https://cdn.pixabay.com/photo/2017/04/18/06/58/barley-2235722_640.jpg',
+  'jowar': 'https://cdn.pixabay.com/photo/2017/03/17/16/28/millet-2241610_640.jpg',
+  'wheat': 'https://cdn.pixabay.com/photo/2016/07/12/12/37/wheat-1511834_640.jpg',
+  'brinjal': 'https://cdn.pixabay.com/photo/2016/06/21/08/36/brinjal-1460756_640.jpg',
+  'bhindi': 'https://cdn.pixabay.com/photo/2016/06/21/08/36/brinjal-1460756_640.jpg',
+  'drumstick': 'https://cdn.pixabay.com/photo/2016/09/19/10/29/moringa-1665052_640.jpg',
+  'sugarcane': 'https://cdn.pixabay.com/photo/2016/10/20/05/52/sugarcane-1774387_640.jpg',
 };
 export const getImageForCrop = (name: string): string => {
   if (!name) return '';

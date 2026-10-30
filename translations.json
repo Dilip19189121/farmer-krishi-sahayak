@@ -1,0 +1,1379 @@
+{
+  "pmfby": {
+    "name": {
+      "en": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+      "hi": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+      "te": "Pradhan Mantri Fasal Bima Yojana (PMFBY)"
+    },
+    "description": {
+      "en": "Comprehensive crop insurance cover against failure of notified crops - assured insurance protection from natural calamities, pests & diseases, with farmers paying only 2% premium for Kharif, 1.5% for Rabi and 5% for annual commercial/horticultural crops; technology like remote sensing and drones is used for loss estimation.",
+      "hi": "Comprehensive फसल बीमा cover against failure of notified फसलs - assured बीमा protection from natural calamities, pests & diseases, with किसानs paying only 2% premium for Kharif, 1.5% for Rabi and 5% for annual commercial/horticultural फसलs; technology like remote sensing and drones is used for loss estimation.",
+      "te": "Comprehensive పంట బీమా cover against failure of notified పంటs - assured బీమా protection from natural calamities, pests & diseases, with రైతుs paying only 2% premium for Kharif, 1.5% for Rabi and 5% for annual commercial/horticultural పంటs; technology like remote sensing and drones is used for loss estimation."
+    },
+    "eligibility": {
+      "en": "All farmers growing notified crops in a notified area. Compulsory for loanee farmers with a Crop Loan/KCC account for notified crops, voluntary for non-loanee farmers.",
+      "hi": "All किसानs growing notified फसलs in a notified area. Compulsory for loanee किसानs with a Crop Loan/KCC account for notified फसलs, voluntary for non-loanee किसानs.",
+      "te": "All రైతుs growing notified పంటs in a notified area. Compulsory for loanee రైతుs with a Crop Loan/KCC account for notified పంటs, voluntary for non-loanee రైతుs."
+    }
+  },
+  "wbcis": {
+    "name": {
+      "en": "Weather Based Crop Insurance Scheme (WBCIS)",
+      "hi": "Weather Based Crop Insurance Scheme (WBCIS)",
+      "te": "Weather Based Crop Insurance Scheme (WBCIS)"
+    },
+    "description": {
+      "en": "Weather-index crop insurance with farmer premium structure at par with PMFBY. Provides protection against adverse weather incidences based on a weather index rather than yield; implementing-agency selection and area allocation criteria are the same as PMFBY and the other broad features remain the same.",
+      "hi": "Weather-index फसल बीमा with किसान premium structure at par with PMFBY. Provides protection against adverse weather incidences based on a weather index rather than yield; implementing-agency selection and area allocation criteria are the same as PMFBY and the other broad features remain the same.",
+      "te": "Weather-index పంట బీమా with రైతు premium structure at par with PMFBY. Provides protection against adverse weather incidences based on a weather index rather than yield; implementing-agency selection and area allocation criteria are the same as PMFBY and the other broad features remain the same."
+    },
+    "eligibility": {
+      "en": "Farmers in WBCIS-notified areas; farmer premium at par with PMFBY (2% Kharif, 1.5% Rabi, 5% annual commercial/horticultural crops).",
+      "hi": "Farmers in WBCIS-notified areas; किसान premium at par with PMFBY (2% Kharif, 1.5% Rabi, 5% annual commercial/horticultural फसलs).",
+      "te": "Farmers in WBCIS-notified areas; రైతు premium at par with PMFBY (2% Kharif, 1.5% Rabi, 5% annual commercial/horticultural పంటs)."
+    }
+  },
+  "upis": {
+    "name": {
+      "en": "Unified Package Insurance Scheme (UPIS)",
+      "hi": "Unified Package Insurance Scheme (UPIS)",
+      "te": "Unified Package Insurance Scheme (UPIS)"
+    },
+    "description": {
+      "en": "Pilot in 45 selected districts providing comprehensive risk coverage of crops, assets, life and student safety to farmers through one simple proposal form covering crop insurance (PMFBY/WBCIS), loss of life (PMJJBY), accidental death & disability (PMSBY), student safety, household and agriculture implements & tractor, implemented through a single window.",
+      "hi": "Pilot in 45 selected districts providing comprehensive risk coverage of फसलs, assets, life and student safety to किसानs through one simple proposal form covering फसल बीमा (PMFBY/WBCIS), loss of life (PMJJBY), accidental death & disability (PMSBY), student safety, household and agriculture implements & tractor, implemented through a single window.",
+      "te": "Pilot in 45 selected districts providing comprehensive risk coverage of పంటs, assets, life and student safety to రైతుs through one simple proposal form covering పంట బీమా (PMFBY/WBCIS), loss of life (PMJJBY), accidental death & disability (PMSBY), student safety, household and agriculture implements & tractor, implemented through a single window."
+    },
+    "eligibility": {
+      "en": "Farmers in the 45 selected pilot districts; crop insurance is compulsory and farmers choose at least two other sections.",
+      "hi": "Farmers in the 45 selected pilot districts; फसल बीमा is compulsory and किसानs choose at least two other sections.",
+      "te": "Farmers in the 45 selected pilot districts; పంట బీమా is compulsory and రైతుs choose at least two other sections."
+    }
+  },
+  "pacs-computerisation": {
+    "name": {
+      "en": "Computerisation of Primary Agricultural Credit Societies (PACS)",
+      "hi": "Computerisation of Primary Agricultural Credit Societies (PACS)",
+      "te": "Computerisation of Primary Agricultural Credit Societies (PACS)"
+    },
+    "description": {
+      "en": "Centrally Sponsored Project implemented by NABARD (2022-23 to 2026-27, sunset 31 March 2027) to computerise the credit and non-credit business of 63,000 PACS/LAMPS, the third tier of the short-term cooperative credit structure, bringing efficiency, accountability, transparency and improved profitability to societies that supply credit, inputs, storage and marketing services to their farmer members.",
+      "hi": "Centrally Sponsored Project implemented by NABARD (2022-23 to 2026-27, sunset 31 March 2027) to computerise the ऋण and non-ऋण business of 63,000 PACS/LAMPS, the third tier of the short-term cooperative ऋण structure, bringing efficiency, accountability, transparency and improved profitability to societies that supply ऋण, inputs, storage and बाजारing services to their किसान members.",
+      "te": "Centrally Sponsored Project implemented by NABARD (2022-23 to 2026-27, sunset 31 March 2027) to computerise the రుణం and non-రుణం business of 63,000 PACS/LAMPS, the third tier of the short-term cooperative రుణం structure, bringing efficiency, accountability, transparency and improved profitability to societies that supply రుణం, inputs, storage and మార్కెట్ing services to their రైతు members."
+    },
+    "eligibility": {
+      "en": "63,000 PACS and LAMPS across India, which are owned by farmers, rural artisans and other cooperative members, with special reach to small & marginal farmers.",
+      "hi": "63,000 PACS and LAMPS across India, which are owned by किसानs, rural artisans and other cooperative members, with special reach to small & marginal किसानs.",
+      "te": "63,000 PACS and LAMPS across India, which are owned by రైతుs, rural artisans and other cooperative members, with special reach to small & marginal రైతుs."
+    }
+  },
+  "pm-sym": {
+    "name": {
+      "en": "PM-SYM",
+      "hi": "PM-SYM",
+      "te": "PM-SYM"
+    },
+    "description": {
+      "en": "Subscribers receive an assured minimum monthly pension of Rs. 3,000 after reaching age 60, in exchange for a modest monthly contribution during their working years, ranging roughly from around Rs. 55 to Rs. 200 per month depending on the subscriber's age at the time of joining -- joining at a younger age means a smaller required monthly contribution.",
+      "hi": "Subscribers receive an assured minimum monthly pension of Rs. 3,000 after reaching age 60, in exchange for a modest monthly contribution during their working years, ranging roughly from around Rs. 55 to Rs. 200 per month depending on the subscriber's age at the time of joining -- joining at a younger age means a smaller required monthly contribution.",
+      "te": "Subscribers receive an assured minimum monthly pension of Rs. 3,000 after reaching age 60, in exchange for a modest monthly contribution during their working years, ranging roughly from around Rs. 55 to Rs. 200 per month depending on the subscriber's age at the time of joining -- joining at a younger age means a smaller required monthly contribution."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "ayushman-bharat": {
+    "name": {
+      "en": "Ayushman Bharat",
+      "hi": "Ayushman Bharat",
+      "te": "Ayushman Bharat"
+    },
+    "description": {
+      "en": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB PM-JAY) was launched on 23 September 2018 in Ranchi, Jharkhand. It is described as the world's largest government-funded health assurance scheme, offering a health cover of Rs. 5,00,000 per family per year for secondary and tertiary care hospitalisation.",
+      "hi": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB PM-JAY) was launched on 23 September 2018 in Ranchi, Jharkhand. It is described as the world's largest सरकार-funded health assurance scheme, offering a health cover of Rs. 5,00,000 per family per year for secondary and tertiary care hospitalisation.",
+      "te": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (AB PM-JAY) was launched on 23 September 2018 in Ranchi, Jharkhand. It is described as the world's largest ప్రభుత్వం-funded health assurance scheme, offering a health cover of Rs. 5,00,000 per family per year for secondary and tertiary care hospitalisation."
+    },
+    "eligibility": {
+      "en": "Eligible households number over 10.74 crore families, roughly the bottom 40 percent of India's population by the deprivation and occupational criteria used in the Socio-Economic Caste Census (SECC) 2011.",
+      "hi": "Eligible households number over 10.74 crore families, roughly the bottom 40 percent of India's population by the deprivation and occupational criteria used in the Socio-Economic Caste Census (SECC) 2011.",
+      "te": "Eligible households number over 10.74 crore families, roughly the bottom 40 percent of India's population by the deprivation and occupational criteria used in the Socio-Economic Caste Census (SECC) 2011."
+    }
+  },
+  "pm-ujjwala": {
+    "name": {
+      "en": "PM Ujjwala",
+      "hi": "PM Ujjwala",
+      "te": "PM Ujjwala"
+    },
+    "description": {
+      "en": "A beneficiary approved under the Pradhan Mantri Ujjwala Yojana receives a deposit-free LPG connection issued in her own name, meaning she is not required to pay the usual security deposit that new LPG customers normally pay for the cylinder and pressure regulator. The government bears the administrative cost of setting up this connection.",
+      "hi": "A beneficiary approved under the Pradhan Mantri Ujjwala Yojana receives a deposit-free LPG connection issued in her own name, meaning she is not required to pay the usual security deposit that new LPG customers normally pay for the cylinder and pressure regulator. The सरकार bears the administrative cost of setting up this connection.",
+      "te": "A beneficiary approved under the Pradhan Mantri Ujjwala Yojana receives a deposit-free LPG connection issued in her own name, meaning she is not required to pay the usual security deposit that new LPG customers normally pay for the cylinder and pressure regulator. The ప్రభుత్వం bears the administrative cost of setting up this connection."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "startup-india": {
+    "name": {
+      "en": "Startup India",
+      "hi": "Startup India",
+      "te": "Startup India"
+    },
+    "description": {
+      "en": "DPIIT recognition unlocks several benefits: self-certification compliance under specified labour and environment laws (reducing routine inspection burden); an income-tax exemption for 3 consecutive financial years out of the first 10 years since incorporation, though this specific tax exemption requires additional certification from an Inter-Ministerial...",
+      "hi": "DPIIT recognition unlocks several benefits: self-certification compliance under specified labour and environment laws (reducing routine inspection burden); an income-tax exemption for 3 consecutive financial years out of the first 10 years since incorporation, though this specific tax exemption requires additional certification from an Inter-Ministerial...",
+      "te": "DPIIT recognition unlocks several benefits: self-certification compliance under specified labour and environment laws (reducing routine inspection burden); an income-tax exemption for 3 consecutive financial years out of the first 10 years since incorporation, though this specific tax exemption requires additional certification from an Inter-Ministerial..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "e-shram-card": {
+    "name": {
+      "en": "e-Shram Card",
+      "hi": "e-Shram Card",
+      "te": "e-Shram Card"
+    },
+    "description": {
+      "en": "Registration results in the issuance of a 12-digit Universal Account Number (UAN)-linked e-Shram card, which serves as a portable identity document for the worker when applying for or being targeted by various welfare schemes. Registered workers have historically also received a built-in accidental death/disability insurance cover linked to the card...",
+      "hi": "Registration results in the issuance of a 12-digit Universal Account Number (UAN)-linked e-Shram card, which serves as a portable identity document for the worker when applying for or being targeted by various welfare schemes. Registered workers have historically also received a built-in accidental death/disability बीमा cover linked to the card...",
+      "te": "Registration results in the issuance of a 12-digit Universal Account Number (UAN)-linked e-Shram card, which serves as a portable identity document for the worker when applying for or being targeted by various welfare schemes. Registered workers have historically also received a built-in accidental death/disability బీమా cover linked to the card..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "beti-bachao-beti-padhao": {
+    "name": {
+      "en": "Beti Bachao Beti Padhao",
+      "hi": "Beti Bachao Beti Padhao",
+      "te": "Beti Bachao Beti Padhao"
+    },
+    "description": {
+      "en": "The programme's core activities include generating public awareness against gender-biased sex selection, strengthening enforcement of the Pre-Conception and Pre-Natal Diagnostic Techniques (PC&PNDT) Act to curb illegal sex-determination practices, promoting girl-child education and school retention, and encouraging convergence with financial schemes...",
+      "hi": "The programme's core activities include generating public awareness against gender-biased sex selection, strengthening enforcement of the Pre-Conception and Pre-Natal Diagnostic Techniques (PC&PNDT) Act to curb illegal sex-determination practices, promoting girl-child education and school retention, and encouraging convergence with financial schemes...",
+      "te": "The programme's core activities include generating public awareness against gender-biased sex selection, strengthening enforcement of the Pre-Conception and Pre-Natal Diagnostic Techniques (PC&PNDT) Act to curb illegal sex-determination practices, promoting girl-child education and school retention, and encouraging convergence with financial schemes..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "pradhan-mantri-vaya-vandana-yojana": {
+    "name": {
+      "en": "Pradhan Mantri Vaya Vandana Yojana",
+      "hi": "Pradhan Mantri Vaya Vandana Yojana",
+      "te": "Pradhan Mantri Vaya Vandana Yojana"
+    },
+    "description": {
+      "en": "The subscriber chooses to receive the assured pension monthly, quarterly, half-yearly, or yearly; the exact pension rate (return equivalent) is fixed by the government for each subscription window and has historically been comparable to prevailing small-savings/interest-rate levels available to senior citizens elsewhere.",
+      "hi": "The subscriber chooses to receive the assured pension monthly, quarterly, half-yearly, or yearly; the exact pension rate (return equivalent) is fixed by the सरकार for each subscription window and has historically been comparable to prevailing small-savings/interest-rate levels available to senior citizens elsewhere.",
+      "te": "The subscriber chooses to receive the assured pension monthly, quarterly, half-yearly, or yearly; the exact pension rate (return equivalent) is fixed by the ప్రభుత్వం for each subscription window and has historically been comparable to prevailing small-savings/interest-rate levels available to senior citizens elsewhere."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "mutual-funds": {
+    "name": {
+      "en": "Mutual Funds",
+      "hi": "Mutual Funds",
+      "te": "Mutual Funds"
+    },
+    "description": {
+      "en": "Broad fund categories include equity funds, debt funds, hybrid funds, and passively managed index/exchange-traded funds, each carrying a different risk-return profile suited to different investment goals and time horizons. Investors can invest either as a lump sum or through a Systematic Investment Plan (SIP), where a fixed amount is invested at regular...",
+      "hi": "Broad fund categories include equity funds, debt funds, hybrid funds, and passively managed index/exchange-traded funds, each carrying a different risk-return profile suited to different investment goals and time horizons. Investors can invest either as a lump sum or through a Systematic Investment Plan (SIP), where a fixed amount is invested at regular...",
+      "te": "Broad fund categories include equity funds, debt funds, hybrid funds, and passively managed index/exchange-traded funds, each carrying a different risk-return profile suited to different investment goals and time horizons. Investors can invest either as a lump sum or through a Systematic Investment Plan (SIP), where a fixed amount is invested at regular..."
+    },
+    "eligibility": {
+      "en": "Equity-Linked Savings Schemes (ELSS), a specific category of equity mutual fund, qualify for a tax deduction under Section 80C and carry a 3-year lock-in, which is the shortest lock-in period among the various instruments eligible for the 80C deduction.",
+      "hi": "Equity-Linked Savings Schemes (ELSS), a specific category of equity mutual fund, qualify for a tax deduction under Section 80C and carry a 3-year lock-in, which is the shortest lock-in period among the various instruments eligible for the 80C deduction.",
+      "te": "Equity-Linked Savings Schemes (ELSS), a specific category of equity mutual fund, qualify for a tax deduction under Section 80C and carry a 3-year lock-in, which is the shortest lock-in period among the various instruments eligible for the 80C deduction."
+    }
+  },
+  "pradhan-mantri-garib-kalyan-anna-yojana": {
+    "name": {
+      "en": "Pradhan Mantri Garib Kalyan Anna Yojana",
+      "hi": "Pradhan Mantri Garib Kalyan Anna Yojana",
+      "te": "Pradhan Mantri Garib Kalyan Anna Yojana"
+    },
+    "description": {
+      "en": "Under the scheme's original COVID-relief form, an additional quantity of foodgrain -- commonly 5 kilograms per person per month -- was provided free of cost, over and above each household's regular NFSA entitlement. From January 2023, this was restructured so that the regular NFSA foodgrain entitlement itself (rather than an additional quantity on top...",
+      "hi": "Under the scheme's original COVID-relief form, an additional quantity of foodgrain -- commonly 5 kilograms per person per month -- was provided free of cost, over and above each household's regular NFSA entitlement. From January 2023, this was restructured so that the regular NFSA foodgrain entitlement itself (rather than an additional quantity on top...",
+      "te": "Under the scheme's original COVID-relief form, an additional quantity of foodgrain -- commonly 5 kilograms per person per month -- was provided free of cost, over and above each household's regular NFSA entitlement. From January 2023, this was restructured so that the regular NFSA foodgrain entitlement itself (rather than an additional quantity on top..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "atal-pension-yojana": {
+    "name": {
+      "en": "Atal Pension Yojana",
+      "hi": "Atal Pension Yojana",
+      "te": "Atal Pension Yojana"
+    },
+    "description": {
+      "en": "Any individual with a savings bank or post office account, aged between 18 and 40 years, can join APY; contributions continue until age 60, so the minimum contribution period is 20 years (for someone joining at 40) and can extend up to 42 years (for someone joining at 18). Since October 2022, income-tax payers have generally not been permitted to newly...",
+      "hi": "Any individual with a savings bank or post office account, aged between 18 and 40 years, can join APY; contributions continue until age 60, so the minimum contribution period is 20 years (for someone joining at 40) and can extend up to 42 years (for someone joining at 18). Since October 2022, income-tax payers have generally not been permitted to newly...",
+      "te": "Any individual with a savings bank or post office account, aged between 18 and 40 years, can join APY; contributions continue until age 60, so the minimum contribution period is 20 years (for someone joining at 40) and can extend up to 42 years (for someone joining at 18). Since October 2022, income-tax payers have generally not been permitted to newly..."
+    },
+    "eligibility": {
+      "en": "Any individual with a savings bank or post office account, aged between 18 and 40 years, can join APY; contributions continue until age 60, so the minimum contribution period is 20 years (for someone joining at 40) and can extend up to 42 years (for someone joining at 18).",
+      "hi": "Any individual with a savings bank or post office account, aged between 18 and 40 years, can join APY; contributions continue until age 60, so the minimum contribution period is 20 years (for someone joining at 40) and can extend up to 42 years (for someone joining at 18).",
+      "te": "Any individual with a savings bank or post office account, aged between 18 and 40 years, can join APY; contributions continue until age 60, so the minimum contribution period is 20 years (for someone joining at 40) and can extend up to 42 years (for someone joining at 18)."
+    }
+  },
+  "pm-svamitva-scheme": {
+    "name": {
+      "en": "PM SVAMITVA Scheme",
+      "hi": "PM SVAMITVA Scheme",
+      "te": "PM SVAMITVA Scheme"
+    },
+    "description": {
+      "en": "The primary output for a property owner is a legally recognised Property Card or Title Deed (referred to by different names in different states, such as 'Gharauni' in some regions), prepared based on drone-surveyed and Continuously Operating Reference Station (CORS)-verified mapping. This property card allows the owner to use the residential property as...",
+      "hi": "The primary output for a property owner is a legally recognised Property Card or Title Deed (referred to by different names in different राज्यs, such as 'Gharauni' in some regions), prepared based on drone-surveyed and Continuously Operating Reference Station (CORS)-verified mapping. This property card allows the owner to use the residential property as...",
+      "te": "The primary output for a property owner is a legally recognised Property Card or Title Deed (referred to by different names in different రాష్ట్రంs, such as 'Gharauni' in some regions), prepared based on drone-surveyed and Continuously Operating Reference Station (CORS)-verified mapping. This property card allows the owner to use the residential property as..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "pmay": {
+    "name": {
+      "en": "PMAY",
+      "hi": "PMAY",
+      "te": "PMAY"
+    },
+    "description": {
+      "en": "To be eligible for Pradhan Mantri Awas Yojana benefits, neither the applicant nor any member of their family should already own a pucca (permanent, all-weather) house anywhere in India, whether in the applicant's own name or in the name of any other family member. Owning even a partial share of a pucca house through a family member is generally treated...",
+      "hi": "To be eligible for Pradhan Mantri Awas Yojana benefits, neither the applicant nor any member of their family should already own a pucca (permanent, all-weather) house anywhere in India, whether in the applicant's own name or in the name of any other family member. Owning even a partial share of a pucca house through a family member is generally treated...",
+      "te": "To be eligible for Pradhan Mantri Awas Yojana benefits, neither the applicant nor any member of their family should already own a pucca (permanent, all-weather) house anywhere in India, whether in the applicant's own name or in the name of any other family member. Owning even a partial share of a pucca house through a family member is generally treated..."
+    },
+    "eligibility": {
+      "en": "To be eligible for Pradhan Mantri Awas Yojana benefits, neither the applicant nor any member of their family should already own a pucca (permanent, all-weather) house anywhere in India, whether in the applicant's own name or in the name of any other family member.",
+      "hi": "To be eligible for Pradhan Mantri Awas Yojana benefits, neither the applicant nor any member of their family should already own a pucca (permanent, all-weather) house anywhere in India, whether in the applicant's own name or in the name of any other family member.",
+      "te": "To be eligible for Pradhan Mantri Awas Yojana benefits, neither the applicant nor any member of their family should already own a pucca (permanent, all-weather) house anywhere in India, whether in the applicant's own name or in the name of any other family member."
+    }
+  },
+  "jan-aushadhi-yojana": {
+    "name": {
+      "en": "Jan Aushadhi Yojana",
+      "hi": "Jan Aushadhi Yojana",
+      "te": "Jan Aushadhi Yojana"
+    },
+    "description": {
+      "en": "For members of the public buying medicines, there is no eligibility criterion -- any customer can purchase generic medicines at a Jan Aushadhi Kendra. For opening a new Kendra, eligible applicants include individual pharmacists or unemployed pharmacists, doctors, registered NGOs, trusts, self-help groups, and state governments or their agencies, each...",
+      "hi": "For members of the public buying medicines, there is no eligibility criterion -- any customer can purchase generic medicines at a Jan Aushadhi Kendra. For opening a new Kendra, eligible applicants include individual pharmacists or unemployed pharmacists, doctors, registered NGOs, trusts, self-help groups, and राज्य सरकारs or their agencies, each...",
+      "te": "For members of the public buying medicines, there is no eligibility criterion -- any customer can purchase generic medicines at a Jan Aushadhi Kendra. For opening a new Kendra, eligible applicants include individual pharmacists or unemployed pharmacists, doctors, registered NGOs, trusts, self-help groups, and రాష్ట్రం ప్రభుత్వంs or their agencies, each..."
+    },
+    "eligibility": {
+      "en": "For members of the public buying medicines, there is no eligibility criterion -- any customer can purchase generic medicines at a Jan Aushadhi Kendra.",
+      "hi": "For members of the public buying medicines, there is no eligibility criterion -- any customer can purchase generic medicines at a Jan Aushadhi Kendra.",
+      "te": "For members of the public buying medicines, there is no eligibility criterion -- any customer can purchase generic medicines at a Jan Aushadhi Kendra."
+    }
+  },
+  "kisan-vikas-patra": {
+    "name": {
+      "en": "Kisan Vikas Patra",
+      "hi": "Kisan Vikas Patra",
+      "te": "Kisan Vikas Patra"
+    },
+    "description": {
+      "en": "The KVP interest rate for the April-June 2026 quarter is 7.5% per annum, with the certificate designed to double the invested amount at maturity -- at this prevailing rate, the maturity period works out to approximately 115 months (a little over 9.5 years); this exact doubling period changes whenever the government revises the applicable interest rate...",
+      "hi": "The KVP interest rate for the April-June 2026 quarter is 7.5% per annum, with the certificate designed to double the invested amount at maturity -- at this prevailing rate, the maturity period works out to approximately 115 months (a little over 9.5 years); this exact doubling period changes whenever the सरकार revises the applicable interest rate...",
+      "te": "The KVP interest rate for the April-June 2026 quarter is 7.5% per annum, with the certificate designed to double the invested amount at maturity -- at this prevailing rate, the maturity period works out to approximately 115 months (a little over 9.5 years); this exact doubling period changes whenever the ప్రభుత్వం revises the applicable interest rate..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "national-savings-certificate": {
+    "name": {
+      "en": "National Savings Certificate",
+      "hi": "National Savings Certificate",
+      "te": "National Savings Certificate"
+    },
+    "description": {
+      "en": "The NSC interest rate for the April-June 2026 quarter is 7.7% per annum, compounded annually but paid out only at maturity along with the principal, rather than at regular intervals during the term. The certificate has a fixed maturity period of 5 years. Investment up to Rs. 1.5 lakh in a financial year is eligible for deduction under Section 80C of the...",
+      "hi": "The NSC interest rate for the April-June 2026 quarter is 7.7% per annum, compounded annually but paid out only at maturity along with the principal, rather than at regular intervals during the term. The certificate has a fixed maturity period of 5 years. Investment up to Rs. 1.5 lakh in a financial year is eligible for deduction under Section 80C of the...",
+      "te": "The NSC interest rate for the April-June 2026 quarter is 7.7% per annum, compounded annually but paid out only at maturity along with the principal, rather than at regular intervals during the term. The certificate has a fixed maturity period of 5 years. Investment up to Rs. 1.5 lakh in a financial year is eligible for deduction under Section 80C of the..."
+    },
+    "eligibility": {
+      "en": "1.5 lakh in a financial year is eligible for deduction under Section 80C of the Income Tax Act; there is no upper limit on how much can be invested in NSC itself, only on how much of that investment qualifies for the 80C deduction.",
+      "hi": "1.5 lakh in a financial year is eligible for deduction under Section 80C of the Income Tax Act; there is no upper limit on how much can be invested in NSC itself, only on how much of that investment qualifies for the 80C deduction.",
+      "te": "1.5 lakh in a financial year is eligible for deduction under Section 80C of the Income Tax Act; there is no upper limit on how much can be invested in NSC itself, only on how much of that investment qualifies for the 80C deduction."
+    }
+  },
+  "public-provident-fund": {
+    "name": {
+      "en": "Public Provident Fund",
+      "hi": "Public Provident Fund",
+      "te": "Public Provident Fund"
+    },
+    "description": {
+      "en": "The PPF interest rate for the April-June 2026 quarter is 7.1% per annum, a rate that has remained unchanged across multiple consecutive quarters, reviewed and set by the government every quarter. The minimum deposit required per financial year is Rs. 500, and the maximum is Rs. 1.5 lakh, which can be deposited in any number of instalments within a...",
+      "hi": "The PPF interest rate for the April-June 2026 quarter is 7.1% per annum, a rate that has remained unchanged across multiple consecutive quarters, reviewed and set by the सरकार every quarter. The minimum deposit required per financial year is Rs. 500, and the maximum is Rs. 1.5 lakh, which can be deposited in any number of instalments within a...",
+      "te": "The PPF interest rate for the April-June 2026 quarter is 7.1% per annum, a rate that has remained unchanged across multiple consecutive quarters, reviewed and set by the ప్రభుత్వం every quarter. The minimum deposit required per financial year is Rs. 500, and the maximum is Rs. 1.5 lakh, which can be deposited in any number of instalments within a..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "senior-citizen-savings-scheme": {
+    "name": {
+      "en": "Senior Citizen Savings Scheme",
+      "hi": "Senior Citizen Savings Scheme",
+      "te": "Senior Citizen Savings Scheme"
+    },
+    "description": {
+      "en": "The SCSS interest rate for the April-June 2026 quarter is 8.2% per annum, among the highest offered across small-savings schemes, with interest paid out quarterly rather than compounded and accumulated to maturity. The maximum deposit permitted is Rs. 30 lakh per individual, aggregated across all SCSS accounts held by that person.",
+      "hi": "The SCSS interest rate for the April-June 2026 quarter is 8.2% per annum, among the highest offered across small-savings schemes, with interest paid out quarterly rather than compounded and accumulated to maturity. The maximum deposit permitted is Rs. 30 lakh per individual, aggregated across all SCSS accounts held by that person.",
+      "te": "The SCSS interest rate for the April-June 2026 quarter is 8.2% per annum, among the highest offered across small-savings schemes, with interest paid out quarterly rather than compounded and accumulated to maturity. The maximum deposit permitted is Rs. 30 lakh per individual, aggregated across all SCSS accounts held by that person."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "sukanya-samriddhi-yojana": {
+    "name": {
+      "en": "Sukanya Samriddhi Yojana",
+      "hi": "Sukanya Samriddhi Yojana",
+      "te": "Sukanya Samriddhi Yojana"
+    },
+    "description": {
+      "en": "The SSY interest rate for the April-June 2026 quarter is 8.2% per annum, among the higher rates offered across small-savings instruments, compounded annually and reviewed quarterly by the government. The minimum deposit required per year is Rs. 250, and the maximum is Rs. 1.5 lakh per year. The account matures 21 years from the date of opening, or...",
+      "hi": "The SSY interest rate for the April-June 2026 quarter is 8.2% per annum, among the higher rates offered across small-savings instruments, compounded annually and reviewed quarterly by the सरकार. The minimum deposit required per year is Rs. 250, and the maximum is Rs. 1.5 lakh per year. The account matures 21 years from the date of opening, or...",
+      "te": "The SSY interest rate for the April-June 2026 quarter is 8.2% per annum, among the higher rates offered across small-savings instruments, compounded annually and reviewed quarterly by the ప్రభుత్వం. The minimum deposit required per year is Rs. 250, and the maximum is Rs. 1.5 lakh per year. The account matures 21 years from the date of opening, or..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "mgnrega": {
+    "name": {
+      "en": "MGNREGA",
+      "hi": "MGNREGA",
+      "te": "MGNREGA"
+    },
+    "description": {
+      "en": "The Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA), originally notified as the National Rural Employment Guarantee Act (NREGA) on 7 September 2005, is a rural employment law rather than a discretionary welfare scheme, meaning the right to work it provides is a legal entitlement that can be claimed and enforced, not merely a benefit...",
+      "hi": "The Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA), originally notified as the National Rural Employment Guarantee Act (NREGA) on 7 September 2005, is a rural employment law rather than a discretionary welfare scheme, meaning the right to work it provides is a legal entitlement that can be claimed and enforced, not merely a benefit...",
+      "te": "The Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA), originally notified as the National Rural Employment Guarantee Act (NREGA) on 7 September 2005, is a rural employment law rather than a discretionary welfare scheme, meaning the right to work it provides is a legal entitlement that can be claimed and enforced, not merely a benefit..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "cgtmse": {
+    "name": {
+      "en": "CGTMSE",
+      "hi": "CGTMSE",
+      "te": "CGTMSE"
+    },
+    "description": {
+      "en": "Guarantee cover is available for collateral-free credit facilities up to Rs. 5 crore per eligible borrower, a ceiling that has been revised upward over time from an earlier, lower limit. The percentage of the loan amount covered by the guarantee varies by loan slab and borrower category, with a generally higher guarantee percentage (commonly in the...",
+      "hi": "Guarantee cover is available for collateral-free ऋण facilities up to Rs. 5 crore per eligible borrower, a ceiling that has been revised upward over time from an earlier, lower limit. The percentage of the loan amount covered by the guarantee varies by loan slab and borrower category, with a generally higher guarantee percentage (commonly in the...",
+      "te": "Guarantee cover is available for collateral-free రుణం facilities up to Rs. 5 crore per eligible borrower, a ceiling that has been revised upward over time from an earlier, lower limit. The percentage of the loan amount covered by the guarantee varies by loan slab and borrower category, with a generally higher guarantee percentage (commonly in the..."
+    },
+    "eligibility": {
+      "en": "5 crore per eligible borrower, a ceiling that has been revised upward over time from an earlier, lower limit.",
+      "hi": "5 crore per eligible borrower, a ceiling that has been revised upward over time from an earlier, lower limit.",
+      "te": "5 crore per eligible borrower, a ceiling that has been revised upward over time from an earlier, lower limit."
+    }
+  },
+  "ayushman-bharat-digital-mission": {
+    "name": {
+      "en": "Ayushman Bharat Digital Mission",
+      "hi": "Ayushman Bharat Digital Mission",
+      "te": "Ayushman Bharat Digital Mission"
+    },
+    "description": {
+      "en": "An ABHA number/ABHA address links an individual's health records -- such as past consultations, prescriptions, laboratory reports, and hospital discharge summaries -- across participating hospitals and health facilities, with the record-sharing always requiring the individual's explicit consent for each instance of access.",
+      "hi": "An ABHA number/ABHA address links an individual's health records -- such as past consultations, prescriptions, laboratory reports, and hospital discharge summaries -- across participating hospitals and health facilities, with the record-sharing always requiring the individual's explicit consent for each instance of access.",
+      "te": "An ABHA number/ABHA address links an individual's health records -- such as past consultations, prescriptions, laboratory reports, and hospital discharge summaries -- across participating hospitals and health facilities, with the record-sharing always requiring the individual's explicit consent for each instance of access."
+    },
+    "eligibility": {
+      "en": "Any Indian resident can voluntarily create an ABHA ID; there is no income, category, or means-based eligibility restriction, which distinguishes ABHA clearly from the separate, means-tested Ayushman Bharat PM-JAY health insurance scheme that uses SECC 2011-based eligibility criteria.",
+      "hi": "Any Indian resident can voluntarily create an ABHA ID; there is no income, category, or means-based eligibility restriction, which distinguishes ABHA clearly from the separate, means-tested Ayushman Bharat PM-JAY health बीमा scheme that uses SECC 2011-based eligibility criteria.",
+      "te": "Any Indian resident can voluntarily create an ABHA ID; there is no income, category, or means-based eligibility restriction, which distinguishes ABHA clearly from the separate, means-tested Ayushman Bharat PM-JAY health బీమా scheme that uses SECC 2011-based eligibility criteria."
+    }
+  },
+  "pradhan-mantri-mudra-yojana": {
+    "name": {
+      "en": "Pradhan Mantri MUDRA Yojana",
+      "hi": "Pradhan Mantri MUDRA Yojana",
+      "te": "Pradhan Mantri MUDRA Yojana"
+    },
+    "description": {
+      "en": "MUDRA loans are extended under three original categories based on the stage and funding need of the enterprise: Shishu (loans up to Rs. 50,000, for very early-stage businesses), Kishore (loans from Rs. 50,000 up to Rs. 5 lakh, for businesses with some track record seeking to expand), and Tarun (loans from Rs.",
+      "hi": "MUDRA loans are extended under three original categories based on the stage and funding need of the enterprise: Shishu (loans up to Rs. 50,000, for very early-stage businesses), Kishore (loans from Rs. 50,000 up to Rs. 5 lakh, for businesses with some track record seeking to expand), and Tarun (loans from Rs.",
+      "te": "MUDRA loans are extended under three original categories based on the stage and funding need of the enterprise: Shishu (loans up to Rs. 50,000, for very early-stage businesses), Kishore (loans from Rs. 50,000 up to Rs. 5 lakh, for businesses with some track record seeking to expand), and Tarun (loans from Rs."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "deposit-insurance-dicgc": {
+    "name": {
+      "en": "Deposit Insurance DICGC",
+      "hi": "Deposit Insurance DICGC",
+      "te": "Deposit Insurance DICGC"
+    },
+    "description": {
+      "en": "DICGC cover applies automatically to deposits (savings, current, fixed, and recurring) held with all commercial banks operating in India, including foreign banks with Indian operations, local area banks, and regional rural banks, as well as cooperative banks that are DICGC members; certain categories of deposits -- such as those of foreign governments,...",
+      "hi": "DICGC cover applies automatically to deposits (savings, current, fixed, and recurring) held with all commercial banks operating in India, including foreign banks with Indian operations, local area banks, and regional rural banks, as well as cooperative banks that are DICGC members; certain categories of deposits -- such as those of foreign सरकारs,...",
+      "te": "DICGC cover applies automatically to deposits (savings, current, fixed, and recurring) held with all commercial banks operating in India, including foreign banks with Indian operations, local area banks, and regional rural banks, as well as cooperative banks that are DICGC members; certain categories of deposits -- such as those of foreign ప్రభుత్వంs,..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "employees-provident-fund": {
+    "name": {
+      "en": "Employees Provident Fund",
+      "hi": "Employees Provident Fund",
+      "te": "Employees Provident Fund"
+    },
+    "description": {
+      "en": "Both the employee and employer contribute 12% of the employee's basic wage plus dearness allowance to the fund each month. Of the employer's 12% contribution, 8.33% (calculated against the statutory wage ceiling) is diverted to the Employees' Pension Scheme (EPS), which provides a monthly pension after retirement, while the remainder goes to the...",
+      "hi": "Both the employee and employer contribute 12% of the employee's basic wage plus dearness allowance to the fund each month. Of the employer's 12% contribution, 8.33% (calculated against the statutory wage ceiling) is diverted to the Employees' Pension Scheme (EPS), which provides a monthly pension after retirement, while the remainder goes to the...",
+      "te": "Both the employee and employer contribute 12% of the employee's basic wage plus dearness allowance to the fund each month. Of the employer's 12% contribution, 8.33% (calculated against the statutory wage ceiling) is diverted to the Employees' Pension Scheme (EPS), which provides a monthly pension after retirement, while the remainder goes to the..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "pm-vishwakarma-yojana": {
+    "name": {
+      "en": "PM Vishwakarma Yojana",
+      "hi": "PM Vishwakarma Yojana",
+      "te": "PM Vishwakarma Yojana"
+    },
+    "description": {
+      "en": "Artisans and craftspeople engaged in one of the 18 notified trades, working primarily with their hands and traditional tools, are eligible; registration is done via a Common Service Centre with Aadhaar-based biometric verification, and generally only one member per family is eligible to avail the scheme's benefits, to keep the support focused and spread...",
+      "hi": "Artisans and craftspeople engaged in one of the 18 notified trades, working primarily with their hands and traditional tools, are eligible; registration is done via a Common Service Centre with Aadhaar-based biometric verification, and generally only one member per family is eligible to avail the scheme's benefits, to keep the support focused and spread...",
+      "te": "Artisans and craftspeople engaged in one of the 18 notified trades, working primarily with their hands and traditional tools, are eligible; registration is done via a Common Service Centre with Aadhaar-based biometric verification, and generally only one member per family is eligible to avail the scheme's benefits, to keep the support focused and spread..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "pm-jeevan-jyoti-bima-yojana": {
+    "name": {
+      "en": "PM Jeevan Jyoti Bima Yojana",
+      "hi": "PM Jeevan Jyoti Bima Yojana",
+      "te": "PM Jeevan Jyoti Bima Yojana"
+    },
+    "description": {
+      "en": "2 lakh to the nominee if the insured member dies due to any cause during the policy year, which runs from 1 June to 31 May each year and is renewable annually. The annual premium is Rs. 436 per member (revised upward from Rs. 330 in 2022), auto-debited from the linked bank account in a single instalment.",
+      "hi": "2 lakh to the nominee if the insured member dies due to any cause during the policy year, which runs from 1 June to 31 May each year and is renewable annually. The annual premium is Rs. 436 per member (revised upward from Rs. 330 in 2022), auto-debited from the linked bank account in a single instalment.",
+      "te": "2 lakh to the nominee if the insured member dies due to any cause during the policy year, which runs from 1 June to 31 May each year and is renewable annually. The annual premium is Rs. 436 per member (revised upward from Rs. 330 in 2022), auto-debited from the linked bank account in a single instalment."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "pm-suraksha-bima-yojana": {
+    "name": {
+      "en": "PM Suraksha Bima Yojana",
+      "hi": "PM Suraksha Bima Yojana",
+      "te": "PM Suraksha Bima Yojana"
+    },
+    "description": {
+      "en": "PMSBY provides risk coverage of Rs. 2 lakh in case of accidental death or full (permanent total) disability, and Rs. 1 lakh in case of permanent partial disability. The annual premium is Rs. 20 per subscriber (revised upward from Rs. 12 in 2022), auto-debited from the linked bank account. This scheme covers accidental death and disability specifically...",
+      "hi": "PMSBY provides risk coverage of Rs. 2 lakh in case of accidental death or full (permanent total) disability, and Rs. 1 lakh in case of permanent partial disability. The annual premium is Rs. 20 per subscriber (revised upward from Rs. 12 in 2022), auto-debited from the linked bank account. This scheme covers accidental death and disability specifically...",
+      "te": "PMSBY provides risk coverage of Rs. 2 lakh in case of accidental death or full (permanent total) disability, and Rs. 1 lakh in case of permanent partial disability. The annual premium is Rs. 20 per subscriber (revised upward from Rs. 12 in 2022), auto-debited from the linked bank account. This scheme covers accidental death and disability specifically..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "pm-jan-dhan-yojana": {
+    "name": {
+      "en": "PM Jan Dhan Yojana",
+      "hi": "PM Jan Dhan Yojana",
+      "te": "PM Jan Dhan Yojana"
+    },
+    "description": {
+      "en": "A PMJDY account comes with several benefits at no cost to the account holder: a free RuPay debit card carrying an accidental insurance cover (raised to Rs. 2 lakh for accounts opened after 28 August 2018, with Rs. 1 lakh cover for earlier accounts); a life insurance cover of Rs. 30,000 for accounts opened before 26 January 2015; interest earned on the...",
+      "hi": "A PMJDY account comes with several benefits at no cost to the account holder: a free RuPay debit card carrying an accidental बीमा cover (raised to Rs. 2 lakh for accounts opened after 28 August 2018, with Rs. 1 lakh cover for earlier accounts); a life बीमा cover of Rs. 30,000 for accounts opened before 26 January 2015; interest earned on the...",
+      "te": "A PMJDY account comes with several benefits at no cost to the account holder: a free RuPay debit card carrying an accidental బీమా cover (raised to Rs. 2 lakh for accounts opened after 28 August 2018, with Rs. 1 lakh cover for earlier accounts); a life బీమా cover of Rs. 30,000 for accounts opened before 26 January 2015; interest earned on the..."
+    },
+    "eligibility": {
+      "en": "30,000 for accounts opened before 26 January 2015; interest earned on the savings balance at the applicable savings account rate; and eligibility for an overdraft facility of up to Rs.",
+      "hi": "30,000 for accounts opened before 26 January 2015; interest earned on the savings balance at the applicable savings account rate; and eligibility for an overdraft facility of up to Rs.",
+      "te": "30,000 for accounts opened before 26 January 2015; interest earned on the savings balance at the applicable savings account rate; and eligibility for an overdraft facility of up to Rs."
+    }
+  },
+  "scholarship-schemes": {
+    "name": {
+      "en": "Scholarship Schemes",
+      "hi": "Scholarship Schemes",
+      "te": "Scholarship Schemes"
+    },
+    "description": {
+      "en": "The National Scholarship Portal (NSP), operational since 1 July 2015 and hosted at scholarships.gov.in, is the Government of India's single-window digital platform for applying to, processing, and disbursing central government, state government, and UGC scholarship schemes. Rather than requiring a student to apply separately to each department running a...",
+      "hi": "The National Scholarship Portal (NSP), operational since 1 July 2015 and hosted at scholarships.gov.in, is the Government of India's single-window digital platform for applying to, processing, and disbursing केंद्र सरकार, राज्य सरकार, and UGC scholarship schemes. Rather than requiring a student to apply separately to each department running a...",
+      "te": "The National Scholarship Portal (NSP), operational since 1 July 2015 and hosted at scholarships.gov.in, is the Government of India's single-window digital platform for applying to, processing, and disbursing కేంద్ర ప్రభుత్వం, రాష్ట్రం ప్రభుత్వం, and UGC scholarship schemes. Rather than requiring a student to apply separately to each department running a..."
+    },
+    "eligibility": {
+      "en": "Rather than requiring a student to apply separately to each department running a scholarship, NSP lets a student register once (obtaining a One Time Registration or OTR number) and then apply to whichever specific schemes they are eligible for through the same portal.",
+      "hi": "Rather than requiring a student to apply separately to each department running a scholarship, NSP lets a student register once (obtaining a One Time Registration or OTR number) and then apply to whichever specific schemes they are eligible for through the same portal.",
+      "te": "Rather than requiring a student to apply separately to each department running a scholarship, NSP lets a student register once (obtaining a One Time Registration or OTR number) and then apply to whichever specific schemes they are eligible for through the same portal."
+    }
+  },
+  "stand-up-india-scheme": {
+    "name": {
+      "en": "Stand-Up India Scheme",
+      "hi": "Stand-Up India Scheme",
+      "te": "Stand-Up India Scheme"
+    },
+    "description": {
+      "en": "Composite loans (covering both a term loan and working capital) ranging from Rs. 10 lakh to Rs. 1 crore are facilitated through scheduled commercial bank branches, with each bank branch generally expected to extend at least one such loan to an SC/ST borrower and one to a woman borrower. Margin money support of up to 25% of the project cost is envisaged,...",
+      "hi": "Composite loans (covering both a term loan and working capital) ranging from Rs. 10 lakh to Rs. 1 crore are facilitated through scheduled commercial bank branches, with each bank branch generally expected to extend at least one such loan to an SC/ST borrower and one to a woman borrower. Margin money support of up to 25% of the project cost is envisaged,...",
+      "te": "Composite loans (covering both a term loan and working capital) ranging from Rs. 10 lakh to Rs. 1 crore are facilitated through scheduled commercial bank branches, with each bank branch generally expected to extend at least one such loan to an SC/ST borrower and one to a woman borrower. Margin money support of up to 25% of the project cost is envisaged,..."
+    },
+    "eligibility": {
+      "en": "Collateral-free lending is facilitated through a credit guarantee cover available via the Credit Guarantee Fund Scheme for Stand-Up India (CGFSI), reducing the bank's reliance on collateral for eligible loans.",
+      "hi": "Collateral-free lending is facilitated through a ऋण guarantee cover available via the Credit Guarantee Fund Scheme for Stand-Up India (CGFSI), reducing the bank's reliance on collateral for eligible loans.",
+      "te": "Collateral-free lending is facilitated through a రుణం guarantee cover available via the Credit Guarantee Fund Scheme for Stand-Up India (CGFSI), reducing the bank's reliance on collateral for eligible loans."
+    }
+  },
+  "pm-svanidhi": {
+    "name": {
+      "en": "PM SVANidhi",
+      "hi": "PM SVANidhi",
+      "te": "PM SVANidhi"
+    },
+    "description": {
+      "en": "The scheme provides collateral-free working-capital loans in successive, increasing tranches, disbursed as the previous loan is repaid on time: an initial loan of up to Rs. 10,000-15,000 (the first-tranche ceiling has been revised over different phases of the scheme), a second loan of up to Rs. 20,000, and a third loan of up to Rs.",
+      "hi": "The scheme provides collateral-free working-capital loans in successive, increasing tranches, disbursed as the previous loan is repaid on time: an initial loan of up to Rs. 10,000-15,000 (the first-tranche ceiling has been revised over different phases of the scheme), a second loan of up to Rs. 20,000, and a third loan of up to Rs.",
+      "te": "The scheme provides collateral-free working-capital loans in successive, increasing tranches, disbursed as the previous loan is repaid on time: an initial loan of up to Rs. 10,000-15,000 (the first-tranche ceiling has been revised over different phases of the scheme), a second loan of up to Rs. 20,000, and a third loan of up to Rs."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "bank-account-nomination": {
+    "name": {
+      "en": "Bank Account Nomination",
+      "hi": "Bank Account Nomination",
+      "te": "Bank Account Nomination"
+    },
+    "description": {
+      "en": "Nomination is available to any individual account holder, whether the account is held singly or jointly; a nomination can be made, changed, or cancelled at any point during the account holder's lifetime by submitting the bank's prescribed nomination form.",
+      "hi": "Nomination is available to any individual account holder, whether the account is held singly or jointly; a nomination can be made, changed, or cancelled at any point during the account holder's lifetime by submitting the bank's prescribed nomination form.",
+      "te": "Nomination is available to any individual account holder, whether the account is held singly or jointly; a nomination can be made, changed, or cancelled at any point during the account holder's lifetime by submitting the bank's prescribed nomination form."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "bank-locker-rules": {
+    "name": {
+      "en": "Bank Locker Rules",
+      "hi": "Bank Locker Rules",
+      "te": "Bank Locker Rules"
+    },
+    "description": {
+      "en": "Annual locker rent varies considerably by bank, locker size, and branch location. Banks are permitted to require a fixed deposit, in addition to any applicable rent, as a safeguard to cover future rent and potential break-open charges, but RBI's guidelines specifically clarify this should not be used as a means of compelling the customer to also...",
+      "hi": "Annual locker rent varies considerably by bank, locker size, and branch location. Banks are permitted to require a fixed deposit, in addition to any applicable rent, as a safeguard to cover future rent and potential break-open charges, but RBI's guidelines specifically clarify this should not be used as a means of compelling the customer to also...",
+      "te": "Annual locker rent varies considerably by bank, locker size, and branch location. Banks are permitted to require a fixed deposit, in addition to any applicable rent, as a safeguard to cover future rent and potential break-open charges, but RBI's guidelines specifically clarify this should not be used as a means of compelling the customer to also..."
+    },
+    "eligibility": {
+      "en": "Under the revised guidelines, banks must maintain an access log/register for locker operations and are required to notify customers in advance of any structural changes at the branch (such as renovation or relocation) that could affect their locker.",
+      "hi": "Under the revised guidelines, banks must maintain an access log/register for locker operations and are required to notify customers in advance of any structural changes at the branch (such as renovation or relocation) that could affect their locker.",
+      "te": "Under the revised guidelines, banks must maintain an access log/register for locker operations and are required to notify customers in advance of any structural changes at the branch (such as renovation or relocation) that could affect their locker."
+    }
+  },
+  "credit-card": {
+    "name": {
+      "en": "Credit Card",
+      "hi": "Credit Card",
+      "te": "Credit Card"
+    },
+    "description": {
+      "en": "Individuals meeting the card issuer's income, age (commonly 18 or 21 years and above), and credit-score criteria are eligible to apply for a standard credit card; secured credit cards, backed by a fixed deposit held with the issuer, are also available for applicants with limited or no prior credit history who may not qualify for an unsecured card.",
+      "hi": "Individuals meeting the card issuer's income, age (commonly 18 or 21 years and above), and ऋण-score criteria are eligible to apply for a standard ऋण card; secured ऋण cards, backed by a fixed deposit held with the issuer, are also available for applicants with limited or no prior ऋण history who may not qualify for an unsecured card.",
+      "te": "Individuals meeting the card issuer's income, age (commonly 18 or 21 years and above), and రుణం-score criteria are eligible to apply for a standard రుణం card; secured రుణం cards, backed by a fixed deposit held with the issuer, are also available for applicants with limited or no prior రుణం history who may not qualify for an unsecured card."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "credit-score": {
+    "name": {
+      "en": "Credit Score",
+      "hi": "Credit Score",
+      "te": "Credit Score"
+    },
+    "description": {
+      "en": "A higher score -- commonly considered 'good' above roughly 750 on the standard 300-900 scale -- generally improves the likelihood of loan or credit-card approval and can help an applicant negotiate more favourable interest rates or terms from a lender. Key factors influencing the score include a person's repayment history and timeliness (the single...",
+      "hi": "A higher score -- commonly considered 'good' above roughly 750 on the standard 300-900 scale -- generally improves the likelihood of loan or ऋण-card approval and can help an applicant negotiate more favourable interest rates or terms from a lender. Key factors influencing the score include a person's repayment history and timeliness (the single...",
+      "te": "A higher score -- commonly considered 'good' above roughly 750 on the standard 300-900 scale -- generally improves the likelihood of loan or రుణం-card approval and can help an applicant negotiate more favourable interest rates or terms from a lender. Key factors influencing the score include a person's repayment history and timeliness (the single..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "current-account": {
+    "name": {
+      "en": "Current Account",
+      "hi": "Current Account",
+      "te": "Current Account"
+    },
+    "description": {
+      "en": "Individuals, sole proprietorships, partnership firms, companies, and other legal entities can open a current account, subject to submitting the appropriate business/KYC documentation, which typically includes PAN, GST registration (where applicable to the business), and proof of business existence such as a registration certificate or partnership deed.",
+      "hi": "Individuals, sole proprietorships, partnership firms, companies, and other legal entities can open a current account, subject to submitting the appropriate business/KYC documentation, which typically includes PAN, GST registration (where applicable to the business), and proof of business existence such as a registration certificate or partnership deed.",
+      "te": "Individuals, sole proprietorships, partnership firms, companies, and other legal entities can open a current account, subject to submitting the appropriate business/KYC documentation, which typically includes PAN, GST registration (where applicable to the business), and proof of business existence such as a registration certificate or partnership deed."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "digital-banking-security": {
+    "name": {
+      "en": "Digital Banking Security",
+      "hi": "Digital Banking Security",
+      "te": "Digital Banking Security"
+    },
+    "description": {
+      "en": "A customer registers for net or mobile banking with their bank (in branch, via ATM, or through the bank's app using OTP-based verification), and sets strong login credentials; per RBI norms, most digital transactions additionally require two-factor authentication, such as an OTP or an app-based transaction approval, on top of the basic login credentials.",
+      "hi": "A customer registers for net or mobile banking with their bank (in branch, via ATM, or through the bank's app using OTP-based verification), and sets strong login credentials; per RBI norms, most digital transactions additionally require two-factor authentication, such as an OTP or an app-based transaction approval, on top of the basic login credentials.",
+      "te": "A customer registers for net or mobile banking with their bank (in branch, via ATM, or through the bank's app using OTP-based verification), and sets strong login credentials; per RBI norms, most digital transactions additionally require two-factor authentication, such as an OTP or an app-based transaction approval, on top of the basic login credentials."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "fixed-deposit": {
+    "name": {
+      "en": "Fixed Deposit",
+      "hi": "Fixed Deposit",
+      "te": "Fixed Deposit"
+    },
+    "description": {
+      "en": "Any resident individual, Hindu Undivided Family (HUF), or other entity with an existing or new banking relationship and completed KYC can open an FD. Senior citizens are generally offered a preferential interest rate, commonly 0.25 to 0.75 percentage points higher than the standard rate offered to other depositors, at most banks.",
+      "hi": "Any resident individual, Hindu Undivided Family (HUF), or other entity with an existing or new banking relationship and completed KYC can open an FD. Senior citizens are generally offered a preferential interest rate, commonly 0.25 to 0.75 percentage points higher than the standard rate offered to other depositors, at most banks.",
+      "te": "Any resident individual, Hindu Undivided Family (HUF), or other entity with an existing or new banking relationship and completed KYC can open an FD. Senior citizens are generally offered a preferential interest rate, commonly 0.25 to 0.75 percentage points higher than the standard rate offered to other depositors, at most banks."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "home-loan": {
+    "name": {
+      "en": "Home Loan",
+      "hi": "Home Loan",
+      "te": "Home Loan"
+    },
+    "description": {
+      "en": "Because the property serves as collateral, home loan interest rates are generally lower than unsecured loan products, and floating-rate home loans are commonly linked to an external benchmark rate such as the RBI repo rate, following RBI's external-benchmark-linking norms for retail loans. Loan tenure can extend up to 20 or even 30 years, depending on...",
+      "hi": "Because the property serves as collateral, home loan interest rates are generally lower than unsecured loan products, and floating-rate home loans are commonly linked to an external benchmark rate such as the RBI repo rate, following RBI's external-benchmark-linking norms for retail loans. Loan tenure can extend up to 20 or even 30 years, depending on...",
+      "te": "Because the property serves as collateral, home loan interest rates are generally lower than unsecured loan products, and floating-rate home loans are commonly linked to an external benchmark rate such as the RBI repo rate, following RBI's external-benchmark-linking norms for retail loans. Loan tenure can extend up to 20 or even 30 years, depending on..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "kyc-norms": {
+    "name": {
+      "en": "KYC Norms",
+      "hi": "KYC Norms",
+      "te": "KYC Norms"
+    },
+    "description": {
+      "en": "KYC requirements apply to every customer opening any account or financial relationship with a regulated entity such as a bank, non-banking financial company (NBFC), or payment system operator; there is no exemption from KYC based on account type or transaction size, though the specific documentation and verification method can vary by risk category.",
+      "hi": "KYC requirements apply to every customer opening any account or financial relationship with a regulated entity such as a bank, non-banking financial company (NBFC), or payment system operator; there is no exemption from KYC based on account type or transaction size, though the specific documentation and verification method can vary by risk category.",
+      "te": "KYC requirements apply to every customer opening any account or financial relationship with a regulated entity such as a bank, non-banking financial company (NBFC), or payment system operator; there is no exemption from KYC based on account type or transaction size, though the specific documentation and verification method can vary by risk category."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "neft-rtgs-imps": {
+    "name": {
+      "en": "NEFT RTGS IMPS",
+      "hi": "NEFT RTGS IMPS",
+      "te": "NEFT RTGS IMPS"
+    },
+    "description": {
+      "en": "National Electronic Funds Transfer (NEFT) processes transfers in batches and now operates 24x7x365, with settlement occurring in near-real-time half-hourly batches; RBI has not set a minimum or maximum transaction amount for NEFT, though individual banks may impose their own per-transaction or per-day limits for retail customers using online channels.",
+      "hi": "National Electronic Funds Transfer (NEFT) processes transfers in batches and now operates 24x7x365, with settlement occurring in near-real-time half-hourly batches; RBI has not set a minimum or maximum transaction amount for NEFT, though individual banks may impose their own per-transaction or per-day limits for retail customers using online channels.",
+      "te": "National Electronic Funds Transfer (NEFT) processes transfers in batches and now operates 24x7x365, with settlement occurring in near-real-time half-hourly batches; RBI has not set a minimum or maximum transaction amount for NEFT, though individual banks may impose their own per-transaction or per-day limits for retail customers using online channels."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "personal-loan": {
+    "name": {
+      "en": "Personal Loan",
+      "hi": "Personal Loan",
+      "te": "Personal Loan"
+    },
+    "description": {
+      "en": "Since the loan is unsecured, no collateral is required, but this also means interest rates are generally higher than for secured loans like a home or auto loan, reflecting the greater risk taken on by the lender; the exact rate offered depends on the applicant's credit profile, income, and the specific lender's policies.",
+      "hi": "Since the loan is unsecured, no collateral is required, but this also means interest rates are generally higher than for secured loans like a home or auto loan, reflecting the greater risk taken on by the lender; the exact rate offered depends on the applicant's ऋण profile, income, and the specific lender's policies.",
+      "te": "Since the loan is unsecured, no collateral is required, but this also means interest rates are generally higher than for secured loans like a home or auto loan, reflecting the greater risk taken on by the lender; the exact rate offered depends on the applicant's రుణం profile, income, and the specific lender's policies."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "recurring-deposit": {
+    "name": {
+      "en": "Recurring Deposit",
+      "hi": "Recurring Deposit",
+      "te": "Recurring Deposit"
+    },
+    "description": {
+      "en": "RD tenures commonly range from 6 months to 10 years, with the interest rate generally comparable to the bank's FD rate for a similar tenure, and interest typically compounded quarterly at most banks. RDs are widely used to build a regular saving habit, since the fixed monthly commitment encourages consistent deposits rather than relying on discretionary...",
+      "hi": "RD tenures commonly range from 6 months to 10 years, with the interest rate generally comparable to the bank's FD rate for a similar tenure, and interest typically compounded quarterly at most banks. RDs are widely used to build a regular saving habit, since the fixed monthly commitment encourages consistent deposits rather than relying on discretionary...",
+      "te": "RD tenures commonly range from 6 months to 10 years, with the interest rate generally comparable to the bank's FD rate for a similar tenure, and interest typically compounded quarterly at most banks. RDs are widely used to build a regular saving habit, since the fixed monthly commitment encourages consistent deposits rather than relying on discretionary..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "savings-account": {
+    "name": {
+      "en": "Savings Account",
+      "hi": "Savings Account",
+      "te": "Savings Account"
+    },
+    "description": {
+      "en": "Interest is paid on the account balance, though rates vary meaningfully by bank and account variant -- generally in a low single-digit range at most large scheduled commercial banks, with some small finance banks offering comparatively higher savings rates. Standard features include a debit card, cheque book, passbook, and internet/mobile banking...",
+      "hi": "Interest is paid on the account balance, though rates vary meaningfully by bank and account variant -- generally in a low single-digit range at most large scheduled commercial banks, with some small finance banks offering comparatively higher savings rates. Standard features include a debit card, cheque book, passbook, and internet/mobile banking...",
+      "te": "Interest is paid on the account balance, though rates vary meaningfully by bank and account variant -- generally in a low single-digit range at most large scheduled commercial banks, with some small finance banks offering comparatively higher savings rates. Standard features include a debit card, cheque book, passbook, and internet/mobile banking..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "pmegp": {
+    "name": {
+      "en": "PMEGP",
+      "hi": "PMEGP",
+      "te": "PMEGP"
+    },
+    "description": {
+      "en": "The government provides a margin money subsidy, generally ranging from around 15% to 35% of the project cost depending on the category of the beneficiary (general category versus special categories such as SC/ST/OBC/women/ex-servicemen/persons with disabilities/North-Eastern region) and the location of the unit (urban versus rural), with the remainder...",
+      "hi": "The सरकार provides a margin money subsidy, generally ranging from around 15% to 35% of the project cost depending on the category of the beneficiary (general category versus special categories such as SC/ST/OBC/women/ex-servicemen/persons with disabilities/North-Eastern region) and the location of the unit (urban versus rural), with the remainder...",
+      "te": "The ప్రభుత్వం provides a margin money subsidy, generally ranging from around 15% to 35% of the project cost depending on the category of the beneficiary (general category versus special categories such as SC/ST/OBC/women/ex-servicemen/persons with disabilities/North-Eastern region) and the location of the unit (urban versus rural), with the remainder..."
+    },
+    "eligibility": {
+      "en": "Maximum project cost eligible for the subsidy is commonly around Rs.",
+      "hi": "Maximum project cost eligible for the subsidy is commonly around Rs.",
+      "te": "Maximum project cost eligible for the subsidy is commonly around Rs."
+    }
+  },
+  "pradhan-mantri-matru-vandana-yojana": {
+    "name": {
+      "en": "Pradhan Mantri Matru Vandana Yojana",
+      "hi": "Pradhan Mantri Matru Vandana Yojana",
+      "te": "Pradhan Mantri Matru Vandana Yojana"
+    },
+    "description": {
+      "en": "The benefit is paid in instalments linked to specific milestones -- early registration of the pregnancy, completion of specified antenatal checkups, and registration of the child's birth along with the first cycle of immunisation -- rather than as a single lump sum, totalling Rs. 5,000 for the first child under the base scheme structure.",
+      "hi": "The benefit is paid in instalments linked to specific milestones -- early registration of the pregnancy, completion of specified antenatal checkups, and registration of the child's birth along with the first cycle of immunisation -- rather than as a single lump sum, totalling Rs. 5,000 for the first child under the base scheme structure.",
+      "te": "The benefit is paid in instalments linked to specific milestones -- early registration of the pregnancy, completion of specified antenatal checkups, and registration of the child's birth along with the first cycle of immunisation -- rather than as a single lump sum, totalling Rs. 5,000 for the first child under the base scheme structure."
+    },
+    "eligibility": {
+      "en": "A related, separate incentive amount is available under the linked component for a second child if that child is a girl, structured to encourage families to value the birth of a girl child.",
+      "hi": "A related, separate incentive amount is available under the linked component for a second child if that child is a girl, structured to encourage families to value the birth of a girl child.",
+      "te": "A related, separate incentive amount is available under the linked component for a second child if that child is a girl, structured to encourage families to value the birth of a girl child."
+    }
+  },
+  "pm-surya-ghar-muft-bijli-yojana": {
+    "name": {
+      "en": "PM Surya Ghar Muft Bijli Yojana",
+      "hi": "PM Surya Ghar Muft Bijli Yojana",
+      "te": "PM Surya Ghar Muft Bijli Yojana"
+    },
+    "description": {
+      "en": "Households with a suitable rooftop for solar panel installation and an existing valid electricity connection are eligible to apply; homeowner status is generally required to apply and receive the subsidy directly, since a tenant typically needs the landlord's consent and cannot independently apply for the subsidy in most implementations of the scheme.",
+      "hi": "Households with a suitable rooftop for solar panel installation and an existing valid electricity connection are eligible to apply; homeowner status is generally required to apply and receive the subsidy directly, since a tenant typically needs the भूमिlord's consent and cannot independently apply for the subsidy in most implementations of the scheme.",
+      "te": "Households with a suitable rooftop for solar panel installation and an existing valid electricity connection are eligible to apply; homeowner status is generally required to apply and receive the subsidy directly, since a tenant typically needs the భూమిlord's consent and cannot independently apply for the subsidy in most implementations of the scheme."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "health-insurance": {
+    "name": {
+      "en": "Health Insurance",
+      "hi": "Health Insurance",
+      "te": "Health Insurance"
+    },
+    "description": {
+      "en": "Individuals and families can buy an individual policy or a family floater policy covering multiple family members under a single sum insured; insurers may apply age limits, waiting periods for pre-existing diseases, and medical underwriting depending on the applicant's age and declared health conditions at the time of purchase.",
+      "hi": "Individuals and families can buy an individual policy or a family floater policy covering multiple family members under a single sum insured; insurers may apply age limits, waiting periods for pre-existing diseases, and medical underwriting depending on the applicant's age and declared health conditions at the time of purchase.",
+      "te": "Individuals and families can buy an individual policy or a family floater policy covering multiple family members under a single sum insured; insurers may apply age limits, waiting periods for pre-existing diseases, and medical underwriting depending on the applicant's age and declared health conditions at the time of purchase."
+    },
+    "eligibility": {
+      "en": "Individuals and families can buy an individual policy or a family floater policy covering multiple family members under a single sum insured; insurers may apply age limits, waiting periods for pre-existing diseases, and medical underwriting depending on the applicant's age and declared health conditions at the time of purchase.",
+      "hi": "Individuals and families can buy an individual policy or a family floater policy covering multiple family members under a single sum insured; insurers may apply age limits, waiting periods for pre-existing diseases, and medical underwriting depending on the applicant's age and declared health conditions at the time of purchase.",
+      "te": "Individuals and families can buy an individual policy or a family floater policy covering multiple family members under a single sum insured; insurers may apply age limits, waiting periods for pre-existing diseases, and medical underwriting depending on the applicant's age and declared health conditions at the time of purchase."
+    }
+  },
+  "motor-insurance": {
+    "name": {
+      "en": "Motor Insurance",
+      "hi": "Motor Insurance",
+      "te": "Motor Insurance"
+    },
+    "description": {
+      "en": "Third-party (liability-only) insurance covers the policyholder's legal liability for injury or death caused to a third party, or damage caused to a third party's property, but does not cover any damage to the insured's own vehicle. Comprehensive insurance covers both this third-party liability and 'own damage' -- damage to the insured's own vehicle from...",
+      "hi": "Third-party (liability-only) बीमा covers the policyholder's legal liability for injury or death caused to a third party, or damage caused to a third party's property, but does not cover any damage to the insured's own vehicle. Comprehensive बीमा covers both this third-party liability and 'own damage' -- damage to the insured's own vehicle from...",
+      "te": "Third-party (liability-only) బీమా covers the policyholder's legal liability for injury or death caused to a third party, or damage caused to a third party's property, but does not cover any damage to the insured's own vehicle. Comprehensive బీమా covers both this third-party liability and 'own damage' -- damage to the insured's own vehicle from..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "term-life-insurance": {
+    "name": {
+      "en": "Term Life Insurance",
+      "hi": "Term Life Insurance",
+      "te": "Term Life Insurance"
+    },
+    "description": {
+      "en": "Because a term plan has no savings or investment component, premiums are typically much lower than for other types of life insurance offering the same sum assured, which can commonly extend into the crores of rupees for eligible applicants. Premiums paid qualify for tax deduction under Section 80C of the Income Tax Act (within the overall 80C limit...",
+      "hi": "Because a term plan has no savings or investment component, premiums are typically much lower than for other types of life बीमा offering the same sum assured, which can commonly extend into the crores of rupees for eligible applicants. Premiums paid qualify for tax deduction under Section 80C of the Income Tax Act (within the overall 80C limit...",
+      "te": "Because a term plan has no savings or investment component, premiums are typically much lower than for other types of life బీమా offering the same sum assured, which can commonly extend into the crores of rupees for eligible applicants. Premiums paid qualify for tax deduction under Section 80C of the Income Tax Act (within the overall 80C limit..."
+    },
+    "eligibility": {
+      "en": "Because a term plan has no savings or investment component, premiums are typically much lower than for other types of life insurance offering the same sum assured, which can commonly extend into the crores of rupees for eligible applicants.",
+      "hi": "Because a term plan has no savings or investment component, premiums are typically much lower than for other types of life बीमा offering the same sum assured, which can commonly extend into the crores of rupees for eligible applicants.",
+      "te": "Because a term plan has no savings or investment component, premiums are typically much lower than for other types of life బీమా offering the same sum assured, which can commonly extend into the crores of rupees for eligible applicants."
+    }
+  },
+  "rbi-banking-ombudsman": {
+    "name": {
+      "en": "RBI Banking Ombudsman",
+      "hi": "RBI Banking Ombudsman",
+      "te": "RBI Banking Ombudsman"
+    },
+    "description": {
+      "en": "Complaints can be filed entirely free of cost through the online Complaint Management System (cms.rbi.org.in), by email, or by physical letter addressed to the relevant Ombudsman office, and in specified cases, through a dedicated toll-free number as well. The Ombudsman can help resolve a complaint through mediation or conciliation between the customer...",
+      "hi": "Complaints can be filed entirely free of cost through the online Complaint Management System (cms.rbi.org.in), by email, or by physical letter addressed to the relevant Ombudsman office, and in specified cases, through a dedicated toll-free number as well. The Ombudsman can help resolve a complaint through mediation or conciliation between the customer...",
+      "te": "Complaints can be filed entirely free of cost through the online Complaint Management System (cms.rbi.org.in), by email, or by physical letter addressed to the relevant Ombudsman office, and in specified cases, through a dedicated toll-free number as well. The Ombudsman can help resolve a complaint through mediation or conciliation between the customer..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "national-pension-system": {
+    "name": {
+      "en": "National Pension System",
+      "hi": "National Pension System",
+      "te": "National Pension System"
+    },
+    "description": {
+      "en": "NPS offers market-linked returns based on the subscriber's chosen allocation across equity, corporate debt, and government securities, managed by PFRDA-registered pension fund managers, so returns are not fixed or guaranteed and vary with market performance. Contributions to Tier I qualify for tax deduction up to Rs.",
+      "hi": "NPS offers बाजार-linked returns based on the subscriber's chosen allocation across equity, corporate debt, and सरकार securities, managed by PFRDA-registered pension fund managers, so returns are not fixed or guaranteed and vary with बाजार performance. Contributions to Tier I qualify for tax deduction up to Rs.",
+      "te": "NPS offers మార్కెట్-linked returns based on the subscriber's chosen allocation across equity, corporate debt, and ప్రభుత్వం securities, managed by PFRDA-registered pension fund managers, so returns are not fixed or guaranteed and vary with మార్కెట్ performance. Contributions to Tier I qualify for tax deduction up to Rs."
+    },
+    "eligibility": {
+      "en": "On reaching age 60 (or on exit), a subscriber must use at least 40% of the accumulated Tier I corpus to purchase an annuity (providing a regular pension), while up to 60% can typically be withdrawn as a lump sum, which is tax-free under prevailing rules subject to conditions.",
+      "hi": "On reaching age 60 (or on exit), a subscriber must use at least 40% of the accumulated Tier I corpus to purchase an annuity (providing a regular pension), while up to 60% can typically be withdrawn as a lump sum, which is tax-free under prevailing rules subject to conditions.",
+      "te": "On reaching age 60 (or on exit), a subscriber must use at least 40% of the accumulated Tier I corpus to purchase an annuity (providing a regular pension), while up to 60% can typically be withdrawn as a lump sum, which is tax-free under prevailing rules subject to conditions."
+    }
+  },
+  "upi-digital-payments": {
+    "name": {
+      "en": "UPI Digital Payments",
+      "hi": "UPI Digital Payments",
+      "te": "UPI Digital Payments"
+    },
+    "description": {
+      "en": "UPI transfers are processed instantly and are available 24x7, including weekends and public holidays, unlike some older transfer mechanisms that had cut-off windows. A single UPI ID or QR code can be linked to, and used to transact from, multiple bank accounts held by the same individual. Person-to-person and person-to-merchant UPI transactions...",
+      "hi": "UPI transfers are processed instantly and are available 24x7, including weekends and public holidays, unlike some older transfer mechanisms that had cut-off windows. A single UPI ID or QR code can be linked to, and used to transact from, multiple bank accounts held by the same individual. Person-to-person and person-to-merchant UPI transactions...",
+      "te": "UPI transfers are processed instantly and are available 24x7, including weekends and public holidays, unlike some older transfer mechanisms that had cut-off windows. A single UPI ID or QR code can be linked to, and used to transact from, multiple bank accounts held by the same individual. Person-to-person and person-to-merchant UPI transactions..."
+    },
+    "eligibility": {
+      "en": "Open to all eligible citizens as per the official scheme guidelines.",
+      "hi": "Open to all eligible citizens as per the official scheme guidelines.",
+      "te": "Open to all eligible citizens as per the official scheme guidelines."
+    }
+  },
+  "sch-001": {
+    "name": {
+      "en": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+      "hi": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+      "te": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)"
+    },
+    "description": {
+      "en": "Direct Income Support. Core data parameters collected by the department: Farmer Aadhaar, Land Holding Area (hectares), Bank Account Number, IFSC Code, Installment Status, District/Village Codes.",
+      "hi": "Direct Income Support. Core data parameters collected by the department: Farmer Aadhaar, Land Holding Area (hectares), Bank Account Number, IFSC Code, Installment Status, District/Village Codes.",
+      "te": "Direct Income Support. Core data parameters collected by the department: Farmer Aadhaar, Land Holding Area (hectares), Bank Account Number, IFSC Code, Installment Status, District/Village Codes."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-002": {
+    "name": {
+      "en": "Kisan Credit Card (KCC)",
+      "hi": "Kisan Credit Card (KCC)",
+      "te": "Kisan Credit Card (KCC)"
+    },
+    "description": {
+      "en": "Banking & Credit. Core data parameters collected by the department: Scale of Finance per crop, Credit Limit, Cultivated Area, Repayment History, Interest Subvention Rate (%), Collateral Waiver Flag.",
+      "hi": "Banking & Credit. Core data parameters collected by the department: Scale of Finance per फसल, Credit Limit, Cultivated Area, Repayment History, Interest Subvention Rate (%), Collateral Waiver Flag.",
+      "te": "Banking & Credit. Core data parameters collected by the department: Scale of Finance per పంట, Credit Limit, Cultivated Area, Repayment History, Interest Subvention Rate (%), Collateral Waiver Flag."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-004": {
+    "name": {
+      "en": "Soil Health Card (SHC) Scheme",
+      "hi": "Soil Health Card (SHC) Scheme",
+      "te": "Soil Health Card (SHC) Scheme"
+    },
+    "description": {
+      "en": "Soil Health & Nutrients. Core data parameters collected by the department: GPS Coordinates of Soil Sample, pH Value, Electrical Conductivity (EC), Organic Carbon (OC), Nitrogen (N), Phosphorus (P), Potassium (K), Zinc (Zn).",
+      "hi": "Soil Health & Nutrients. Core data parameters collected by the department: GPS Coordinates of Soil Sample, pH Value, Electrical Conductivity (EC), Organic Carbon (OC), Nitrogen (N), Phosphorus (P), Potassium (K), Zinc (Zn).",
+      "te": "Soil Health & Nutrients. Core data parameters collected by the department: GPS Coordinates of Soil Sample, pH Value, Electrical Conductivity (EC), Organic Carbon (OC), Nitrogen (N), Phosphorus (P), Potassium (K), Zinc (Zn)."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-005": {
+    "name": {
+      "en": "National Agriculture Market (e-NAM)",
+      "hi": "National Agriculture Market (e-NAM)",
+      "te": "National Agriculture Market (e-NAM)"
+    },
+    "description": {
+      "en": "Digital Trade & Markets. Core data parameters collected by the department: Mandi Arrival Volume, Minimum/Maximum/Modal Commodity Prices, Lot Number, Moisture Content (%), Bidder IDs, Transaction Timestamp, Farmer Bank Status.",
+      "hi": "Digital Trade & Markets. Core data parameters collected by the department: Mandi Arrival Volume, Minimum/Maximum/Modal Commodity Prices, Lot Number, Moisture Content (%), Bidder IDs, Transaction Timestamp, Farmer Bank Status.",
+      "te": "Digital Trade & Markets. Core data parameters collected by the department: Mandi Arrival Volume, Minimum/Maximum/Modal Commodity Prices, Lot Number, Moisture Content (%), Bidder IDs, Transaction Timestamp, Farmer Bank Status."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-006": {
+    "name": {
+      "en": "Pradhan Mantri Krishi Sinchayee Yojana (PMKSY)",
+      "hi": "Pradhan Mantri Krishi Sinchayee Yojana (PMKSY)",
+      "te": "Pradhan Mantri Krishi Sinchayee Yojana (PMKSY)"
+    },
+    "description": {
+      "en": "Irrigation & Water Support. Core data parameters collected by the department: Micro-irrigation Type (Drip/Sprinkler), Water Source GPS, Subsidized Equipment Cost, Vendor ID, Water Use Efficiency Metrics.",
+      "hi": "Irrigation & Water Support. Core data parameters collected by the department: Micro-सिंचाई Type (Drip/Sprinkler), Water Source GPS, Subsidized Equipment Cost, Vendor ID, Water Use Efficiency Metrics.",
+      "te": "Irrigation & Water Support. Core data parameters collected by the department: Micro-నీరింపు Type (Drip/Sprinkler), Water Source GPS, Subsidized Equipment Cost, Vendor ID, Water Use Efficiency Metrics."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-007": {
+    "name": {
+      "en": "Agriculture Infrastructure Fund (AIF)",
+      "hi": "Agriculture Infrastructure Fund (AIF)",
+      "te": "Agriculture Infrastructure Fund (AIF)"
+    },
+    "description": {
+      "en": "Infrastructure Development. Core data parameters collected by the department: Project Type (Cold Storage/Warehouse/Silo), Total Capital Cost, Loan Amount, Interest Subvention Amount, Project Geo-tagging Status.",
+      "hi": "Infrastructure Development. Core data parameters collected by the department: Project Type (Cold Storage/Warehouse/Silo), Total Capital Cost, Loan Amount, Interest Subvention Amount, Project Geo-tagging Status.",
+      "te": "Infrastructure Development. Core data parameters collected by the department: Project Type (Cold Storage/Warehouse/Silo), Total Capital Cost, Loan Amount, Interest Subvention Amount, Project Geo-tagging Status."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-008": {
+    "name": {
+      "en": "Paramparagat Krishi Vikas Yojana (PKVY)",
+      "hi": "Paramparagat Krishi Vikas Yojana (PKVY)",
+      "te": "Paramparagat Krishi Vikas Yojana (PKVY)"
+    },
+    "description": {
+      "en": "Organic Farming. Core data parameters collected by the department: Cluster ID, Total Cluster Land Area, PGS India Certification Status, Bio-fertilizer Input Tracking, Organic Product Premium Price Multiplier.",
+      "hi": "Organic Farming. Core data parameters collected by the department: Cluster ID, Total Cluster Land Area, PGS India Certification Status, Bio-fertilizer Input Tracking, Organic Product Premium Price Multiplier.",
+      "te": "Organic Farming. Core data parameters collected by the department: Cluster ID, Total Cluster Land Area, PGS India Certification Status, Bio-fertilizer Input Tracking, Organic Product Premium Price Multiplier."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-009": {
+    "name": {
+      "en": "Sub-Mission on Agricultural Mechanization (SMAM)",
+      "hi": "Sub-Mission on Agricultural Mechanization (SMAM)",
+      "te": "Sub-Mission on Agricultural Mechanization (SMAM)"
+    },
+    "description": {
+      "en": "Farm Equipment & Tech. Core data parameters collected by the department: Tractor/Implement Horsepower, Manufacturer SKU, Subsidy Disbursement Amount, Custom Hiring Centre (CHC) Coordinates, Beneficiary Category.",
+      "hi": "Farm Equipment & Tech. Core data parameters collected by the department: Tractor/Implement Horsepower, Manufacturer SKU, Subsidy Disbursement Amount, Custom Hiring Centre (CHC) Coordinates, Beneficiary Category.",
+      "te": "Farm Equipment & Tech. Core data parameters collected by the department: Tractor/Implement Horsepower, Manufacturer SKU, Subsidy Disbursement Amount, Custom Hiring Centre (CHC) Coordinates, Beneficiary Category."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-010": {
+    "name": {
+      "en": "National Livestock Mission (NLM)",
+      "hi": "National Livestock Mission (NLM)",
+      "te": "National Livestock Mission (NLM)"
+    },
+    "description": {
+      "en": "Animal Husbandry. Core data parameters collected by the department: Breed Type, Feed Intake Logs, Animal Tag ID (INAF RFID), Artificial Insemination Timestamps, Vaccination Records, Milk/Meat Yield Data.",
+      "hi": "Animal Husbandry. Core data parameters collected by the department: Breed Type, Feed Intake Logs, Animal Tag ID (INAF RFID), Artificial Insemination Timestamps, Vaccination Records, Milk/Meat Yield Data.",
+      "te": "Animal Husbandry. Core data parameters collected by the department: Breed Type, Feed Intake Logs, Animal Tag ID (INAF RFID), Artificial Insemination Timestamps, Vaccination Records, Milk/Meat Yield Data."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-011": {
+    "name": {
+      "en": "Mission for Integrated Development of Horticulture (MIDH)",
+      "hi": "Mission for Integrated Development of Horticulture (MIDH)",
+      "te": "Mission for Integrated Development of Horticulture (MIDH)"
+    },
+    "description": {
+      "en": "Horticulture. Core data parameters collected by the department: Nursery License Status, Tissue Culture Production Volume, Perishable Crop Cold-chain Log, Area under Polyhouses, Subsidized Sapling Varieties.",
+      "hi": "Horticulture. Core data parameters collected by the department: Nursery License Status, Tissue Culture Production Volume, Perishable Crop Cold-chain Log, Area under Polyhouses, Subsidized Sapling Varieties.",
+      "te": "Horticulture. Core data parameters collected by the department: Nursery License Status, Tissue Culture Production Volume, Perishable Crop Cold-chain Log, Area under Polyhouses, Subsidized Sapling Varieties."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-012": {
+    "name": {
+      "en": "Kisan Rin Portal (KRP)",
+      "hi": "Kisan Rin Portal (KRP)",
+      "te": "Kisan Rin Portal (KRP)"
+    },
+    "description": {
+      "en": "Banking & Digital Finance. Core data parameters collected by the department: Digitized Land Record Linkage, Bank Branch Code, Interest Subvention Claim ID, Active NPA Flag, Aadhaar Seeding Percentage.",
+      "hi": "Banking & Digital Finance. Core data parameters collected by the department: Digitized Land Record Linkage, Bank Branch Code, Interest Subvention Claim ID, Active NPA Flag, Aadhaar Seeding Percentage.",
+      "te": "Banking & Digital Finance. Core data parameters collected by the department: Digitized Land Record Linkage, Bank Branch Code, Interest Subvention Claim ID, Active NPA Flag, Aadhaar Seeding Percentage."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-013": {
+    "name": {
+      "en": "Namo Drone Didi Scheme",
+      "hi": "Namo Drone Didi Scheme",
+      "te": "Namo Drone Didi Scheme"
+    },
+    "description": {
+      "en": "Tech & Input Support. Core data parameters collected by the department: SHG Group ID, Drone DGCA Registration Number, Pilot License ID, Acreage Sprayed, Type of Nano-Fertilizer Used, Subsidy Payout Status.",
+      "hi": "Tech & Input Support. Core data parameters collected by the department: SHG Group ID, Drone DGCA Registration Number, Pilot License ID, Acreage Sprayed, Type of Nano-Fertilizer Used, Subsidy Payout Status.",
+      "te": "Tech & Input Support. Core data parameters collected by the department: SHG Group ID, Drone DGCA Registration Number, Pilot License ID, Acreage Sprayed, Type of Nano-Fertilizer Used, Subsidy Payout Status."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-014": {
+    "name": {
+      "en": "Rythu Bandhu (Telangana)",
+      "hi": "Rythu Bandhu (Telangana)",
+      "te": "Rythu Bandhu (Telangana)"
+    },
+    "description": {
+      "en": "State Direct Income. Core data parameters collected by the department: Pattadar Passbook Number, Survey Number, Acreage Multiplier, Financial Year Disbursal Batch ID, Aadhaar Verification Status.",
+      "hi": "State Direct Income. Core data parameters collected by the department: Pattadar Passbook Number, Survey Number, Acreage Multiplier, Financial Year Disbursal Batch ID, Aadhaar Verification Status.",
+      "te": "State Direct Income. Core data parameters collected by the department: Pattadar Passbook Number, Survey Number, Acreage Multiplier, Financial Year Disbursal Batch ID, Aadhaar Verification Status."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-015": {
+    "name": {
+      "en": "Rythu Bima (Telangana)",
+      "hi": "Rythu Bima (Telangana)",
+      "te": "Rythu Bima (Telangana)"
+    },
+    "description": {
+      "en": "State Life Insurance. Core data parameters collected by the department: Farmer Nominee Details, Relationship Code, Claim Intimation Date, Premium Amount Paid by State, LIC Settlement Reference ID.",
+      "hi": "State Life Insurance. Core data parameters collected by the department: Farmer Nominee Details, Relationship Code, Claim Intimation Date, Premium Amount Paid by State, LIC Settlement Reference ID.",
+      "te": "State Life Insurance. Core data parameters collected by the department: Farmer Nominee Details, Relationship Code, Claim Intimation Date, Premium Amount Paid by State, LIC Settlement Reference ID."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-016": {
+    "name": {
+      "en": "Krushak Assistance for Livelihood and Income (KALIA - Odisha)",
+      "hi": "Krushak Assistance for Livelihood and Income (KALIA - Odisha)",
+      "te": "Krushak Assistance for Livelihood and Income (KALIA - Odisha)"
+    },
+    "description": {
+      "en": "State Financial Support. Core data parameters collected by the department: Landless Agricultural Labourer Status, Cultivator Category, Primary Bank Account Number, Ration Card Database Link ID.",
+      "hi": "State Financial Support. Core data parameters collected by the department: Landless Agricultural Labourer Status, Cultivator Category, Primary Bank Account Number, Ration Card Database Link ID.",
+      "te": "State Financial Support. Core data parameters collected by the department: Landless Agricultural Labourer Status, Cultivator Category, Primary Bank Account Number, Ration Card Database Link ID."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-017": {
+    "name": {
+      "en": "YSR Rythu Bharosa (Andhra Pradesh)",
+      "hi": "YSR Rythu Bharosa (Andhra Pradesh)",
+      "te": "YSR Rythu Bharosa (Andhra Pradesh)"
+    },
+    "description": {
+      "en": "State Financial Support. Core data parameters collected by the department: Tenant Farmer Lease Agreement Status, Consolidated DB Payout ID, Crop Booking (e-Pek) Verification Code.",
+      "hi": "State Financial Support. Core data parameters collected by the department: Tenant Farmer Lease Agreement Status, Consolidated DB Payout ID, Crop Booking (e-Pek) Verification Code.",
+      "te": "State Financial Support. Core data parameters collected by the department: Tenant Farmer Lease Agreement Status, Consolidated DB Payout ID, Crop Booking (e-Pek) Verification Code."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-018": {
+    "name": {
+      "en": "Mukhyamantri Krishi Ashirwad Yojana (Jharkhand)",
+      "hi": "Mukhyamantri Krishi Ashirwad Yojana (Jharkhand)",
+      "te": "Mukhyamantri Krishi Ashirwad Yojana (Jharkhand)"
+    },
+    "description": {
+      "en": "State Income Support. Core data parameters collected by the department: Acreage Under Paddy, Bank Account Transfer Reference Number, Local Patwari Verification Log.",
+      "hi": "State Income Support. Core data parameters collected by the department: Acreage Under Paddy, Bank Account Transfer Reference Number, Local Patwari Verification Log.",
+      "te": "State Income Support. Core data parameters collected by the department: Acreage Under Paddy, Bank Account Transfer Reference Number, Local Patwari Verification Log."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-019": {
+    "name": {
+      "en": "Bhavantar Bhugtan Yojana (Madhya Pradesh)",
+      "hi": "Bhavantar Bhugtan Yojana (Madhya Pradesh)",
+      "te": "Bhavantar Bhugtan Yojana (Madhya Pradesh)"
+    },
+    "description": {
+      "en": "State Price Support. Core data parameters collected by the department: Mandi Model Rate, Minimum Support Price (MSP), Price Deficit Gap Payout, Quantity Sold (Quintals), Weighbridge Slip Number.",
+      "hi": "State Price Support. Core data parameters collected by the department: Mandi Model Rate, Minimum Support Price (MSP), Price Deficit Gap Payout, Quantity Sold (Quintals), Weighbridge Slip Number.",
+      "te": "State Price Support. Core data parameters collected by the department: Mandi Model Rate, Minimum Support Price (MSP), Price Deficit Gap Payout, Quantity Sold (Quintals), Weighbridge Slip Number."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-020": {
+    "name": {
+      "en": "Pradhan Mantri Kisan Maandhan Yojana (PM-KMY)",
+      "hi": "Pradhan Mantri Kisan Maandhan Yojana (PM-KMY)",
+      "te": "Pradhan Mantri Kisan Maandhan Yojana (PM-KMY)"
+    },
+    "description": {
+      "en": "Pension & Social Security. Core data parameters collected by the department: Monthly Contribution Amount, LIC Pension Account Number (SPAN), Age Entry Corridors, Nominee Vesting Details.",
+      "hi": "Pension & Social Security. Core data parameters collected by the department: Monthly Contribution Amount, LIC Pension Account Number (SPAN), Age Entry Corridors, Nominee Vesting Details.",
+      "te": "Pension & Social Security. Core data parameters collected by the department: Monthly Contribution Amount, LIC Pension Account Number (SPAN), Age Entry Corridors, Nominee Vesting Details."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-021": {
+    "name": {
+      "en": "National Mission on Edible Oils - Oil Palm (NMEO-OP)",
+      "hi": "National Mission on Edible Oils - Oil Palm (NMEO-OP)",
+      "te": "National Mission on Edible Oils - Oil Palm (NMEO-OP)"
+    },
+    "description": {
+      "en": "Oilseed Production. Core data parameters collected by the department: Fresh Fruit Bunches (FFB) Price, Processing Mill Purchase Record, Subsidized Seedling Delivery Log, Area Expanded (ha).",
+      "hi": "Oilseed Production. Core data parameters collected by the department: Fresh Fruit Bunches (FFB) Price, Processing Mill Purchase Record, Subsidized Seedling Delivery Log, Area Expanded (ha).",
+      "te": "Oilseed Production. Core data parameters collected by the department: Fresh Fruit Bunches (FFB) Price, Processing Mill Purchase Record, Subsidized Seedling Delivery Log, Area Expanded (ha)."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-022": {
+    "name": {
+      "en": "Rastriya Krishi Vikas Yojana (RKVY)",
+      "hi": "Rastriya Krishi Vikas Yojana (RKVY)",
+      "te": "Rastriya Krishi Vikas Yojana (RKVY)"
+    },
+    "description": {
+      "en": "Infrastructure & Allied. Core data parameters collected by the department: State Allocation Ratio, Detailed Project Report (DPR) Status, Infrastructure Utilization Log, Milestone Completion Geotags.",
+      "hi": "Infrastructure & Allied. Core data parameters collected by the department: State Allocation Ratio, Detailed Project Report (DPR) Status, Infrastructure Utilization Log, Milestone Completion Geotags.",
+      "te": "Infrastructure & Allied. Core data parameters collected by the department: State Allocation Ratio, Detailed Project Report (DPR) Status, Infrastructure Utilization Log, Milestone Completion Geotags."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-023": {
+    "name": {
+      "en": "Seed Village Scheme",
+      "hi": "Seed Village Scheme",
+      "te": "Seed Village Scheme"
+    },
+    "description": {
+      "en": "Seed Production. Core data parameters collected by the department: Foundation Seed Distributed, Certified Seed Produced, Training Batch ID, Seed Germination Purity Percentage, Seed Laboratory Report Number.",
+      "hi": "Seed Production. Core data parameters collected by the department: Foundation Seed Distributed, Certified Seed Produced, Training Batch ID, Seed Germination Purity Percentage, Seed Laboratory Report Number.",
+      "te": "Seed Production. Core data parameters collected by the department: Foundation Seed Distributed, Certified Seed Produced, Training Batch ID, Seed Germination Purity Percentage, Seed Laboratory Report Number."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-024": {
+    "name": {
+      "en": "Integrated Scheme for Agricultural Marketing (ISAM)",
+      "hi": "Integrated Scheme for Agricultural Marketing (ISAM)",
+      "te": "Integrated Scheme for Agricultural Marketing (ISAM)"
+    },
+    "description": {
+      "en": "Marketing Infrastructure. Core data parameters collected by the department: Warehouse Capacity (Metric Tons), Cold Storage Grading Parameters, Scientific Storage Efficiency Log, Private Mandi License Status.",
+      "hi": "Marketing Infrastructure. Core data parameters collected by the department: Warehouse Capacity (Metric Tons), Cold Storage Grading Parameters, Scientific Storage Efficiency Log, Private Mandi License Status.",
+      "te": "Marketing Infrastructure. Core data parameters collected by the department: Warehouse Capacity (Metric Tons), Cold Storage Grading Parameters, Scientific Storage Efficiency Log, Private Mandi License Status."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  },
+  "sch-025": {
+    "name": {
+      "en": "Coconut Development Board (CDB) Schemes",
+      "hi": "Coconut Development Board (CDB) Schemes",
+      "te": "Coconut Development Board (CDB) Schemes"
+    },
+    "description": {
+      "en": "Horticulture Sub-Sector. Core data parameters collected by the department: Palm Tree Density per Hectare, Neera Production Volumes, Product Diversification Export Logs, Crop Rejuvenation Subsidy Payouts.",
+      "hi": "Horticulture Sub-Sector. Core data parameters collected by the department: Palm Tree Density per Hectare, Neera Production Volumes, Product Diversification Export Logs, Crop Rejuvenation Subsidy Payouts.",
+      "te": "Horticulture Sub-Sector. Core data parameters collected by the department: Palm Tree Density per Hectare, Neera Production Volumes, Product Diversification Export Logs, Crop Rejuvenation Subsidy Payouts."
+    },
+    "eligibility": {
+      "en": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "hi": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria.",
+      "te": "Eligibility details are not included in this dataset row; see the official scheme portal for the criteria."
+    }
+  }
+}

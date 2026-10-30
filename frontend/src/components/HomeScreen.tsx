@@ -248,7 +248,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
   // On mount: stream the trilingual welcome messages into the chat, then a
   // language-selection bubble (Telugu / Hindi / English) 6s after mount.
+  // Only runs on the very first mount: on remounts the welcome speech timers
+  // must not fire again (the chat is already populated).
   useEffect(() => {
+    if (messages.length > 2) return;
+
     const nowTime = () =>
       new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
