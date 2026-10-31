@@ -417,7 +417,7 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
     const query = searchQuery.trim().toLowerCase();
     const matchesSearch =
       !query ||
-      s.name.toLowerCase().includes(query) ||
+      Object.values(s.name)[0].toLowerCase().includes(query) ||
       s.description.toLowerCase().includes(query) ||
       s.eligibility.toLowerCase().includes(query);
 
@@ -559,7 +559,7 @@ export const SchemesScreen: React.FC<SchemesScreenProps> = ({ showToast }) => {
                   </div>
 
                   <h3 className="text-[19px] sm:text-[20px] font-bold text-[#111827] leading-snug">
-                    {scheme.name}
+                    {scheme.name[language] || scheme.name.en}
                   </h3>
 
                   <p className="mt-3 text-[12.5px] text-[#374151] leading-relaxed line-clamp-4">

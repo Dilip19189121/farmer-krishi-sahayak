@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { ApiError, getPrices, PriceRecord } from '../api/client';
 import { getImageForCrop, fetchLiveImage } from '../utils/imageMatcher';
+import { cropNameTranslations } from '../utils/translation_maps_crops';
 import { parsedPriceItems, ParsedPriceItem } from '../data/parsedPrices';
 
 interface PricesScreenProps {
@@ -289,7 +290,7 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
     return {
       id: `${slug}-${r.date}-${idx}`,
       name: { en: r.commodity },
-      variety: { en: r.group || 'Market Report Group' },
+      variety: { en: r.group ? (cropNameTranslations as Record<string, Record<string, string>>)[r.group]?.[language] || r.group : 'Market Report Group' },
       mandi: { en: r.market || 'National Aggregate' },
       stateKey: null,
       price: price !== null ? `₹ ${price.toLocaleString('en-IN')}` : '—',
@@ -481,14 +482,14 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div>
                           <h3 className="text-[18px] font-bold text-[#111827] leading-snug">
-                            {item.commodity}
+                            {(cropNameTranslations as Record<string, Record<string, string>>)[item.commodity]?.[language] || item.commodity}
                           </h3>
                           <p className="text-[11.5px] text-[#6b7280] font-medium">
                             {item.prices[0]?.date ?? ''}
                           </p>
                         </div>
                         <span className="px-2.5 py-1 rounded-full bg-[#f3f4f6] text-[#374151] text-[11px] font-semibold whitespace-nowrap shadow-2xs">
-                          {item.group}
+                          {item.group.toLowerCase() === 'vegetables' ? vegetablesTextByLang[language] || 'Vegetables' : fruitsTextByLang[language] || 'Fruits'}
                         </span>
                       </div>
 
