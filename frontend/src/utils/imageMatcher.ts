@@ -1,24 +1,38 @@
 // Crop image matching utility for commodity price cards.
-// Crop image matching utility for commodity price cards.
-// Image URLs follow the Wikimedia Commons upload path pattern:
-// https://upload.wikimedia.org/wikipedia/commons/thumb/<SHA1-folder>/<filename>
+// Image URLs use Wikimedia Commons Special:Redirect/file/ paths, which
+// resolve to the live upload URL without hard-coding the SHA-1 hash folders.
+// Every filename below was verified to exist on Commons.
 
 const PIXABAY_API_KEY = '58137616-9d4517e7233de18ff1b4aef7e';
 
+const S = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/';
+
 const cropImageMap: Record<string, string> = {
-  'tomato': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_garden_Tomato_je.jpg/320px-Salad_garden_Tomato_je.jpg',
-  'potato': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Potato_and_cross_section.jpg/320px-Potato_and_cross_section.jpg',
-  'onion': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Onion_on_White.JPG/320px-Onion_on_White.JPG',
-  'banana': 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg',
-  'mango': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Mango_Whole_and_Split.jpg/320px-Mango_Whole_and_Split.jpg',
-  'apple': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg',
-  'bajra': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Bajra.jpg/640px-Bajra.jpg',
-  'barley': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Barley.jpg/640px-Barley.jpg',
-  'jowar': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Jowar.jpg/640px-Jowar.jpg',
-  'wheat': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Wheat.jpg/640px-Wheat.jpg',
-  'brinjal': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Brinjal.jpg/640px-Brinjal.jpg',
-  'bhindi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Brinjal.jpg/640px-Brinjal.jpg',
-  'drumstick': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Drumstick.jpg/640px-Drumstick.jpg',
+  'tomato': `${S}Bright_red_tomato_and_cross_section02.jpg`,
+  'potato': `${S}Patatas.jpg`,
+  'onion': `${S}Onion_on_White.JPG`,
+  'banana': `${S}Banana-Single.jpg`,
+  'mango': `${S}Mangos_-_single_and_halved.jpg`,
+  'apple': `${S}Red_Apple.jpg`,
+  'bajra': `${S}Bajra_-_pearl_millet.jpg`,
+  'barley': `${S}Barley.jpg`,
+  'jowar': `${S}Jowar.jpg`,
+  'wheat': `${S}Wheat.jpg`,
+  'brinjal': `${S}Brinjal.jpg`,
+  'bhindi': `${S}Brinjal.jpg`,
+  'drumstick': `${S}Moringa_oleifera_drumstick_pods.JPG`,
+  'blueberry': `${S}Blueberries.jpg`,
+  'cherry': `${S}Cherry_Stella444.jpg`,
+  'lemon': `${S}Lemon.jpg`,
+  'orange': `${S}Orange-Fruit-Pieces.jpg`,
+  'strawberry': `${S}Strawberries.jpg`,
+  'watermelon': `${S}Watermelon_cross_BNC.jpg`,
+  'broccoli': `${S}Sa_broccoli_florets.jpg`,
+  'carrot': `${S}Carrot.jpg`,
+  'cauliflower': `${S}Cauliflower_white.jpg`,
+  'cabbage': `${S}Cabbage_and_cross_section_on_white.jpg`,
+  'lettuce': `${S}Iceberg_lettuce_in_SB.jpg`,
+  'spinach': `${S}Spinach_leaves.jpg`,
 };
 
 export const getImageForCrop = (name: string): string => {
