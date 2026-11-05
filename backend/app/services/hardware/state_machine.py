@@ -464,6 +464,9 @@ class KioskStateMachine:
         self._turn_in_progress = False
         self._absent_since: Optional[float] = None
         self._last_speech_at: Optional[float] = None
+        # Silence-pause timer: stops counting toward the 10-min deadline when
+        # the farmer is silent for 1 minute, restarts on the next speech.
+        self._silent_pause_start: Optional[float] = None
 
         # Telemetry surfaced by GET /hardware/status.
         self.turns_answered = 0
@@ -676,6 +679,7 @@ class KioskStateMachine:
         self._turn_in_progress = False
         self._absent_since = None
         self._last_speech_at = None
+        self._silent_pause_start = None
         self.no_response_count = 0
         self._interrupt_flag_clear()
 
@@ -702,13 +706,16 @@ class KioskStateMachine:
 
             turn = await self._listening_turn(reason="")
             if turn is None or turn.get("no_speech"):
-                # No speech: the silent-turn ladder handles the repetition
-                # (1 -> repeat prompt, 2 -> follow-up + final listen, 3 ->
-                # end). A no_speech dict is truthy, so this MUST branch on
-                # it too — not just on None, or the loop repeats forever.
-                if await self._silent_turn_path():
-                    return
+                # Continuous silence: pause the session timer (no speech
+                # counts toward the 10-min deadline).
+                if self._silent_pause_start is None:
+                    self._silent_pause_start = time.monotonic()
                 continue
+
+            # Farmer spoke: reset silence-pause tracking, then unpause the
+            # timer (timer restarts for the next turn from here).
+            if self._silent_pause_start is not None:
+                self._silent_pause_start = None
 
             self._silent_turns = 0
             self.no_response_count = 0
@@ -935,61 +942,6 @@ class KioskStateMachine:
             turn["unclear"] = why
             _log(f"unclear transcript ({why})")
         return turn
-
-    async def _silent_turn_path(self) -> bool:
-        """Nobody spoke. Returns True when the session should END.
-
-        - Pre-first-answer (welcome phase): repeats are handled by the
-          GREETING board; a silence at this point just tries again.
-        - In conversation: 1 silent turn → repeat prompt; 2 → follow-up
-          prompt + one last listening window; 3 → END.
-        """
-        self._silent_turns += 1
-        self.no_response_count = self._silent_turns
-        if self._absent_since is not None and await self._absence_ended():
-            return True
-        if self._silent_turns <= 1:
-            await self._enter(
-                State.RESPONDING,
-                f"repeat prompt (silent turn {self._silent_turns}/2)",
-            )
-            await _speak(
-                REPEAT_PROMPTS.get(self._lang or "en", REPEAT_PROMPTS["en"]),
-                self._lang or "en",
-            )
-            if await self._absence_ended():
-                return True
-            return False
-        if self._silent_turns == 2:
-            await self._enter(
-                State.RESPONDING, "2 silent turns: follow-up prompt"
-            )
-            await _speak(
-                FOLLOWUP_SILENT_PROMPTS.get(
-                    self._lang or "en", FOLLOWUP_SILENT_PROMPTS["en"]
-                ),
-                self._lang or "en",
-            )
-            if await self._absence_ended():
-                return True
-            # One last listening window after the follow-up prompt.
-            turn = await self._listening_turn(reason="final listen")
-            if turn is not None and not turn.get("no_speech"):
-                self._silent_turns = 0
-                self.no_response_count = 0
-                self._lang = self._lang or turn.get("detected_language") or DEFAULT_LANG
-                self.turns_answered += 1
-                await self._enter(
-                    State.RESPONDING, f"answered ({self._lang}) (turn {self.turns_answered})"
-                )
-                await _speak((turn.get("answer") or REPEAT_PROMPTS["en"])[:1200], self._lang)
-                return await self._no_response_due_to_absence()
-            self.last_reason = "ended after follow-up prompt (still silent)"
-            await self._enter(State.END, self.last_reason)
-            return True
-        self.last_reason = f"{self._silent_turns} consecutive silent turns"
-        await self._enter(State.END, self.last_reason)
-        return True
 
     async def _no_response_due_to_absence(self) -> bool:
         """Shared post-turn exit check, ending on absence or timeout."""

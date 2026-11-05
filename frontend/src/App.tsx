@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getHardwareStatus, hardwareTrigger } from './api/client';
-import { OfficerGateway } from './components/OfficerGateway';
+import { OfficerGateway} from './components/OfficerGateway';
 import { DaoCommandCenter } from './components/DaoCommandCenter';
 import { HomeScreen } from './components/HomeScreen';
 import { SchemesScreen } from './components/SchemesScreen';
@@ -62,6 +62,56 @@ export default function App() {
     const poll = setInterval(refreshSessionFromBackend, 5000);
     return () => clearInterval(poll);
   }, [refreshSessionFromBackend]);
+
+  // Global touch/click/scroll listener: if the kiosk session expired while the
+  // farmer was interacting with the app (screen touched or scrolled), resume the
+  // session with POST /hardware/trigger?force=true, restoring the previous
+  // language and chat messages. Nothing resumes when the session is active, and
+  // the listener is added on mount and removed on unmount.
+  useEffect(() => {
+    const resumeKioskSession = async (event: Event) => {
+      if (sessionStatus !== 'expired') {
+        // Session already active (or in warning) — do not resume.
+        return;
+      }
+
+      try {
+        // Resume the expired session without clearing the previous language or
+        // chat messages.
+        await hardwareTrigger(true); // POST /hardware/trigger?force=true
+        showToast('Kiosk session resumed.');
+        // Refresh the backend state so the app reflects the resumed session.
+        await refreshSessionFromBackend();
+      } catch {
+        // Backend unreachable: let the 5s poll refresh the status.
+        showToast('Could not resume kiosk session.');
+      }
+    };
+
+    const handleTouch = (event: TouchEvent) => {
+      event.preventDefault();
+      resumeKioskSession(event);
+    };
+    const handleClick = (event: MouseEvent) => {
+      resumeKioskSession(event);
+    };
+    const handleScroll = (event: Event) => {
+      resumeKioskSession(event);
+    };
+
+    window.addEventListener('touchstart', handleTouch);
+    window.addEventListener('mousedown', handleClick);
+    window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('scroll', handleScroll, { passive: false });
+    window.addEventListener('scroll', handleScroll, { passive: false });
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouch);
+      window.removeEventListener('mousedown', handleClick);
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [sessionStatus, refreshSessionFromBackend]);
 
   // Local 1s tick between backend polls so the countdown moves smoothly.
   useEffect(() => {

@@ -289,9 +289,9 @@ export const PricesScreen: React.FC<PricesScreenProps> = ({ showToast }) => {
     const slug = r.commodity.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     return {
       id: `${slug}-${r.date}-${idx}`,
-      name: { en: r.commodity },
+      name: { en: r.commodity, te: (cropNameTranslations as Record<string, Record<string, string>>)[r.commodity]?.te || r.commodity, hi: (cropNameTranslations as Record<string, Record<string, string>>)[r.commodity]?.hi || r.commodity },
       variety: { en: r.group ? (cropNameTranslations as Record<string, Record<string, string>>)[r.group]?.[language] || r.group : 'Market Report Group' },
-      mandi: { en: r.market || 'National Aggregate' },
+      mandi: { en: r.market || 'National Aggregate', te: r.market || 'National Aggregate', hi: r.market || 'National Aggregate' },
       stateKey: null,
       price: price !== null ? `₹ ${price.toLocaleString('en-IN')}` : '—',
       perKg: price !== null ? `₹ ${(price / 100).toFixed(2)}/kg` : '—',

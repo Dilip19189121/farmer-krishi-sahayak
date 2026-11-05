@@ -100,8 +100,6 @@ const cropNameTranslations = {
   'Market Report Group': { en: 'Market Report Group', te: 'మార్కెట్ రిపోర్ట్ గ్రూప్', hi: 'मंडी रिपोर्ट समूह' },
 };
 
-module.exports = { cropNameTranslations };
-
 export { cropNameTranslations };
 export const cropNameTranslationsAny = cropNameTranslations;
 

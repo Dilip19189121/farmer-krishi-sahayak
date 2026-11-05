@@ -844,7 +844,18 @@ def _table_rows_from_csv(csv_path: Path) -> tuple[list[str], list[list]]:
 
 def _records_from_table(header: list[str], rows: list[list]) -> list[dict]:
     """Turn a wide price/arrival table into one record per commodity and date."""
+    # Column header alias map (raw CSV headers -> expected names).
+    COLUMN_MAP = {
+        "commodity": "commodity",
+        "market": "market",
+        "arrivaldate": "date",
+        "modalprice": "price",
+        "minprice": "min_price",
+        "maxprice": "max_price",
+        "state": "group",
+    }
     norm = [_norm_cell(cell) for cell in header]
+    norm = [COLUMN_MAP.get(n, n) for n in norm]
     index = {name: norm.index(name) for name in set(norm) if name}
 
     def column(name: str) -> Optional[int]:
