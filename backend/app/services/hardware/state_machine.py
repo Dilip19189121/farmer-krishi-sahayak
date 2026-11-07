@@ -169,9 +169,10 @@ VOICE_BY_LANG = {
 # neural voice so each word sounds native. Used while the farmer's language
 # is not yet detected (every new session starts here).
 WELCOME_SEGMENTS = (
-    ("Welcome!", "en"),
-    ("Namaskaram! Please ask your question.", "te"),
-    ("Namaste! अपना सवाल बताइए।", "hi"),
+    ("Hello! Namaste! Aapka swagat hai! Welcome to Krishi Sahayak!", "en"),
+    ("దయచేసి మీ భాష ఎంచుకోండి. Telugu అనండి.", "te"),
+    ("कृपया अपनी भाषा चुनें। Hindi बोलें।", "hi"),
+    ("Or say English to continue in English.", "en"),
 )
 # Shorter repeat when nobody answered the first welcome.
 WELCOME_RETRY_SEGMENTS = (
@@ -833,6 +834,11 @@ class KioskStateMachine:
                     return False
             self._welcome_retries += 1
             interrupted = await _speak_segments(segments)
+            # After the welcome boards and before listening: hint the farmer
+            # at the language-selection prompt (only if the welcome was not
+            # interrupted).
+            if not interrupted:
+                await _speak_segments(LANGUAGE_CHOICE_SEGMENTS)
             if interrupted:
                 _log("welcome interrupted by farmer speech; going to LISTENING")
                 return True

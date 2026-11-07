@@ -254,9 +254,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     if (messages.length > 2) return;
 
     const nowTime = () =>
-      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    const timers = [
+      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });    const timers = [
       setTimeout(() => {
         setMessages((prev) => [...prev, {
           id: `welcome-1-${Date.now()}`,
@@ -264,31 +262,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           text: 'Hello, Namaste, and a warm Welcome! Aapka swagat hai.',
           time: nowTime(),
         }]);
-        // Speak welcome bubble 1 aloud (Web Speech API)
-        // Telugu welcome bubble: speak via backend TTS (te-IN), else browser voice.
-        postChatTts('Hello, Namaste, and a warm Welcome! Aapka swagat hai.')
-          .then((res) => {
-            if (res.audio_url) {
-              const audio = new Audio(res.audio_url);
-              audio.play().catch(() => {});                                  } else if (res.audio) {
-                                    const audio = new Audio(URL.createObjectURL(new Blob([atob(res.audio)], { type: 'audio/wav' })));
-                                    audio.play().catch(() => {});
-                                  } else {
-              postChatTtsRaw('Hello, Namaste, and a warm Welcome! Aapka swagat hai.')
-                .then((rawRes) => {
-                  if (rawRes.audio) {
-                    const audio = new Audio('data:audio/wav;base64,' + rawRes.audio);
-                    audio.play().catch(() => {});
-                  }
-                });
-            }
-          })
-          .catch(() => {
-            if ('speechSynthesis' in window) {
-              const utter1 = new SpeechSynthesisUtterance('Hello, Namaste, and a warm Welcome! Aapka swagat hai.');
-              window.speechSynthesis.speak(utter1);
-            }
-          });
       }, 0),
       setTimeout(() => {
         setMessages((prev) => [...prev, {
@@ -296,33 +269,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           sender: 'assistant',
           text: 'Please select your preferred language\nअपनी भाषा चुनें\nమీ భాషను ఎంచుకోండి',
           time: nowTime(),
-        }]);
-        // Speak welcome bubble 2 aloud (Web Speech API)
-        // Language-selection bubble (Telugu / Hindi / English): speak via
-        // backend TTS for Telugu only; Hindi/English keep the browser voice.
-        postChatTts('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి')
-          .then((res) => {
-            if (res.audio_url) {
-              const audio = new Audio(res.audio_url);
-              audio.play().catch(() => {});                                  } else if (res.audio) {
-                                    const audio = new Audio(URL.createObjectURL(new Blob([atob(res.audio)], { type: 'audio/wav' })));
-                                    audio.play().catch(() => {});
-                                  } else {
-              postChatTtsRaw('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి')
-                .then((rawRes) => {
-                  if (rawRes.audio) {
-                    const audio = new Audio('data:audio/wav;base64,' + rawRes.audio);
-                    audio.play().catch(() => {});
-                  }
-                });
-            }
-          })
-          .catch(() => {
-            if ('speechSynthesis' in window) {
-              const utter2 = new SpeechSynthesisUtterance('Please select your preferred language\nअप्नी भाषा चुनें\nమీ భాషను ఎంచుకోండి');
-              window.speechSynthesis.speak(utter2);
-            }
-          });
+        }]);      // bubble 2 text shown; speech removed per request
       }, 4000),
     ];
     // After bubble 2 has spoken (at 4000ms): show the language-selection
