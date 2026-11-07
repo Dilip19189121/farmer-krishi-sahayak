@@ -69,7 +69,7 @@ class VoiceChatResponse(ChatResponse):
 def _build_sources(hits: list[dict]) -> list[Source]:
     """Turn retrieved chunks into response sources, keeping only real fields."""
     return [
-        Source(**{**hit["metadata"], "distance": hit["distance"]}).model_dump(
+        Source(**{**hit["metadata"], "distance": hit.get("distance", 0.0)}).model_dump(
             exclude_none=True
         )
         for hit in hits

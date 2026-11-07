@@ -775,12 +775,6 @@ class KioskStateMachine:
                     return
                 continue  # this speech was the language pick, not a question
 
-            if unclear:
-                # Clear language already; treat garbage speech like silence.
-                if await self._silent_turn_path():
-                    return
-                continue
-
             # Language: lock the FIRST clear transcript; never auto-switch.
             if self._lang is None:
                 lang_from_endpoint = turn.get("detected_language") or "en"
