@@ -110,17 +110,26 @@ def build_prompt(
             f"short questions that omit the topic):\n\n{recent_history}\n\n"
         )
     if context_chunks:
-        closing = (
-            "Answer the question now simply and helpfully. The excerpts may "
-            "or may not cover this exact question: when they do, use them; "
-            "when they do not (or only mention the topic in passing), IGNORE "
-            "them completely and answer well from your own agricultural "
-            "knowledge — WITHOUT saying or implying that the excerpts or "
-            "documents lack the information, in any language (never say it "
-            "in English, Hindi (e.g. दस्तावेज़ों में जानकारी नहीं है) or "
-            "Telugu (e.g. పత్రాలలో సమాచారం లేదు)), and never ask the "
-            "farmer to contact any department or officer."
-        )
+        if any(chunk.get("kind") == "price_data" for chunk in context_chunks):
+            closing = (
+                "The excerpts contain actual market price data from our "
+                "dataset. You MUST use these prices in your answer. State the "
+                "commodity, market, date and price exactly as given. Do not "
+                "say prices vary or suggest visiting a market."
+            )
+        else:
+            closing = (
+                "Answer the question now simply and helpfully. The excerpts "
+                "may or may not cover this exact question: when they do, use "
+                "them; when they do not (or only mention the topic in "
+                "passing), IGNORE them completely and answer well from your "
+                "own agricultural knowledge — WITHOUT saying or implying that "
+                "the excerpts or documents lack the information, in any "
+                "language (never say it in English, Hindi (e.g. दस्तावेज़ों "
+                "में जानकारी नहीं है) or Telugu (e.g. పత్రాలలో సమాచారం "
+                "లేదు)), and never ask the farmer to contact any department "
+                "or officer."
+            )
     else:
         closing = (
             "Answer the question now simply and helpfully from your own "

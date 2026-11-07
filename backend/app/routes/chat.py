@@ -158,6 +158,47 @@ def _answer_turn(
         chat_memory.get_recent_turns(session_id)
     )
 
+    # 3b. Price/market query enrichment: the router's RAG retrieval covers
+    #     scheme/crop/advisory topics, not structured price tables.
+    #     If the query mentions price/market words, surface load_market_prices()
+    #     records directly into the retrieval hits.
+    PRICE_KEYWORDS = (
+        "price", "cost", "rate", "mandi", "market", "rupee", "kg", "quintal",
+    )
+    query_lower = text.lower()
+    is_price_query = any(kw in query_lower for kw in PRICE_KEYWORDS)
+    if is_price_query:
+        try:
+            market = rag_service.load_market_prices()
+            records = market.get("records") or []
+        except Exception:
+            market = None
+            records = []
+        if records:
+            matched = [
+                r for r in records
+                if any(
+                    word.lower() in query_lower
+                    or any(
+                        word.lower() in str(r.get("commodity", "")).lower()
+                        for word in query_lower.split()
+                    )
+                    for word in str(r.get("commodity", "")).split()
+                )
+            ]
+            if matched:
+                price_text = "\n".join(str(r) for r in matched[:5])
+            else:
+                price_text = "\n".join(str(r) for r in records[:10])
+            hits.insert(
+                0,
+                {
+                    "kind": "price_data",
+                    "text": price_text,
+                    "metadata": {"market_source": "load_market_prices"},
+                },
+            )
+
     # 4. Provider rotation (unchanged call signature/order).
     try:
         answer, provider = ai_service.generate_answer(text, hits, history_text)
