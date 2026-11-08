@@ -235,49 +235,35 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     const id = setInterval(poll, 2000);
     poll(); // immediate first pull (starts on mount)
     return () => clearInterval(id);
-  }, []);
+  }, []);  // On mount: clear messages and mark session initialized (first mount only,
+    // so remounting during an active session does not restart the welcome flow).
+    // On mount: if the backend chat log first shows a message containing 'language', 'భాష', or 'भाषा',
+    // add the language selection buttons 2 seconds after that message.
+    // (A fixed 12s fallback timer is kept as a safety net in case the backend never emits such a message.)
+    const langSelectShown = useRef(false);
+    useEffect(() => {
+      if (langSelectShown.current) return;
+      const hasLangPrompt = messages.some(m =>
+        (m.text || '').includes('భాష') ||
+        (m.text || '').includes('भाषा') ||
+        (m.text || '').toLowerCase().includes('language')
+      );
+      if (!hasLangPrompt) return;
+      langSelectShown.current = true;
+      const t = setTimeout(() => {
+        setMessages(prev => [...prev, {
+          id: 'lang-select-once',
+          sender: 'assistant',
+          type: 'lang-select',
+          text: '',
+          time: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+        }]);
+      }, 2000);
+      return () => clearTimeout(t);
+    }, [messages]);
 
-  // On mount: clear messages and mark session initialized (first mount only,
-  // so remounting during an active session does not restart the welcome flow).
-  useEffect(() => {
-    if (!sessionInitialized.current && messages.length === 0) {
-      setMessages([]);
-      sessionInitialized.current = true;
-    }
-  }, []);
-
-  // On mount: backend chat log supplies the welcome bubbles (0ms) and the
-  // language prompt (4s) plus the lang-select buttons (5s).
-  useEffect(() => {
-    const nowTime = () =>
-      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const timers: ReturnType<typeof setTimeout>[] = [];
-
-    timers.push(setTimeout(() => {
-      setMessages((prev) => [...prev, {
-        id: `lang-prompt-${Date.now()}`,
-        sender: 'assistant',
-        type: 'lang-prompt',
-        text: 'దయచేసి మీ భాష ఎంచుకోండి | कृపయా మీ భాష ఎంచుకోండి | Please select your language',
-        time: nowTime(),
-      }]);
-    }, 4000));
-
-    timers.push(setTimeout(() => {
-      setMessages((prev) => [...prev, {
-        id: `lang-select-${Date.now()}`,
-        sender: 'assistant',
-        type: 'lang-select',
-        text: '',
-        time: nowTime(),
-      }]);
-    }, 9000));
-
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
-  // Update initial message and dialogue chart values when language changes
-  useEffect(() => {
+    // Update initial message and dialogue chart values when language changes
+    useEffect(() => {
     setLatestPersonQuery(userQueryByLang[language] || userQueryByLang.en);
     setLatestAiAnswer(assistantAdvisoryResponsesByLang[language] || assistantAdvisoryResponsesByLang.en);
     setMessages((prev) => {

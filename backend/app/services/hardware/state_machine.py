@@ -204,9 +204,7 @@ TIMEOUT_WARNING_PROMPTS = {
 TIMEOUT_OUTRO_PROMPTS = FOLLOWUP_SILENT_PROMPTS
 # Trilingual language-selection prompt for undetectable speech.
 LANGUAGE_CHOICE_SEGMENTS = (
-    ("Which language? Please say Telugu, Hindi or English.", "en"),
-    ("మీ భాష? తెలుగు, హిందీ లేదా ఇంగ్లీష్ అని చెప్పండి.", "te"),
-    ("आपकी भाषा? तेलुगु, हिंदी या अंग्रेज़ी कहिए।", "hi"),
+    ("Please select your language. कृपया अपनी भाषा चुनें। దయచేసి మీ భాష ఎంచుకోండి", "en"),
 )
 SWITCH_ACKS = {
     "te": "సరే! ఇప్పటి నుంచి తెలుగులో మాట్లాడతాను. మీ ప్రశ్న చెప్పండి.",
