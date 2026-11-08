@@ -112,11 +112,10 @@ def build_prompt(
     if context_chunks:
         if any(chunk.get("kind") == "price_data" for chunk in context_chunks):
             closing = (
-                "The excerpts contain actual current market price data. "
-                "You MUST state the price directly. Say only the commodity "
-                "name and price in rupees per quintal or kg. Do NOT mention "
-                "any date, year, month or time period. Do NOT say prices "
-                "vary or suggest visiting a market."
+                "Answer directly with the commodity name and price in rupees "
+                "per quintal or kg. Do not mention any source, dataset, document "
+                "or excerpt. Do not mention dates or time periods. Do not say "
+                "prices vary or suggest visiting a market."
             )
         else:
             closing = (

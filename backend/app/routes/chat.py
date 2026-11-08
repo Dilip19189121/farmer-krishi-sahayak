@@ -96,6 +96,10 @@ def _retrieve_with_router(
     Returns (hits, decisions) — decisions is this turn's router log, kept
     for ops/debug and echoed in the test harness only.
     """
+    price_words = {"price", "cost", "rate", "mandi", "market", "kg", "quintal"}
+    if any(word in query.lower().split() for word in price_words):
+        top_k = 2
+
     decisions = rag_router.route(query)
     queries = decisions["expand_queries"]
     hybrid = decisions["hybrid"]
