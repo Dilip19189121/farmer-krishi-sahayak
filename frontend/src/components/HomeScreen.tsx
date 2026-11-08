@@ -23,6 +23,8 @@ interface HomeScreenProps {
   sessionInitialized: React.MutableRefObject<boolean>;
 }
 
+const langSelectShownGlobal = { current: false };
+
 export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNavigate,
   showToast,
@@ -240,16 +242,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     // On mount: if the backend chat log first shows a message containing 'language', 'భాష', or 'भाषा',
     // add the language selection buttons 2 seconds after that message.
     // (A fixed 12s fallback timer is kept as a safety net in case the backend never emits such a message.)
-    const langSelectShown = useRef(false);
     useEffect(() => {
-      if (langSelectShown.current) return;
+      if (langSelectShownGlobal.current) return;
       const hasLangPrompt = messages.some(m =>
         (m.text || '').includes('భాష') ||
         (m.text || '').includes('भाषा') ||
         (m.text || '').toLowerCase().includes('language')
       );
       if (!hasLangPrompt) return;
-      langSelectShown.current = true;
+      langSelectShownGlobal.current = true;
       const t = setTimeout(() => {
         setMessages(prev => [...prev, {
           id: 'lang-select-once',
@@ -688,7 +689,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                               setLanguageSelected(true);
                               // Speak the Telugu start-up line via the backend TTS
                               // (te-IN multilingual voice), then start the mic.
-                              const teText = 'మీకు ఏమి సహాయం కావాలి? పంట గురించి అడగండి.';
+                              const teText = 'నమస్కారం! నేను మీకు ఎలా సహాయపడగలను? పంట ధరలు, పథకాలు లేదా వ్యవసాయ సలహాల గురించి అడగండి.';
                               postChatTts(teText)
                                 .then((res) => {
                                   if (res.audio_url) {
@@ -732,7 +733,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                               // Speak the Hindi start-up line in 'hi-IN' then
                               // start the microphone after bubble 3 is spoken.
                               if ('speechSynthesis' in window) {
-                                const hiUtterance = new SpeechSynthesisUtterance('आपको क्या सहायता चाहिए? फसल या योजना के बारे में पूछें।');
+                                const hiUtterance = new SpeechSynthesisUtterance('नमस्ते! मैं आपकी कैसे मदद कर सकता हूँ? फसल की कीमतें, योजनाएं या खेती की सलाह पूछें।');
                                 hiUtterance.lang = 'hi-IN';
                                 window.speechSynthesis.speak(hiUtterance);
                               }
@@ -750,7 +751,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                               // Speak the English start-up line in 'en-US' then
                               // start the microphone after bubble 3 is spoken.
                               if ('speechSynthesis' in window) {
-                                const enUtterance = new SpeechSynthesisUtterance('What help do you need? Ask about crops or schemes.');
+                                const enUtterance = new SpeechSynthesisUtterance('Hello! How can I help you? Ask me about crop prices, schemes, or farming advice.');
                                 enUtterance.lang = 'en-US';
                                 window.speechSynthesis.speak(enUtterance);
                               }
