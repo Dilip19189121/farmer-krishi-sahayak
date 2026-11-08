@@ -381,7 +381,7 @@ def embed_and_store(datasets_dir: Path = DATASETS_DIR) -> int:
     client = chromadb.PersistentClient(
         path=str(CHROMA_DIR), settings=Settings(anonymized_telemetry=False)
     )
-    if COLLECTION_NAME in {c.name for c in client.list_collections()}:
+    if COLLECTION_NAME in client.list_collections():
         client.delete_collection(COLLECTION_NAME)
     collection = client.get_or_create_collection(
         COLLECTION_NAME, metadata={"hnsw:space": "cosine"}

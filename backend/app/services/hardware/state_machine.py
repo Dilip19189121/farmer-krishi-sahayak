@@ -425,6 +425,8 @@ async def _speak_segments(segments, interruptible: bool = True) -> bool:
     for index, (text, lang) in enumerate(segments, 1):
         _log(f"speech {index}/{total} ({lang}): {text!r}")
         await _speak(text, lang, interruptible=interruptible)
+        if index < total:
+            await asyncio.sleep(1.5)
         if _INTERRUPT_FLAG.is_set():
             _log(f"speech {index}/{total} interrupted")
             interrupted = True
@@ -833,6 +835,11 @@ class KioskStateMachine:
                 if await self._absence_ended():
                     return False
             self._welcome_retries += 1
+            # Post one combined line to the frontend chat log so the chat
+            # panel matches what was spoken (each welcome board is one entry).
+            frontend_chat_log.append(
+                {"role": "assistant", "text": segments[0][0]}
+            )
             interrupted = await _speak_segments(segments)
             # After the welcome boards and before listening: hint the farmer
             # at the language-selection prompt (only if the welcome was not

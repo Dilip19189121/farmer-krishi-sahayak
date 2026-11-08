@@ -246,35 +246,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     }
   }, []);
 
-  // On mount: stream the trilingual welcome messages into the chat, then a
-  // language-selection bubble (Telugu / Hindi / English) 6s after mount.
-  // Only runs on the very first mount: on remounts the welcome speech timers
-  // must not fire again (the chat is already populated).
+  // On mount: backend chat log supplies the welcome bubbles (0ms) and the
+  // language prompt (4s) plus the lang-select buttons (5s).
   useEffect(() => {
-    if (messages.length > 2) return;
-
     const nowTime = () =>
-      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });    const timers = [
-      setTimeout(() => {
-        setMessages((prev) => [...prev, {
-          id: `welcome-1-${Date.now()}`,
-          sender: 'assistant',
-          text: 'Hello, Namaste, and a warm Welcome! Aapka swagat hai.',
-          time: nowTime(),
-        }]);
-      }, 0),
-      setTimeout(() => {
-        setMessages((prev) => [...prev, {
-          id: `welcome-2-${Date.now()}`,
-          sender: 'assistant',
-          text: 'Please select your preferred language\nअपनी भाषा चुनें\nమీ భాషను ఎంచుకోండి',
-          time: nowTime(),
-        }]);      // bubble 2 text shown; speech removed per request
-      }, 4000),
-    ];
-    // After bubble 2 has spoken (at 4000ms): show the language-selection
-    // message so the farmer can pick a language.
-    setTimeout(() => {
+      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    timers.push(setTimeout(() => {
+      setMessages((prev) => [...prev, {
+        id: `lang-prompt-${Date.now()}`,
+        sender: 'assistant',
+        type: 'lang-prompt',
+        text: 'దయచేసి మీ భాష ఎంచుకోండి | कृపయా మీ భాష ఎంచుకోండి | Please select your language',
+        time: nowTime(),
+      }]);
+    }, 4000));
+
+    timers.push(setTimeout(() => {
       setMessages((prev) => [...prev, {
         id: `lang-select-${Date.now()}`,
         sender: 'assistant',
@@ -282,7 +271,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         text: '',
         time: nowTime(),
       }]);
-    }, 4000);
+    }, 5000));
 
     return () => timers.forEach(clearTimeout);
   }, []);
