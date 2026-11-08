@@ -271,7 +271,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         text: '',
         time: nowTime(),
       }]);
-    }, 5000));
+    }, 9000));
 
     return () => timers.forEach(clearTimeout);
   }, []);

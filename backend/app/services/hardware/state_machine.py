@@ -841,11 +841,10 @@ class KioskStateMachine:
                 {"role": "assistant", "text": segments[0][0]}
             )
             interrupted = await _speak_segments(segments)
-            # After the welcome boards and before listening: hint the farmer
-            # at the language-selection prompt (only if the welcome was not
-            # interrupted).
-            if not interrupted:
-                await _speak_segments(LANGUAGE_CHOICE_SEGMENTS)
+            frontend_chat_log.append(
+                {"role": "assistant", "text": LANGUAGE_CHOICE_SEGMENTS[0][0]}
+            )
+            await _speak_segments(LANGUAGE_CHOICE_SEGMENTS)
             if interrupted:
                 _log("welcome interrupted by farmer speech; going to LISTENING")
                 return True
