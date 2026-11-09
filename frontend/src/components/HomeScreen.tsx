@@ -746,42 +746,23 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                             // (te-IN multilingual voice), then start the mic.
                             const teText =
                               "నమస్కారం! నేను మీకు ఎలా సహాయపడగలను? పంట ధరలు, పథకాలు లేదా వ్యవసాయ సలహాల గురించి అడగండి.";
-                            postChatTts(teText)
-                              .then((res) => {
-                                if (res.audio_url) {
-                                  const audio = new Audio(res.audio_url);
-                                  audio.play().catch(() => {});
-                                } else if (res.audio) {
-                                  const audio = new Audio(
-                                    URL.createObjectURL(
-                                      new Blob([atob(res.audio)], {
-                                        type: "audio/wav",
-                                      }),
-                                    ),
-                                  );
-                                  audio.play().catch(() => {});
-                                } else {
-                                  postChatTtsRaw(teText).then((rawRes) => {
-                                    if (rawRes.audio) {
-                                      const audio = new Audio(
-                                        "data:audio/wav;base64," + rawRes.audio,
-                                      );
-                                      audio.play().catch(() => {});
-                                    }
-                                  });
-                                }
-                              })
-                              .catch(() => {
-                                // Backend TTS unavailable — fall through to the
-                                // existing browser Web Speech API so the line
-                                // still speaks on devices without the backend.
-                                if ("speechSynthesis" in window) {
-                                  const teUtterance =
-                                    new SpeechSynthesisUtterance(teText);
-                                  teUtterance.lang = "te-IN";
-                                  window.speechSynthesis.speak(teUtterance);
-                                }
-                              });
+                            fetch('http://127.0.0.1:8000/chat/tts', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ text: teText, lang: 'te' })
+                            })
+                            .then(res => res.blob())
+                            .then(blob => {
+                              const audio = new Audio(URL.createObjectURL(blob));
+                              audio.play().catch(() => {});
+                            })
+                            .catch(() => {
+                              if ('speechSynthesis' in window) {
+                                const teUtterance = new SpeechSynthesisUtterance(teText);
+                                teUtterance.lang = 'te-IN';
+                                window.speechSynthesis.speak(teUtterance);
+                              }
+                            });
                             setTimeout(() => startListeningForFarmer(), 3500);
                           }}
                           className="px-3 py-1.5 rounded-full bg-[#006b2c] text-white text-[13px] font-bold hover:bg-[#005a24] transition-colors cursor-pointer shadow-xs"
